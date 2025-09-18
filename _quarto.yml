@@ -1,0 +1,99 @@
+project:
+  type: "website"
+  title: "Theoretical and Empirical Research Methodology (Fall 2025)"
+  output-dir: _site
+  render:
+    - "index.qmd"
+    - "content/*.qmd"
+    - "content/material/*.qmd"
+    - "content/material/session*/*.qmd"
+    - "content/tutorials/*.qmd"
+    - "content/tutorials/*/*.qmd"
+    - "content/exercises/*.qmd"
+    - "content/exercises/*/*.qmd"
+    - "content/statrecap/*.qmd"
+    - "content/statrecap/*/*.qmd"
+
+website:
+  title: "Theoretical and Empirical Research Methodology - Implementation Lab" # Title of website shown on top left
+  page-navigation: true
+  reader-mode: true
+  open-graph: true
+  favicon: "figures/icons/course_favicon.png"
+  search:
+    location: navbar
+    type: textbox
+  sidebar:
+    style: docked
+    contents:
+      - href: index.qmd
+        text: "🏠 Home"
+      - href: content/index.qmd
+        text: "🏢 Getting Started"
+      - section: "🗓️ Material"
+        contents:
+         - href: content/material/index.qmd
+           text: Overview
+         - href: content/material/session01.qmd
+           text: Session 01
+         - href: content/material/session02.qmd
+           text: Session 02
+         # - href: content/material/session03.qmd
+         #   text: Session 03
+         # - href: content/material/session04.qmd
+         #   text: Session 04
+         # - href: content/material/session05.qmd
+         #   text: Session 05
+         # - href: content/material/session06.qmd
+         #   text: Session 06
+         # - href: content/material/session07.qmd
+         #   text: Session 07
+         # - href: content/material/session08.qmd
+         #   text: Session 08
+         # - href: content/material/session09.qmd
+         #   text: Session 09
+         # - href: content/material/session10.qmd
+         #   text: Session 10
+         # - href: content/material/session12.qmd
+         #   text: Session 12
+         # - href: content/material/session13.qmd
+         #   text: Session 13
+      - href: content/tutorials.qmd
+        text: "💻 Tutorials"
+      - href: content/statrecap.qmd
+        text: "📈 Statistics recap"
+
+  navbar:
+    background: primary
+  page-footer:
+    background: light
+    left: "Copyright 2025, Claudius Gräbner-Radkowitsch" 
+
+bibliography: references/references.bib
+csl: references/jepp.csl
+
+format:
+  html:
+    author-meta: Claudius Gräbner-Radkowitsch
+    author:
+      name: Claudius Gräbner-Radkowitsch
+      url: https://claudius-graebner.com/
+      orcid: 0000-0003-4065-4722
+      affiliation: EUF and JKU
+      affiliation-url: https://www.uni-flensburg.de/en/pluralist-economics
+    date-format: "DD MM YYYY"
+
+    email-obfuscation: javascript
+    link-external-newwindow: true
+    link-external-icon: false
+
+    theme:
+      light: 
+        - journal
+        - css/custom.scss # Change the default colour
+    toc: true
+
+execute:
+  freeze: auto
+#margin-header: |
+# ![](/figures/logos/MY_INSTITUTION.png)

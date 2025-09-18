@@ -1,0 +1,52 @@
+---
+title: "Material overview"
+---
+
+## 📚 General references
+
+The following textbooks offer a good general reference to the course
+content, and I think its a good idea to read into these books in a 
+general way. Moreover, I often point to chapters in the respective 
+session pages.
+
+- Wickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). *R for data science: Import, tidy, transform, visualize, and model data* (2nd edition). O'Reilly. [https://r4ds.hadley.nz/](https://r4ds.hadley.nz/)
+
+- Ismay, C., & Kim, A. Y.-S. (2020). *Statistical inference via data science: A ModernDive, into R and the tidyverse*. CRC Press, Taylor and Francis Group. [https://moderndive.com/index.html](https://moderndive.com/index.html)
+
+For more advanced details on the fundamentals of programming in R, I 
+recommend the following:
+
+- Wickham, H. (2019). *Advanced R* (Second edition). CRC Press/Taylor & Francis Group. [https://adv-r.hadley.nz/](https://adv-r.hadley.nz/)
+
+For the model-related parts of the lecture I recommend the following book as a further reading reference:
+
+- James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). An introduction to statistical learning: With applications in R (Second edition). Springer.  [https://www.statlearning.com/](https://www.statlearning.com/) 
+
+## 🔖 Session-specific material
+
+::: {.callout-note collapse="true"}
+## How to use the exercise codes?
+For information on how to use the exercise code, read 
+[this tutorial](/content/tutorials/using-exercises/).
+:::
+
+
+|   Session    | Topic                                                         |       Exercise code                      |
+|:------------:|:--------------------------------------------------------------|:----------------------------------------:|
+|   [1](#s1)   | [General introduction](/content/material/session01.qmd)       |                                          |
+|   [2](#s2)   | [Basics of R and R-Studio](/content/material/session02.qmd) | `Basics`, `Functions`                    |
+
+<!--
+|   [3](#s3)   | [Project management](/content/material/session03.qmd)         | `ProjectOrga`                            |
+|   [4](#s4)   | [Object types](/content/material/session04.qmd)               | `ObjectTypes1`, `ObjectTypes2`           |
+|   [5](#s5)   | [Recap & practice](/content/material/session05.qmd)           |                                          |
+|   [6](#s6)   | [Visualization](/content/material/session06.qmd)              |      `Visualization1`                    |
+|   [7](#s7)   | [Quarto](/content/material/session07.qmd)                     | `Quarto`                                 |
+|   [8](#s8)   | [AI for coding](/content/material/session08.qmd)              |                                          |
+|   [9](#s9)   | [Importing data](/content/material/session09.qmd)             | `Wrangling1`, `Wrangling2`               |
+|  [10](#s10)  | [Preparing data](/content/material/session10.qmd)             | `Wrangling1`, `Wrangling2`               |
+|  [11](#s11)  | TBD                                                           |                                          |
+|  [12](#s12)  | Linear models                                                 | `LinearRegression1`, `LinearRegression2` |
+|  [13](#s13)  | Analyzing experimental data                                   |                                          |
+|  [14](#s14)  | Recap & practice                                              |                                          |
+-->

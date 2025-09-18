@@ -1,0 +1,51 @@
+---
+title: "🗓️ Session 01 - Introduction, overview and installation"
+date: "2025-03-14"
+date-modified: last-modified
+---
+
+In this first week, we will cover what you can expect to learn from these exercises 
+and how they differ from the main lecture. 
+I will elaborate a bit on why I chose R for this course, what you can do
+with it, and what has helped previous participants helped excelling in this 
+course. Finally, I explain a bit what R is, how it relates to R Studio and LaTeX.
+
+## 👨‍🏫 Lecture Slides 
+
+Either click on the slide area below or click 
+[here](/content/material/slides/E1-Introduction.pdf) to download the slides.
+
+
+```{=html}
+<div class="embed-container">
+  <iframe 
+  width="370" height="208"
+  src="/content/material/slides/E1-Introduction.pdf" 
+  style="border: 0.5px" 
+  ></iframe>
+</div>
+```
+
+## 🎥 Accompanying lecture videos 
+
+All the videos are available via this [playlist](https://www.youtube.com/playlist?list=PLZDawQMrG1RImURlbldAF773MDRqeARNu).
+
+```{=html}
+<div class="embed-container">
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/videoseries?si=UBJo1AiCblQZFtZD&amp;list=PLZDawQMrG1RImURlbldAF773MDRqeARNu" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+```
+
+
+## 📚 Mandatory Reading
+
+Read the following tutorials:
+
+- [Installation of the necessary software](/content/tutorials/installation/index.qmd)
+- [Installing R packages](/content/tutorials/installing-packages/index.qmd)
+- [Using the exercise package](/content/tutorials/using-exercises/index.qmd)
+
+## ✍️ Coursework
+
+- Make sure you installed `R`, `R-Studio`, `Git` and all the required R packages
+- If you have questions or problems, please post them in the Moodle forum
