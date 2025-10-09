@@ -884,9 +884,9 @@
   {
     "objectID": "content/material/session03.html",
     "href": "content/material/session03.html",
-    "title": "🗓️ Session 3: Object types in R",
+    "title": "🗓️ Session 3: Project management",
     "section": "",
-    "text": "In the first part of this session you learn some additional details about R packages and about the most important and most fundamental object types in R, such as decimal numbers or words. While this might look a bit boring at first, understanding these basic types is fundamental for all the more advanced (and exiting) stuff in the future!\nIn the second part of this session, you are then introduced to two more advanced object types in R. The two object types covered, factors and data frames, are advanced in the sense that they can be thought of extensions of some of the basic object types you encountered before: factors and special kinds of integers, and data frames are special kinds of lists.",
+    "text": "This is one of the most underestimated topics. In this session you learn how to adequately set up your working environment on your computer. This means where you should save which files, which directory structure you should use, and how to point the computer to other files on your computer. While this sounds boring at first, taking seriously the insights from this session will save you tons of hours of frustration in the future!",
     "crumbs": [
       "🗓️ Material",
       "Session 03"
@@ -895,9 +895,9 @@
   {
     "objectID": "content/material/session03.html#lecture-slides",
     "href": "content/material/session03.html#lecture-slides",
-    "title": "🗓️ Session 3: Object types in R",
+    "title": "🗓️ Session 3: Project management",
     "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nFor the slides of the first part of this session (Packages and basic object types) on click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipSolutions to the intermediate exercises of part 1\n\n\n\n\n\n\n\n\n\nFor the slides of the second part of this session (Advanced object types) see the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipNotes and solutions for the second part of this session",
+    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nNoteLecture script",
     "crumbs": [
       "🗓️ Material",
       "Session 03"
@@ -906,9 +906,9 @@
   {
     "objectID": "content/material/session03.html#lecture-videos",
     "href": "content/material/session03.html#lecture-videos",
-    "title": "🗓️ Session 3: Object types in R",
+    "title": "🗓️ Session 3: Project management",
     "section": "🎥 Lecture videos",
-    "text": "🎥 Lecture videos\nAll the videos for the first part on basic object types are available via this playlist.\n\n\n\nAll the videos for the second part on advanced object types are available via this playlist.",
+    "text": "🎥 Lecture videos\nCurrently, no videos are available for this session. Check out the tutorial on project setup instead.",
     "crumbs": [
       "🗓️ Material",
       "Session 03"
@@ -917,9 +917,9 @@
   {
     "objectID": "content/material/session03.html#mandatory-reading",
     "href": "content/material/session03.html#mandatory-reading",
-    "title": "🗓️ Session 3: Object types in R",
+    "title": "🗓️ Session 3: Project management",
     "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\nRead the following tutorials for the first part on basic object types:\n\nFundamental object types in R I: Functions\nFundamental object types in R II: Vectors\n\nThe topics of the second part on advanced object types are covered here:\n\nFundamental object types in R III: Factors and data frames\n\n\n🏆 Further readings\nI suggest you read these references after you learned about data wrangling techniques in session 10.\n\nSections 1-3 in Chapter 12 of Wickham et al. (2023).\nChapter 13 in Wickham et al. (2023).\nChapter 14 in Wickham et al. (2023).\nChapter 16 in Wickham et al. (2023).",
+    "text": "📚 Mandatory Reading\n\nThe tutorial Setting up an R project",
     "crumbs": [
       "🗓️ Material",
       "Session 03"
@@ -928,7 +928,7 @@
   {
     "objectID": "content/material/session03.html#further-reading",
     "href": "content/material/session03.html#further-reading",
-    "title": "🗓️ Session 4: Project management",
+    "title": "🗓️ Session 3: Project management",
     "section": "Further Reading",
     "text": "Further Reading\nWhile we do not cover this in this course, I highly recommend learning the version control system Git. Personally, I can recommend the following:\n\nVery concise introduction to Git\nIntroduction to GitHub: GitHub skills and the official docs",
     "crumbs": [
@@ -939,9 +939,9 @@
   {
     "objectID": "content/material/session03.html#coursework",
     "href": "content/material/session03.html#coursework",
-    "title": "🗓️ Session 3: Object types in R",
+    "title": "🗓️ Session 3: Project management",
     "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the ObjectTypes1 exercises of the package DataScienceExercises for the first part on basic object types:\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ObjectTypes1\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nFor the second part do the ObjectTypes2 exercises of the package DataScienceExercises\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ObjectTypes2\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nIf you have questions or problems, please post them in the Moodle forum",
+    "text": "✍️ Coursework\n\nDo the exercises ProjectOrga from the DataScienceExercises package that refer to setting up an R project\nIf you still have problems with R Packages, re-read the respective section of the tutorial from session 2\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ProjectOrga\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))",
     "crumbs": [
       "🗓️ Material",
       "Session 03"
@@ -1140,9 +1140,9 @@
   {
     "objectID": "content/material/session04.html",
     "href": "content/material/session04.html",
-    "title": "🗓️ Session 4: Project management",
+    "title": "🗓️ Session 4: Object types in R",
     "section": "",
-    "text": "This is one of the most underestimated topics. In this session you learn how to adequately set up your working environment on your computer. This means where you should save which files, which directory structure you should use, and how to point the computer to other files on your computer. While this sounds boring at first, taking seriously the insights from this session will save you tons of hours of frustration in the future!",
+    "text": "In the first part of this session you learn some additional details about R packages and about the most important and most fundamental object types in R, such as decimal numbers or words. While this might look a bit boring at first, understanding these basic types is fundamental for all the more advanced (and exiting) stuff in the future!\nIn the second part of this session, you are then introduced to two more advanced object types in R. The two object types covered, factors and data frames, are advanced in the sense that they can be thought of extensions of some of the basic object types you encountered before: factors and special kinds of integers, and data frames are special kinds of lists.",
     "crumbs": [
       "🗓️ Material",
       "Session 04"
@@ -1151,9 +1151,9 @@
   {
     "objectID": "content/material/session04.html#lecture-slides",
     "href": "content/material/session04.html#lecture-slides",
-    "title": "🗓️ Session 4: Project management",
+    "title": "🗓️ Session 4: Object types in R",
     "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nNoteLecture script",
+    "text": "👨‍🏫 Lecture Slides\nFor the slides of the first part of this session (Packages and basic object types) on click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipSolutions to the intermediate exercises of part 1\n\n\n\n\n\n\n\n\n\nFor the slides of the second part of this session (Advanced object types) see the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipNotes and solutions for the second part of this session",
     "crumbs": [
       "🗓️ Material",
       "Session 04"
@@ -1162,9 +1162,9 @@
   {
     "objectID": "content/material/session04.html#lecture-videos",
     "href": "content/material/session04.html#lecture-videos",
-    "title": "🗓️ Session 4: Project management",
+    "title": "🗓️ Session 4: Object types in R",
     "section": "🎥 Lecture videos",
-    "text": "🎥 Lecture videos\nCurrently, no videos are available for this session. Check out the tutorial on project setup instead.",
+    "text": "🎥 Lecture videos\nAll the videos for the first part on basic object types are available via this playlist.\n\n\n\nAll the videos for the second part on advanced object types are available via this playlist.",
     "crumbs": [
       "🗓️ Material",
       "Session 04"
@@ -1173,9 +1173,9 @@
   {
     "objectID": "content/material/session04.html#mandatory-reading",
     "href": "content/material/session04.html#mandatory-reading",
-    "title": "🗓️ Session 4: Project management",
+    "title": "🗓️ Session 4: Object types in R",
     "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\n\nThe tutorial Setting up an R project",
+    "text": "📚 Mandatory Reading\nRead the following tutorials for the first part on basic object types:\n\nFundamental object types in R I: Functions\nFundamental object types in R II: Vectors\n\nThe topics of the second part on advanced object types are covered here:\n\nFundamental object types in R III: Factors and data frames\n\n\n🏆 Further readings\nI suggest you read these references after you learned about data wrangling techniques in session 10.\n\nSections 1-3 in Chapter 12 of Wickham et al. (2023).\nChapter 13 in Wickham et al. (2023).\nChapter 14 in Wickham et al. (2023).\nChapter 16 in Wickham et al. (2023).",
     "crumbs": [
       "🗓️ Material",
       "Session 04"
@@ -1184,9 +1184,9 @@
   {
     "objectID": "content/material/session04.html#coursework",
     "href": "content/material/session04.html#coursework",
-    "title": "🗓️ Session 4: Project management",
+    "title": "🗓️ Session 4: Object types in R",
     "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the exercises ProjectOrga from the DataScienceExercises package that refer to setting up an R project\nIf you still have problems with R Packages, re-read the respective section of the tutorial from session 2\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ProjectOrga\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))",
+    "text": "✍️ Coursework\n\nDo the ObjectTypes1 exercises of the package DataScienceExercises for the first part on basic object types:\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ObjectTypes1\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nFor the second part do the ObjectTypes2 exercises of the package DataScienceExercises\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ObjectTypes2\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nIf you have questions or problems, please post them in the Moodle forum",
     "crumbs": [
       "🗓️ Material",
       "Session 04"
@@ -1625,16 +1625,5 @@
     "title": "3: Descriptive Statistics",
     "section": "Regression",
     "text": "Regression\nWhile often associated with predictive modeling, regression also serves as a powerful descriptive tool that goes beyond correlation. Think of regression as drawing the “best-fit line” through scattered data points, providing a mathematical equation that summarizes the relationship between (two or more) variables. The most common form, linear regression, is typically written using standardized notation:\n\\[y=\\beta_0 + \\beta_1 \\boldsymbol{x}_1\\]\nwhere \\(\\beta_0\\) represents the y-intercept and \\(\\beta_1\\) represents the slope coefficient. For multiple regression with several predictors, the formula extends to\n\\[y=\\beta_0 + \\beta_1  \\boldsymbol{x}_1 + \\beta_2  \\boldsymbol{x}_2 ... + \\beta_k \\boldsymbol{x}_k \\]\nwith each \\(\\beta_1\\) coefficient describing how \\(\\boldsymbol{y}\\) changes when the corresponding predictor variable changes by one unit, holding all other variables constant. Unlike correlation, which only indicates strength and direction, regression coefficients provide interpretable measures of how variables actually relate to each other in your data.\nFor instance, when \\(y\\) is total sales in 1000 EUR, \\(\\boldsymbol{x}_2\\) the total distance of your shop to the city centre in km, and \\(\\hat{\\beta}_2=-0.5\\) this means that, according to your model, if your shop was moving away from the city centre by 1 km, this is associated, on average, by reducing sales by 500 EUR.\nWhen examining relationships between variables, a regression line offers both a visual and mathematical summary that complements other measures of association.\n\nExample: Consider a marketing manager analyzing the relationship between monthly advertising spend and sales revenue. The manager collects data from the past 12 months to understand how these variables are related. Figure 2 shows a regression that is based on the equation \\[sales = \\beta_0 + \\beta_1 \\cdot advertising\\] The coefficient \\(\\beta_1\\) (approximately 2.5) provides a clear descriptive measure: in the data, for each additional thousand euros spent on advertising, monthly sales revenue increase on average by about 2500 EUR. The intercept (\\(\\beta_0\\)) of around 50 represents the theoretical sales revenue when advertising spend is zero, though this value often has less practical interpretation.\nThe visualization highlights both the overall trend and how individual data points deviate from it. The dotted lines — representing residuals — show the “misses” between what our regression line predicts (the ‘fitted values’) and the actual sales values. Some months performed better than the regression predicted (points above the line), while others performed worse (points below the line). These patterns themselves are descriptive insights that might prompt further investigation: What happened in months with large positive residuals that might explain their better-than-expected performance?\nAs a descriptive tool, this regression cannot claim that advertising directly causes sales increases or predict future performance. It simply summarizes the historical relationship between these variables in a quantifiable way that goes beyond what correlation alone could tell us. Everything that goes beyond that is in the area of inferential statistics.\n\nas you can see in .\n\n\nCreate data and conduct regression\n# Create a simple business dataset\n\nset.seed(123) \n\n # Monthly ad expenditures in thousands of euros:\nadvertising_spend &lt;- seq(15, 37, by = 2) \n# Sales in thousands with noise:\nsales_revenue &lt;- 50 + 2.5 * advertising_spend + rnorm(12, 0, 5)  \n\n# Combine into a data frame\nmarketing_data &lt;- data.frame(\n  month = month.abb[1:12],\n  advertising_spend = advertising_spend,\n  sales_revenue = sales_revenue\n)\n\n# Run a simple linear regression\nmodel &lt;- lm(sales_revenue ~ advertising_spend, data = marketing_data)\n\n# Extract coefficients for our discussion\nbeta0 &lt;- coef(model)[1]  # Intercept\nbeta1 &lt;- coef(model)[2]  # Slope\n\n# Create data with regression information for plotting\nmarketing_data$fitted &lt;- fitted(model)  # Predicted values from regression\nmarketing_data$residuals &lt;- residuals(model)  # Differences between actual and predicted\n\n\n\n\nR code for the visualization\nggplot(marketing_data, aes(x = advertising_spend, y = sales_revenue)) +\n  geom_point(size = 3, color = \"steelblue\") +\n  geom_smooth(method = \"lm\", se = FALSE, color = \"darkred\") +\n  geom_segment(aes(xend = advertising_spend, yend = fitted), \n               linetype = \"dotted\", color = \"gray30\") +\n  labs(\n    title = \"Advertising Expenditure and Sales Revenue\",\n    subtitle = paste0(\"y = \", round(beta0, 1), \" + \", round(beta1, 2), \"x\"),\n    x = \"Monthly Advertising Spend (thousands €)\",\n    y = \"Monthly Sales Revenue (thousands €)\",\n    caption = \"Dotted lines represent residuals - the difference between\\nactual sales and what the regression line predicts\"\n  ) +\n  annotate(\"text\", x = 30, y = 110, \n           label = \"Residuals show how much\\nactual sales differ from\\nwhat our line predicts\", \n           size = 3, hjust = 0) +\n  annotate(\"curve\", x = 29, y = 110, xend = 27, yend = 120,\n           arrow = arrow(length = unit(0.2, \"cm\")), curvature = -0.3) +\n  theme_minimal() +\n  theme(\n    plot.title = element_text(face = \"bold\"),\n    plot.subtitle = element_text(face = \"italic\")\n  )\n\n\n\n\n\n\n\n\nFigure 2: The regression associated with the marketing example."
-  },
-  {
-    "objectID": "content/material/session04.html#further-reading",
-    "href": "content/material/session04.html#further-reading",
-    "title": "🗓️ Session 4: Project management",
-    "section": "Further Reading",
-    "text": "Further Reading\nWhile we do not cover this in this course, I highly recommend learning the version control system Git. Personally, I can recommend the following:\n\nVery concise introduction to Git\nIntroduction to GitHub: GitHub skills and the official docs",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 04"
-    ]
   }
 ]
