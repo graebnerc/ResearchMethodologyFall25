@@ -1,0 +1,15 @@
+{
+  "hash": "e999b6086f5fcb3c9892751cfceb9a05",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"🗓️ Session 5: Importing data\"\ndate: \"2025-10-20\"\ndate-modified: last-modified\n---\n\nThis is also one of the most underestimated topics. This session builds\nupon the previous session on setting up a project environment. Now you will learn\nhow to import data obtained elsewhere into R. We focus on importing `.csv` files,\nbut with the skills acquired in this context you will face no difficulties in\nimporting other data types as well. \n\n\n## 👨‍🏫 Lecture Slides \n\nEither click on the slide area below or click \n[here](/content/material/slides/E5-DataImport.pdf) to download the slides.\n\n\n```{=html}\n<div class=\"embed-container\">\n  <iframe \n  src=\"/content/material/slides/E5-DataImport.pdf\" \n  style=\"border: 0.5px\" \n  width=\"80%\"\n  height=\"80%\"\n  ></iframe>\n</div>\n```\n\n- [Data for the exercises](/content/material/fread_expls.zip)\n\n## 🎥 Lecture videos \n\nAll the videos are available via this [playlist](https://www.youtube.com/playlist?list=PLZDawQMrG1RK05hizCTxDROrbvdACAy0h).\n\n\n```{=html}\n<div class=\"embed-container\">\n<iframe width=\"560\" height=\"315\" src=\"https://www.youtube-nocookie.com/embed/videoseries?si=jQeCMrsHboEtQDJD&amp;list=PLZDawQMrG1RK05hizCTxDROrbvdACAy0h\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>\n</div>\n```\n\n\n## 📚 Mandatory Reading\n\n- The tutorial [Importing and exporting data using data.table](/content/tutorials/importing-exporting-data/index.qmd) \n\n## Further Reading\n\nTBA\n\n## ✍️ Coursework\n\n- Do the exercises `ImportData` from the `DataScienceExercises` package\n\n::: {.callout-tip collapse=\"true\"}\n## Quick code for starting the exercises\n\n::: {.cell}\n\n```{.r .cell-code}\nlearnr::run_tutorial(\n  name = \"ImportData\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n```\n:::\n\n:::\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -8,7 +8,7 @@
 
 <meta name="author" content="Claudius Gräbner-Radkowitsch">
 
-<title>🗓️ Session 6: Visualization – Theoretical and Empirical Research Methodology - Implementation Lab</title>
+<title>🗓️ Session 6: Data preparation – Theoretical and Empirical Research Methodology - Implementation Lab</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -85,6 +85,8 @@ div.csl-indent {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../content/tutorials.html" rel="next">
+<link href="../../content/material/session05.html" rel="prev">
 <link href="../../figures/icons/course_favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -125,7 +127,7 @@ div.csl-indent {
 }</script>
 
 
-<meta property="og:title" content="🗓️ Session 6: Visualization – Theoretical and Empirical Research Methodology - Implementation Lab">
+<meta property="og:title" content="🗓️ Session 6: Data preparation – Theoretical and Empirical Research Methodology - Implementation Lab">
 <meta property="og:description" content="">
 <meta property="og:image" content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==">
 <meta property="og:site_name" content="Theoretical and Empirical Research Methodology - Implementation Lab">
@@ -159,7 +161,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">🗓️ Session 6: Visualization</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/material/index.html">🗓️ Material</a></li><li class="breadcrumb-item"><a href="../../content/material/session06.html">Session 06</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -226,6 +228,18 @@ div.csl-indent {
  <span class="menu-text">Session 04</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/material/session05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/material/session06.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Session 06</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -261,9 +275,9 @@ div.csl-indent {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/material/index.html">🗓️ Material</a></li><li class="breadcrumb-item"><a href="../../content/material/session06.html">Session 06</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">🗓️ Session 6: Visualization</h1>
+<h1 class="title">🗓️ Session 6: Data preparation</h1>
 </div>
 
 
@@ -289,14 +303,14 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">25 04 2025</p>
+      <p class="date">24 10 2025</p>
     </div>
   </div>
   
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">01 05 2025</p>
+      <p class="date-modified">20 10 2025</p>
     </div>
   </div>
     
@@ -307,12 +321,12 @@ div.csl-indent {
 </header>
 
 
-<p>One area for which R is particulary well-known for is the area of <em>visualization</em>. This is particularly because of the package <a href="https://ggplot2.tidyverse.org/">ggplot2</a>. This session introduces <code>ggplot2</code> and the general approach to generate visualization in R. The good thing is that if you follow the approach described here, you can basically create every visualization type you can think of.</p>
+<p>In this session you learn how to turn your raw data into a state such that you can work with it. Luckily, there is one particular form for our data that represents the common starting point for all further operations, such as visualization or modelling. This form is called <em>tidy data</em>. And the goal of this session is to equip you with the tools that you need to turn the often messy raw data into tidy data. These skills are important because they make you independent: you will be able to prepare any data you find or create yourself such that you can further process it, and you will not rely on others to provide you data in a particular form.</p>
 <section id="lecture-slides" class="level2">
 <h2 class="anchored" data-anchor-id="lecture-slides">👨‍🏫 Lecture Slides</h2>
-<p>Either click on the slide area below or click <a href="../../content/material/slides/E6-Visualization.pdf">here</a> to download the slides.</p>
+<p>Either click on the slide area below or click <a href="../../content/material/slides/E6-DataPreparation.pdf">here</a> to download the slides.</p>
 <div class="embed-container">
-  <iframe src="../../content/material/slides/E6-Visualization.pdf" style="border: 0.5px" width="80%" height="80%"></iframe>
+  <iframe src="../../content/material/slides/E6-DataPreparation.pdf" style="border: 0.5px" width="80%" height="80%"></iframe>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -320,39 +334,48 @@ div.csl-indent {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>The R script of this session
+<span class="screen-reader-only">Tip</span>Data and solutions to the intermediate exercises
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<script src="https://gist.github.com/graebnerc/a3c11735652a0e4927ec71d4efadce09.js"></script>
+<ul>
+<li><a href="DataWranglingVideo.zip">Data used in the video</a></li>
+<li><a href="DataPrepExData.zip">Data for exercises</a></li>
+</ul>
+<script src="https://gist.github.com/graebnerc/029ca3b65025478f19f75ebfda2c1292.js"></script>
 </div>
 </div>
 </div>
 </section>
 <section id="lecture-videos" class="level2">
 <h2 class="anchored" data-anchor-id="lecture-videos">🎥 Lecture videos</h2>
-<p>Currently, no videos are available for this session. Check out the <a href="../../content/tutorials/visualization/index.html">tutorial</a> instead.</p>
+<p>All the videos are available via this <a href="https://www.youtube.com/playlist?list=PLZDawQMrG1RIzp07hiVKmu6wUs8tqdKod">playlist</a>.</p>
+<div class="embed-container">
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/videoseries?si=t69pnr-CSejvV0ZH&amp;list=PLZDawQMrG1RIzp07hiVKmu6wUs8tqdKod" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+</div>
 </section>
 <section id="mandatory-reading" class="level2">
 <h2 class="anchored" data-anchor-id="mandatory-reading">📚 Mandatory Reading</h2>
 <ul>
-<li>The tutorial <a href="../../content/tutorials/visualization/index.html">visualization</a></li>
+<li>The tutorial <a href="../../content/tutorials/data-wrangling/index.html">Data preparation</a></li>
+<li><a href="https://r4ds.hadley.nz/data-tidy.html">Chapter 5</a> in <span class="citation" data-cites="r4ds">Wickham <em>et al.</em> (<a href="#ref-r4ds" role="doc-biblioref">2023</a>)</span>.</li>
 </ul>
 </section>
 <section id="further-reading" class="level2">
 <h2 class="anchored" data-anchor-id="further-reading">Further Reading</h2>
 <ul>
-<li><span class="citation" data-cites="hadleygraphics">Wickham (<a href="#ref-hadleygraphics" role="doc-biblioref">2010</a>)</span>, who introduces the theory underlying <code>ggplot2</code></li>
-<li><a href="https://github.com/rstudio/cheatsheets/blob/main/data-visualization.pdf">ggplot2 cheat sheet</a></li>
-<li>Browse the website <a href="https://www.data-to-viz.com/">from Data to Viz</a> and try to re-create some of the figures yourself</li>
+<li>The help page for the <a href="https://dplyr.tidyverse.org/reference/select.html">selection helpers</a>, which facilitate the selection of particular columns.</li>
+<li><a href="https://r4ds.hadley.nz/numbers">Chapter 13</a> in <span class="citation" data-cites="r4ds">Wickham <em>et al.</em> (<a href="#ref-r4ds" role="doc-biblioref">2023</a>)</span>.</li>
+<li><a href="https://r4ds.hadley.nz/strings">Chapter 14</a> in <span class="citation" data-cites="r4ds">Wickham <em>et al.</em> (<a href="#ref-r4ds" role="doc-biblioref">2023</a>)</span>.</li>
+<li><span class="citation" data-cites="tidydata">Wickham (<a href="#ref-tidydata" role="doc-biblioref">2014</a>)</span> on the concept of ‘tidy data’ (see the <a href="https://github.com/hadley/tidy-data">Github repo</a> for reproduction of the paper)</li>
 </ul>
 </section>
 <section id="coursework" class="level2">
 <h2 class="anchored" data-anchor-id="coursework">✍️ Coursework</h2>
 <ul>
-<li>Do the exercises <code>Visualization1</code> from the <code>DataScienceExercises</code> package</li>
+<li>Do the exercises <code>Wrangling1</code> from the <code>DataScienceExercises</code> package</li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -368,9 +391,37 @@ div.csl-indent {
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>learnr<span class="sc">::</span><span class="fu">run_tutorial</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">"Visualization1"</span>, </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">"Wrangling1"</span>, </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">package =</span> <span class="st">"DataScienceExercises"</span>, </span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">shiny_args=</span><span class="fu">list</span>(<span class="st">"launch.browser"</span><span class="ot">=</span><span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<ul>
+<li>Download data about the CO2 emissions for some countries of your choice from the World Bank <a href="https://data.worldbank.org/indicator/EN.ATM.CO2E.PC">website</a> for the years 2000 to 2020. Set up an R project, save the data, import it, and make a line graph.
+<ul>
+<li><a href="../../content/material/session06-solution.zip">ZIP file</a> with a possible solution<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+</ul></li>
+<li>If you want more exercises on the challenge of making data longer/wider, you can do the exercises <code>Wrangling2</code> from the <code>DataScienceExercises</code> package</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Quick code for starting the exercises
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>learnr<span class="sc">::</span><span class="fu">run_tutorial</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">"Wrangling2"</span>, </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">package =</span> <span class="st">"DataScienceExercises"</span>, </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">shiny_args=</span><span class="fu">list</span>(<span class="st">"launch.browser"</span><span class="ot">=</span><span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -380,11 +431,20 @@ div.csl-indent {
 
 </section>
 
+
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-hadleygraphics" class="csl-entry" role="listitem">
-Wickham, H. (2010) <span>“<a href="https://doi.org/10.1198/jcgs.2009.07098">A <span>Layered Grammar</span> of <span>Graphics</span></a>,”</span> <em>Journal of Computational and Graphical Statistics</em> 19(1): 3–28.
+<div id="ref-tidydata" class="csl-entry" role="listitem">
+Wickham, H. (2014) <span>“<a href="https://doi.org/10.18637/jss.v059.i10">Tidy <span>Data</span></a>,”</span> <em>Journal of Statistical Software</em> 59(10).
 </div>
-</div></section></div></main> <!-- /main -->
+<div id="ref-r4ds" class="csl-entry" role="listitem">
+Wickham, H., Çetinkaya-Rundel, M. and Grolemund, G. (2023) <em>R for data science: Import, tidy, transform, visualize, and model data</em>, 2nd edition., Beijing et al.: O’Reilly, available at <a href="https://r4ds.hadley.nz/">https://r4ds.hadley.nz/</a>.
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>You can ignore the <code>make_co2_data.R</code> for now and only look at <code>make_co2_plot.R</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -790,6 +850,18 @@ Wickham, H. (2010) <span>“<a href="https://doi.org/10.1198/jcgs.2009.07098">A 
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../content/material/session05.html" class="pagination-link" aria-label="Session 05">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Session 05</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../content/tutorials.html" class="pagination-link" aria-label="💻 Tutorials">
+        <span class="nav-page-text">💻 Tutorials</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">

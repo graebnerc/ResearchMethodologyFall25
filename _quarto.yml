@@ -42,10 +42,10 @@ website:
            text: Session 03
          - href: content/material/session04.qmd
            text: Session 04
-         # - href: content/material/session05.qmd
-         #   text: Session 05
-         # - href: content/material/session06.qmd
-         #   text: Session 06
+         - href: content/material/session05.qmd
+           text: Session 05
+         - href: content/material/session06.qmd
+           text: Session 06
          # - href: content/material/session07.qmd
          #   text: Session 07
          # - href: content/material/session08.qmd

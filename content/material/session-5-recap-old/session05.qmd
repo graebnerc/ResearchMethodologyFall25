@@ -1,0 +1,37 @@
+---
+title: "🗓️ Session 5: Recap and practice"
+date: "2025-04-11"
+date-modified: last-modified
+---
+
+This session is about recap and practice. We will do exercises on topics that
+you suggest, and recap concepts you found particularly hard to grasp. To this
+end, make sure you communicate your preferences on topics via Moodle until 
+one week before this session.
+
+## 👨‍🏫 Lecture script 
+
+- The [script](session05-notes.qmd) summarizing the key parts of the session
+
+## 🎥 Lecture videos 
+
+There will be no videos for recap sessions.
+
+## 📚 Suggested Reading
+
+- The tutorial [Setting up an R project](/content/tutorials/setting-up-an-r-project/index.qmd)
+- [Fundamental object types in R I: Functions](/content/tutorials/obj-types-i-functions/index.qmd)
+- The section on lists in [Fundamental object types in R II: Vectors](/content/tutorials/obj-types-ii-vectors/index.qmd)
+- The section on factors in [Fundamental object types in R III: Factors and data frames](/content/tutorials/obj-types-iii-adv/index.qmd)
+
+## ✍️ Coursework
+
+*During the fthe session you will work on this sheet in groups*
+*of three people. Please use only one computer but develop the solutions together.*
+*LAter we will go through your solutions and discuss problems.*
+*I will post my own solutions online after the session, but urge to first try*
+*to come up with solutions on your own.*
+
+- [Exercise sheet for this session](session05-exercises.qmd)
+- [R file template for your solutions](https://gist.github.com/graebnerc/3725a703f7fcbc6d429993810d7a81fd)
+- [Possible solutions to the exercises](session05-solutions.qmd)

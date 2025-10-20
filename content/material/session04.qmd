@@ -21,13 +21,13 @@ kinds of integers, and data frames are special kinds of lists.
 
 For the slides of the first part of this session (*Packages and basic object types*)
 on click on the slide area below or click 
-[here](/content/material/slides/E3a-Objects.pdf) to download the slides.
+[here](/content/material/slides/E4a-Objects.pdf) to download the slides.
 
 
 ```{=html}
 <div class="embed-container">
   <iframe 
-  src="/content/material/slides/E3a-Objects.pdf" 
+  src="/content/material/slides/E4a-Objects.pdf" 
   style="border: 0.5px" 
   width="80%"
   height="80%"
@@ -42,12 +42,12 @@ on click on the slide area below or click
 
 For the slides of the second part of this session (*Advanced object types*) 
 see the slide area below or click 
-[here](/content/material/slides/E3b-AdvObjects.pdf) to download the slides.
+[here](/content/material/slides/E4b-AdvObjects.pdf) to download the slides.
 
 ```{=html}
 <div class="embed-container">
   <iframe 
-  src="/content/material/slides/E3b-AdvObjects.pdf" 
+  src="/content/material/slides/E4b-AdvObjects.pdf" 
   style="border: 0.5px" 
   width="80%"
   height="80%"

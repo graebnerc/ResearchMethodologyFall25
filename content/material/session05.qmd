@@ -1,37 +1,67 @@
 ---
-title: "🗓️ Session 5: Recap and practice"
-date: "2025-04-11"
+title: "🗓️ Session 5: Importing data"
+date: "2025-10-20"
 date-modified: last-modified
 ---
 
-This session is about recap and practice. We will do exercises on topics that
-you suggest, and recap concepts you found particularly hard to grasp. To this
-end, make sure you communicate your preferences on topics via Moodle until 
-one week before this session.
+This is also one of the most underestimated topics. This session builds
+upon the previous session on setting up a project environment. Now you will learn
+how to import data obtained elsewhere into R. We focus on importing `.csv` files,
+but with the skills acquired in this context you will face no difficulties in
+importing other data types as well. 
 
-## 👨‍🏫 Lecture script 
 
-- The [script](session05-notes.qmd) summarizing the key parts of the session
+## 👨‍🏫 Lecture Slides 
+
+Either click on the slide area below or click 
+[here](/content/material/slides/E5-DataImport.pdf) to download the slides.
+
+
+```{=html}
+<div class="embed-container">
+  <iframe 
+  src="/content/material/slides/E5-DataImport.pdf" 
+  style="border: 0.5px" 
+  width="80%"
+  height="80%"
+  ></iframe>
+</div>
+```
+
+- [Data for the exercises](/content/material/fread_expls.zip)
 
 ## 🎥 Lecture videos 
 
-There will be no videos for recap sessions.
+All the videos are available via this [playlist](https://www.youtube.com/playlist?list=PLZDawQMrG1RK05hizCTxDROrbvdACAy0h).
 
-## 📚 Suggested Reading
 
-- The tutorial [Setting up an R project](/content/tutorials/setting-up-an-r-project/index.qmd)
-- [Fundamental object types in R I: Functions](/content/tutorials/obj-types-i-functions/index.qmd)
-- The section on lists in [Fundamental object types in R II: Vectors](/content/tutorials/obj-types-ii-vectors/index.qmd)
-- The section on factors in [Fundamental object types in R III: Factors and data frames](/content/tutorials/obj-types-iii-adv/index.qmd)
+```{=html}
+<div class="embed-container">
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/videoseries?si=jQeCMrsHboEtQDJD&amp;list=PLZDawQMrG1RK05hizCTxDROrbvdACAy0h" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+```
+
+
+## 📚 Mandatory Reading
+
+- The tutorial [Importing and exporting data using data.table](/content/tutorials/importing-exporting-data/index.qmd) 
+
+## Further Reading
+
+TBA
 
 ## ✍️ Coursework
 
-*During the fthe session you will work on this sheet in groups*
-*of three people. Please use only one computer but develop the solutions together.*
-*LAter we will go through your solutions and discuss problems.*
-*I will post my own solutions online after the session, but urge to first try*
-*to come up with solutions on your own.*
+- Do the exercises `ImportData` from the `DataScienceExercises` package
 
-- [Exercise sheet for this session](session05-exercises.qmd)
-- [R file template for your solutions](https://gist.github.com/graebnerc/3725a703f7fcbc6d429993810d7a81fd)
-- [Possible solutions to the exercises](session05-solutions.qmd)
+::: {.callout-tip collapse="true"}
+## Quick code for starting the exercises
+```{r}
+#| eval: false
+learnr::run_tutorial(
+  name = "ImportData", 
+  package = "DataScienceExercises", 
+  shiny_args=list("launch.browser"=TRUE))
+```
+:::
+
