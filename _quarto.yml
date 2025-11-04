@@ -46,10 +46,10 @@ website:
            text: Session 05
          - href: content/material/session06.qmd
            text: Session 06
-         # - href: content/material/session07.qmd
-         #   text: Session 07
-         # - href: content/material/session08.qmd
-         #   text: Session 08
+         - href: content/material/session07.qmd
+           text: Session 07
+         - href: content/material/session08.qmd
+           text: Session 08
          # - href: content/material/session09.qmd
          #   text: Session 09
          # - href: content/material/session10.qmd

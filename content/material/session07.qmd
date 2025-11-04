@@ -36,8 +36,14 @@ Either click on the slide area below or click
 
 ## 🎥 Lecture videos 
 
-Currently, no videos are available for this session. Check out the 
-[tutorial](/content/tutorials/visualization/index.qmd) instead.
+All the videos are available via this [playlist](https://youtube.com/playlist?list=PLZDawQMrG1RL_OhYImHUM-F9rHsizLxYx&si=ofMKoYwusOS38sZL).
+
+```{=html}
+<div class="embed-container">
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/videoseries?si=ofMKoYwusOS38sZL&amp;list=PLZDawQMrG1RL_OhYImHUM-F9rHsizLxYx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+```
+
 
 ## 📚 Mandatory Reading
 

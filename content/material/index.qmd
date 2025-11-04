@@ -34,17 +34,15 @@ For information on how to use the exercise code, read
 |   Session    | Topic                                                         |       Exercise code                      |
 |:------------:|:--------------------------------------------------------------|:----------------------------------------:|
 |   [1](#s1)   | [General introduction](/content/material/session01.qmd)       |                                          |
-|   [2](#s2)   | [Basics of R and R-Studio](/content/material/session02.qmd) | `Basics`, `Functions`                    |
-
-<!--
+|   [2](#s2)   | [Basics of R and R-Studio](/content/material/session02.qmd) | `Basics`, `Functions` |
 |   [3](#s3)   | [Project management](/content/material/session03.qmd)         | `ProjectOrga`                            |
 |   [4](#s4)   | [Object types](/content/material/session04.qmd)               | `ObjectTypes1`, `ObjectTypes2`           |
-|   [5](#s5)   | [Recap & practice](/content/material/session05.qmd)           |                                          |
-|   [6](#s6)   | [Visualization](/content/material/session06.qmd)              |      `Visualization1`                    |
-|   [7](#s7)   | [Quarto](/content/material/session07.qmd)                     | `Quarto`                                 |
-|   [8](#s8)   | [AI for coding](/content/material/session08.qmd)              |                                          |
-|   [9](#s9)   | [Importing data](/content/material/session09.qmd)             | `Wrangling1`, `Wrangling2`               |
-|  [10](#s10)  | [Preparing data](/content/material/session10.qmd)             | `Wrangling1`, `Wrangling2`               |
+|   [5](#s5)   | [Importing data](/content/material/session05.qmd)             | `Wrangling1`, `Wrangling2`               |
+|  [6](#s6)  | [Preparing data](/content/material/session06.qmd)             | `Wrangling1`, `Wrangling2`               |
+|   [7](#s7)   | [Visualization](/content/material/session07.qmd)              |      `Visualization1`                    |
+|   [8](#s8)   | [Quarto](/content/material/session08.qmd)                     | `Quarto`                                 |
+<!--
+|   [9](#s9)   | [AI for coding](/content/material/session09.qmd)              |                                          |
 |  [11](#s11)  | TBD                                                           |                                          |
 |  [12](#s12)  | Linear models                                                 | `LinearRegression1`, `LinearRegression2` |
 |  [13](#s13)  | Analyzing experimental data                                   |                                          |

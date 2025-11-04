@@ -8,7 +8,7 @@
 
 <meta name="author" content="Claudius Gräbner-Radkowitsch">
 
-<title>🗓️ Session 8: Using AI for coding – Theoretical and Empirical Research Methodology - Implementation Lab</title>
+<title>🗓️ Session 8: A very short introduction to Quarto – Theoretical and Empirical Research Methodology - Implementation Lab</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -31,6 +66,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../content/tutorials.html" rel="next">
+<link href="../../content/material/session07.html" rel="prev">
 <link href="../../figures/icons/course_favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -71,7 +108,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<meta property="og:title" content="🗓️ Session 8: Using AI for coding – Theoretical and Empirical Research Methodology - Implementation Lab">
+<meta property="og:title" content="🗓️ Session 8: A very short introduction to Quarto – Theoretical and Empirical Research Methodology - Implementation Lab">
 <meta property="og:description" content="">
 <meta property="og:image" content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==">
 <meta property="og:site_name" content="Theoretical and Empirical Research Methodology - Implementation Lab">
@@ -105,7 +142,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">🗓️ Session 8: Using AI for coding</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/material/index.html">🗓️ Material</a></li><li class="breadcrumb-item"><a href="../../content/material/session08.html">Session 08</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -184,6 +221,18 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Session 06</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/material/session07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 07</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/material/session08.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Session 08</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -219,9 +268,9 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/material/index.html">🗓️ Material</a></li><li class="breadcrumb-item"><a href="../../content/material/session08.html">Session 08</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">🗓️ Session 8: Using AI for coding</h1>
+<h1 class="title">🗓️ Session 8: A very short introduction to Quarto</h1>
 </div>
 
 
@@ -247,14 +296,14 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">09 05 2025</p>
+      <p class="date">07 11 2025</p>
     </div>
   </div>
   
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">08 05 2025</p>
+      <p class="date-modified">04 11 2025</p>
     </div>
   </div>
     
@@ -265,32 +314,62 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>In this lecture you learn the basics of using AI tools for coding tasks. While no AI tool will help you to write code in a language you do not understand, modern AI tools are well suited to assist you in writing code in a language you are familiar with. Here we discuss some of the most common use cases for AI when it comes to the development of R code. We focus on, first, getting a first sketch of an R script and, second, on using AI to help you find mistakes in your current code.</p>
-<p>You also learn how important it is to provide the AI with context - something you can only do if you already know the basics of the programming language you and the AI are working with. Finally, we also touch upon some AI-like tools and advice on how to avoid typos in code.</p>
+<p>Quarto is a modern multi-language version of <em>R Markdown</em>. As with its predecessor, the idea is to provide people with the opportunity to write text and code into the very same document. This makes the creation of nice looking and reproducible reports or paper very easy. Moreoever, with Quarto it is very easy to create very nice papers, reports, websites or interactive apps. This website, for example, is fully written in Quarto. In this lecture, you learn everything you need to get started with writing your first Quarto documents. In fact, its really straightforward once you get the basic idea.</p>
 <section id="lecture-slides" class="level2">
 <h2 class="anchored" data-anchor-id="lecture-slides">👨‍🏫 Lecture Slides</h2>
-<p>Either click on the slide area below or click <a href="../../content/material/slides/L8-AICoding.pdf">here</a> to download the slides.</p>
+<p>Either click on the slide area below or click <a href="../../content/material/slides/E8-Quarto.pdf">here</a> to download the slides.</p>
 <div class="embed-container">
-  <iframe src="../../content/material/slides/L8-AICoding.pdf" style="border: 0.5px" width="80%" height="80%"></iframe>
+  <iframe src="../../content/material/slides/E8-Quarto.pdf" style="border: 0.5px" width="80%" height="80%"></iframe>
 </div>
+<ul>
+<li><a href="DesasterMarkdown.pdf">DesasterMarkdown.pdf</a></li>
+<li><a href="NicerMarkdown.pdf">NicerMarkdown.pdf</a></li>
+</ul>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Prompts and code examples from the lecture
+<span class="screen-reader-only">Tip</span>Code for the markdown desaster and a possible solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<script src="https://gist.github.com/graebnerc/5bf7f47a92afc22beb63c6fbc1d30831.js"></script>
+<script src="https://gist.github.com/graebnerc/44b82add84b1d5cb89d28574ae89ed02.js"></script>
 </div>
 </div>
 </div>
+</section>
+<section id="lecture-videos" class="level2">
+<h2 class="anchored" data-anchor-id="lecture-videos">🎥 Lecture videos</h2>
+<p>All the videos are available via this <a href="https://youtube.com/playlist?list=PLZDawQMrG1RLKUDufKf8EJz4Kj4WC_Kco&amp;feature=shared">playlist</a>.</p>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/videoseries?si=Ts2M1v35TDmtfbr3&amp;list=PLZDawQMrG1RLKUDufKf8EJz4Kj4WC_Kco" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+</section>
+<section id="mandatory-reading" class="level2">
+<h2 class="anchored" data-anchor-id="mandatory-reading">📚 Mandatory Reading</h2>
 <ul>
-<li>Details for the <a href="../../content/material/session08-Exercise.html">exercise on e-commerce data</a> (“generate R code”)</li>
+<li><a href="https://commonmark.org/help/tutorial/">The CommonMark markdown tutorial</a></li>
+<li><a href="https://quarto.org/docs/get-started/hello/rstudio.html">Quarto tutorial I: the basics</a></li>
+<li><a href="https://quarto.org/docs/get-started/computations/rstudio.html">Quarto tutorial II: computations</a></li>
+<li><a href="https://quarto.org/docs/get-started/authoring/rstudio.html">Quarto tutorial III: authoring quarto documents</a></li>
+</ul>
+</section>
+<section id="further-reading" class="level2">
+<h2 class="anchored" data-anchor-id="further-reading">Further Reading</h2>
+<ul>
+<li><a href="https://www.apreshill.com/blog/2022-04-we-dont-talk-about-quarto/">Blog introducing Quarto</a></li>
+<li><a href="https://yihui.org/en/2022/04/quarto-r-markdown/">Quarto and R Markdown</a></li>
+<li><a href="https://quarto.org/docs/guide/">The comprehensive Quarto documentation</a></li>
+<li><a href="https://quarto.org/docs/authoring/markdown-basics.html">Markdown basics</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/">The R Markdown Cookbook</a></li>
+</ul>
+</section>
+<section id="coursework" class="level2">
+<h2 class="anchored" data-anchor-id="coursework">✍️ Coursework</h2>
+<ul>
+<li>Do the exercises <code>Quarto</code> from the <code>DataScienceExercises</code> package</li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
@@ -298,39 +377,69 @@ ul.task-list li input[type="checkbox"] {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Base code for exercises on debugging, documenting and optimizing R code
+<span class="screen-reader-only">Tip</span>Quick code for starting the exercises
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<script src="https://gist.github.com/graebnerc/f4a4822676d81f5f608b1a9c4648614f.js"></script>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>learnr<span class="sc">::</span><span class="fu">run_tutorial</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">"Quarto"</span>, </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">package =</span> <span class="st">"DataScienceExercises"</span>, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">shiny_args=</span><span class="fu">list</span>(<span class="st">"launch.browser"</span><span class="ot">=</span><span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-</section>
-<section id="lecture-videos" class="level2">
-<h2 class="anchored" data-anchor-id="lecture-videos">🎥 Lecture videos</h2>
-<p>So far, there are no learning videos available for this lecture.</p>
-</section>
-<section id="mandatory-reading" class="level2">
-<h2 class="anchored" data-anchor-id="mandatory-reading">📚 Mandatory Reading</h2>
-<p>NA</p>
-</section>
-<section id="further-reading" class="level2">
-<h2 class="anchored" data-anchor-id="further-reading">Further Reading</h2>
+</div>
 <ul>
-<li>How to use <a href="https://docs.posit.co/ide/user/ide/guide/tools/copilot.html">Github Copilot in R Studio</a> and a guideline on how to get free student access<a href="https://github.com/education/students">through Github Education</a></li>
-<li>Resources for <a href="https://codeassist.google">Gemini Code Assist</a>, which is free but cannot be integrated directly into R Studio</li>
-<li>More information on <a href="https://docs.anthropic.com/en/docs/claude-code/overview">Claude Code</a>, which is most interesting for doing advanced programming work</li>
-<li>More information on <a href="https://windsurf.com">Windsurf</a>, which has a good free tier but no plugin for R Studio</li>
+<li>Do the following practical exercise:</li>
 </ul>
-</section>
-<section id="coursework" class="level2">
-<h2 class="anchored" data-anchor-id="coursework">✍️ Coursework</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Exercise description
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Create a new Quarto document where you set the title, date, and the author explicitly. Write a sample text that comprises…</p>
 <ul>
-<li>Do the in-class exercises you did not complete during the session</li>
+<li>…at least one level 1 heading</li>
+<li>…at least two level 2 headings</li>
+<li>…a YAML part that specifies that R code remains hidden by default</li>
+<li>…one R chunk where both the output and the code is printed in the final document</li>
+<li>…one R chunk that produces a simply ggplot object and where the code producing the plot is hidden</li>
 </ul>
+<p>Then do the following:</p>
+<ol type="1">
+<li><p>Knit the document to html with a floating table of contents and a special theme.</p></li>
+<li><p>Make the document available via Netlify Drop and add the possibility to download the underlying Rmd file. &gt; Note: For Netlify Drop to work, the html file must be called <code>index.html</code>!</p></li>
+<li><p>Knit the document to PDF and make sure that it includes a table of contents.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Possible solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<script src="https://gist.github.com/graebnerc/f42962b9ecbf9d7a7e6dc5593be691bd.js"></script>
+</div>
+</div>
+</div>
 
 
 </section>
@@ -741,6 +850,18 @@ ul.task-list li input[type="checkbox"] {
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../content/material/session07.html" class="pagination-link" aria-label="Session 07">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Session 07</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../content/tutorials.html" class="pagination-link" aria-label="💻 Tutorials">
+        <span class="nav-page-text">💻 Tutorials</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">

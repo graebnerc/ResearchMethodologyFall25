@@ -159,8 +159,8 @@ min(gdp_data$gdpPercap); max(gdp_data$gdpPercap)
 ```
 
 We now want to add an additional layer with data points on our plot.
-Poits are so called `geom`: a certain geometrical object representing data
-points. The function to add points is called `ggplot2::geom_point()` amd 
+Points are so called `geom`: a certain geometrical object representing data
+points. The function to add points is called `ggplot2::geom_point()` and 
 we literally just add it to our plot:
 
 ```{r}
@@ -387,10 +387,10 @@ gdp_plot
 ```
 
 So, the only thing that distinguishes our plot from the initial example is 
-the color pallette. There are many different pallettes available, you can 
+the color palette. There are many different pallettes available, you can 
 search for your favorite one in the internet. Here we use one provided by 
 the package `RColorBrewer`, which can be used for the `fill`-aesthetic 
-direclty:
+directly:
 
 ```{r}
 gdp_plot <- gdp_plot +
