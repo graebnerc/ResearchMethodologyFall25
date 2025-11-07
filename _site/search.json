@@ -833,446 +833,69 @@
     "text": "Your marketing team needs insights to develop targeted campaigns that will increase customer engagement and spending. The team believes there may be hidden patterns in how different customer segments interact with their platform.\nYour task: Create a visualization that reveals an interesting pattern in this data that could help inform marketing strategy.\n\nExample solution"
   },
   {
-    "objectID": "content/material/session07.html",
-    "href": "content/material/session07.html",
-    "title": "🗓️ Session 7: Visualization",
+    "objectID": "content/material/session08.html",
+    "href": "content/material/session08.html",
+    "title": "🗓️ Session 8: A very short introduction to Quarto",
     "section": "",
-    "text": "One area for which R is particulary well-known for is the area of visualization. This is particularly because of the package ggplot2. This session introduces ggplot2 and the general approach to generate visualization in R. The good thing is that if you follow the approach described here, you can basically create every visualization type you can think of.",
+    "text": "Quarto is a modern multi-language version of R Markdown. As with its predecessor, the idea is to provide people with the opportunity to write text and code into the very same document. This makes the creation of nice looking and reproducible reports or paper very easy. Moreoever, with Quarto it is very easy to create very nice papers, reports, websites or interactive apps. This website, for example, is fully written in Quarto. In this lecture, you learn everything you need to get started with writing your first Quarto documents. In fact, its really straightforward once you get the basic idea.",
     "crumbs": [
       "🗓️ Material",
-      "Session 07"
+      "Session 08"
     ]
   },
   {
-    "objectID": "content/material/session07.html#lecture-slides",
-    "href": "content/material/session07.html#lecture-slides",
-    "title": "🗓️ Session 7: Visualization",
+    "objectID": "content/material/session08.html#lecture-slides",
+    "href": "content/material/session08.html#lecture-slides",
+    "title": "🗓️ Session 8: A very short introduction to Quarto",
     "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipThe R script of this session",
+    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\nDesasterMarkdown.pdf\nNicerMarkdown.pdf\n\n\n\n\n\n\n\nTipCode for the markdown desaster and a possible solution",
     "crumbs": [
       "🗓️ Material",
-      "Session 07"
+      "Session 08"
     ]
   },
   {
-    "objectID": "content/material/session07.html#lecture-videos",
-    "href": "content/material/session07.html#lecture-videos",
-    "title": "🗓️ Session 7: Visualization",
+    "objectID": "content/material/session08.html#lecture-videos",
+    "href": "content/material/session08.html#lecture-videos",
+    "title": "🗓️ Session 8: A very short introduction to Quarto",
     "section": "🎥 Lecture videos",
     "text": "🎥 Lecture videos\nAll the videos are available via this playlist.",
     "crumbs": [
       "🗓️ Material",
-      "Session 07"
+      "Session 08"
     ]
   },
   {
-    "objectID": "content/material/session07.html#mandatory-reading",
-    "href": "content/material/session07.html#mandatory-reading",
-    "title": "🗓️ Session 7: Visualization",
+    "objectID": "content/material/session08.html#mandatory-reading",
+    "href": "content/material/session08.html#mandatory-reading",
+    "title": "🗓️ Session 8: A very short introduction to Quarto",
     "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\n\nThe tutorial visualization",
+    "text": "📚 Mandatory Reading\n\nThe CommonMark markdown tutorial\nQuarto tutorial I: the basics\nQuarto tutorial II: computations\nQuarto tutorial III: authoring quarto documents",
     "crumbs": [
       "🗓️ Material",
-      "Session 07"
+      "Session 08"
     ]
   },
   {
-    "objectID": "content/material/session07.html#further-reading",
-    "href": "content/material/session07.html#further-reading",
-    "title": "🗓️ Session 7: Visualization",
+    "objectID": "content/material/session08.html#further-reading",
+    "href": "content/material/session08.html#further-reading",
+    "title": "🗓️ Session 8: A very short introduction to Quarto",
     "section": "Further Reading",
-    "text": "Further Reading\n\nWickham (2010), who introduces the theory underlying ggplot2\nggplot2 cheat sheet\nBrowse the website from Data to Viz and try to re-create some of the figures yourself",
+    "text": "Further Reading\n\nBlog introducing Quarto\nQuarto and R Markdown\nThe comprehensive Quarto documentation\nMarkdown basics\nThe R Markdown Cookbook",
     "crumbs": [
       "🗓️ Material",
-      "Session 07"
+      "Session 08"
     ]
   },
   {
-    "objectID": "content/material/session07.html#coursework",
-    "href": "content/material/session07.html#coursework",
-    "title": "🗓️ Session 7: Visualization",
+    "objectID": "content/material/session08.html#coursework",
+    "href": "content/material/session08.html#coursework",
+    "title": "🗓️ Session 8: A very short introduction to Quarto",
     "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the exercises Visualization1 from the DataScienceExercises package\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Visualization1\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))",
+    "text": "✍️ Coursework\n\nDo the exercises Quarto from the DataScienceExercises package\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Quarto\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nDo the following practical exercise:\n\n\n\n\n\n\n\nNoteExercise description\n\n\n\n\n\nCreate a new Quarto document where you set the title, date, and the author explicitly. Write a sample text that comprises…\n\n…at least one level 1 heading\n…at least two level 2 headings\n…a YAML part that specifies that R code remains hidden by default\n…one R chunk where both the output and the code is printed in the final document\n…one R chunk that produces a simply ggplot object and where the code producing the plot is hidden\n\nThen do the following:\n\nKnit the document to html with a floating table of contents and a special theme.\nMake the document available via Netlify Drop and add the possibility to download the underlying Rmd file. &gt; Note: For Netlify Drop to work, the html file must be called index.html!\nKnit the document to PDF and make sure that it includes a table of contents.\n\n\n\n\n\n\n\n\n\n\nTipPossible solution",
     "crumbs": [
       "🗓️ Material",
-      "Session 07"
-    ]
-  },
-  {
-    "objectID": "content/material/session05.html",
-    "href": "content/material/session05.html",
-    "title": "🗓️ Session 5: Importing data",
-    "section": "",
-    "text": "This is also one of the most underestimated topics. This session builds upon the previous session on setting up a project environment. Now you will learn how to import data obtained elsewhere into R. We focus on importing .csv files, but with the skills acquired in this context you will face no difficulties in importing other data types as well.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 05"
-    ]
-  },
-  {
-    "objectID": "content/material/session05.html#lecture-slides",
-    "href": "content/material/session05.html#lecture-slides",
-    "title": "🗓️ Session 5: Importing data",
-    "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\nData for the exercises",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 05"
-    ]
-  },
-  {
-    "objectID": "content/material/session05.html#lecture-videos",
-    "href": "content/material/session05.html#lecture-videos",
-    "title": "🗓️ Session 5: Importing data",
-    "section": "🎥 Lecture videos",
-    "text": "🎥 Lecture videos\nAll the videos are available via this playlist.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 05"
-    ]
-  },
-  {
-    "objectID": "content/material/session05.html#mandatory-reading",
-    "href": "content/material/session05.html#mandatory-reading",
-    "title": "🗓️ Session 5: Importing data",
-    "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\n\nThe tutorial Importing and exporting data using data.table",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 05"
-    ]
-  },
-  {
-    "objectID": "content/material/session05.html#further-reading",
-    "href": "content/material/session05.html#further-reading",
-    "title": "🗓️ Session 5: Importing data",
-    "section": "Further Reading",
-    "text": "Further Reading\nTBA",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 05"
-    ]
-  },
-  {
-    "objectID": "content/material/session05.html#coursework",
-    "href": "content/material/session05.html#coursework",
-    "title": "🗓️ Session 5: Importing data",
-    "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the exercises ImportData from the DataScienceExercises package\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ImportData\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 05"
-    ]
-  },
-  {
-    "objectID": "content/material/session03.html",
-    "href": "content/material/session03.html",
-    "title": "🗓️ Session 3: Project management",
-    "section": "",
-    "text": "This is one of the most underestimated topics. In this session you learn how to adequately set up your working environment on your computer. This means where you should save which files, which directory structure you should use, and how to point the computer to other files on your computer. While this sounds boring at first, taking seriously the insights from this session will save you tons of hours of frustration in the future!",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 03"
-    ]
-  },
-  {
-    "objectID": "content/material/session03.html#lecture-slides",
-    "href": "content/material/session03.html#lecture-slides",
-    "title": "🗓️ Session 3: Project management",
-    "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nNoteLecture script",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 03"
-    ]
-  },
-  {
-    "objectID": "content/material/session03.html#lecture-videos",
-    "href": "content/material/session03.html#lecture-videos",
-    "title": "🗓️ Session 3: Project management",
-    "section": "🎥 Lecture videos",
-    "text": "🎥 Lecture videos\nCurrently, no videos are available for this session. Check out the tutorial on project setup instead.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 03"
-    ]
-  },
-  {
-    "objectID": "content/material/session03.html#mandatory-reading",
-    "href": "content/material/session03.html#mandatory-reading",
-    "title": "🗓️ Session 3: Project management",
-    "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\n\nThe tutorial Setting up an R project",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 03"
-    ]
-  },
-  {
-    "objectID": "content/material/session03.html#further-reading",
-    "href": "content/material/session03.html#further-reading",
-    "title": "🗓️ Session 3: Project management",
-    "section": "Further Reading",
-    "text": "Further Reading\nWhile we do not cover this in this course, I highly recommend learning the version control system Git. Personally, I can recommend the following:\n\nVery concise introduction to Git\nIntroduction to GitHub: GitHub skills and the official docs",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 03"
-    ]
-  },
-  {
-    "objectID": "content/material/session03.html#coursework",
-    "href": "content/material/session03.html#coursework",
-    "title": "🗓️ Session 3: Project management",
-    "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the exercises ProjectOrga from the DataScienceExercises package that refer to setting up an R project\nIf you still have problems with R Packages, re-read the respective section of the tutorial from session 2\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ProjectOrga\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 03"
-    ]
-  },
-  {
-    "objectID": "content/material/session01.html",
-    "href": "content/material/session01.html",
-    "title": "🗓️ Session 01 - Introduction, overview and installation",
-    "section": "",
-    "text": "In this first week, we will cover what you can expect to learn from these exercises and how they differ from the main lecture. I will elaborate a bit on why I chose R for this course, what you can do with it, and what has helped previous participants helped excelling in this course. Finally, I explain a bit what R is, how it relates to R Studio and LaTeX.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 01"
-    ]
-  },
-  {
-    "objectID": "content/material/session01.html#lecture-slides",
-    "href": "content/material/session01.html#lecture-slides",
-    "title": "🗓️ Session 01 - Introduction, overview and installation",
-    "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 01"
-    ]
-  },
-  {
-    "objectID": "content/material/session01.html#accompanying-lecture-videos",
-    "href": "content/material/session01.html#accompanying-lecture-videos",
-    "title": "🗓️ Session 01 - Introduction, overview and installation",
-    "section": "🎥 Accompanying lecture videos",
-    "text": "🎥 Accompanying lecture videos\nAll the videos are available via this playlist.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 01"
-    ]
-  },
-  {
-    "objectID": "content/material/session01.html#mandatory-reading",
-    "href": "content/material/session01.html#mandatory-reading",
-    "title": "🗓️ Session 01 - Introduction, overview and installation",
-    "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\nRead the following tutorials:\n\nInstallation of the necessary software\nInstalling R packages\nUsing the exercise package",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 01"
-    ]
-  },
-  {
-    "objectID": "content/material/session01.html#coursework",
-    "href": "content/material/session01.html#coursework",
-    "title": "🗓️ Session 01 - Introduction, overview and installation",
-    "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nMake sure you installed R, R-Studio, Git and all the required R packages\nIf you have questions or problems, please post them in the Moodle forum",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 01"
-    ]
-  },
-  {
-    "objectID": "content/tutorials.html",
-    "href": "content/tutorials.html",
-    "title": "Tutorials",
-    "section": "",
-    "text": "Here are tutorials, meant to complement the course.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Session date - Oldest\n      \n      \n        Session date - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\nSession date\n\n\n\nTitle\n\n\n\n\n\n\n\n\nSeptember 19, 2025\n\n\nInstallation of the necessary software\n\n\n\n\n\n\nSeptember 19, 2025\n\n\nInstalling R packages\n\n\n\n\n\n\nSeptember 19, 2025\n\n\nUsing the exercise package\n\n\n\n\n\n\nSeptember 26, 2025\n\n\nFirst steps in R\n\n\n\n\n\n\nOctober 10, 2025\n\n\nSetting up an R project\n\n\n\n\n\n\nOctober 17, 2025\n\n\nFundamental object types in R I: Functions\n\n\n\n\n\n\nOctober 17, 2025\n\n\nFundamental object types in R II: Vectors\n\n\n\n\n\n\nOctober 17, 2025\n\n\nFundamental object types in R III: Factors and data frames\n\n\n\n\n\n\nOctober 20, 2025\n\n\nImporting and exporting data\n\n\n\n\n\n\nOctober 24, 2025\n\n\nData preparation\n\n\n\n\n\n\nOctober 31, 2025\n\n\nVisualization\n\n\n\n\n\n\nDecember 5, 2025\n\n\nExperiments\n\n\n\n\n\n\nDecember 5, 2025\n\n\nLinear Regression\n\n\n\n\n\n\nNo matching items",
-    "crumbs": [
-      "💻 Tutorials"
-    ]
-  },
-  {
-    "objectID": "content/index.html",
-    "href": "content/index.html",
-    "title": "Theoretical and Empirical Research Methodology",
-    "section": "",
-    "text": "📍 Lecture\nMondays 13:00-14:30 in MAD (room MAD 099) & Fridays 11:00-12:30 in MAD (room MAD 225; biweekly, see seminar timetable)\nPlease make sure to check out the most recent version of the seminar timetable since lecture dates might differ from one week to another. The most recent version can be found in Moodle.\n\n\n💻 Exercises\nThere is an R package with interactive exercises for this course. I strongly recommend to do the exercises for each session since regular practice is the most important determinant in your success in learning R. You find more information on how to use the exercises in this tutorial. On top of that, there are some additional exercises on selected topics here.\n\n\n📂 Material\nYou find an overview about all lecture materials, such as slides and reading lists here. Complete material lists for the single sessions are distributed via the respective session pages. Lecture videos can, so far, only be accessed via Moodle. EUF students can register for the Moodle course 16256 using the password ResearchMethods25.\n\n\n📖 Tutorials\nComplementary to the lectures there are also short tutorials, which explain certain concepts in a more detailed and applied manner. You can find an overview over all tutorials here.\n\n\n💌 Contact and discussion\nFor asking questions and starting discussions, please use the forum in Moodle.",
-    "crumbs": [
-      "🏢 Getting Started"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Theoretical and Empirical Research Methodology",
-    "section": "",
-    "text": "📑 The course in brief\nFocus: This course is part of the module Theoretical and Empirical Research Methodology. It complements the theoretical lectures by introducing you to the statistical programming language R and acquire practical knowledge about how to implement essential research tools and all theoretical concepts discussed during the main lecture in R.\nHow: The implementation lab comprises a mixture of (i) lectures, in which I introduce concepts in the classroom, (ii) automated hands-on exercises for you to do at home on your own and (iii) instructional videos for topics that are best learned and practiced by yourself. Of course, you are always invited to post your questions to the course forum on Moodle and more intricate problems can be solved in class.\nPrerequisites: The lab does not require you to have any prior knowledge in R or any other programming language. Depending on your prior knowledge or affinity to programming, the course will be quite demanding, but equip you with computational skills that are most valuable both within academia and the business world.\n\n\n🎯 Learning Objectives\n\nUse R together with the integrated development environment R Studio\nUnderstand the use of R packages to perform specific data analytic tasks\nWrite reproducible data analysis reports using Quarto\nTransform raw data into tidy data, which is suitable for further analysis\nChoose and justify the correct visualization approach, and create appealing visualizations using the R package ggplot2\nImplement and interpret linear regression models with numerical and categorial variables\nAnalyze experimental data in R\n\n\n The main course on moodle",
-    "crumbs": [
-      "🏠 Home"
-    ]
-  },
-  {
-    "objectID": "content/exercises.html",
-    "href": "content/exercises.html",
-    "title": "Additional exercises",
-    "section": "",
-    "text": "Here are some additional exercises, on top of those provided by the exercise package.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Session date - Oldest\n      \n      \n        Session date - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\nSession date\n\n\n\nTitle\n\n\n\n\n\n\n\n\nMarch 28, 2024\n\n\nBasic object types: exercises\n\n\n\n\n\n\nMay 16, 2024\n\n\nQuarto exercises\n\n\n\n\n\n\nJune 7, 2024\n\n\nExercises on multiple linear regression\n\n\n\n\n\n\n \n\n\nExercise on experiments - possible solution\n\n\n\n\n\n\n \n\n\nExercise on experiments\n\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "content/statrecap.html",
-    "href": "content/statrecap.html",
-    "title": "A short and friendly recap of mathematical and statistical fundamentals",
-    "section": "",
-    "text": "Here I provide you with explanations of the basics in statistics and mathematics that are required for this course, as explicated in the seminar description.\nThis is ongoing work, so I greatly value your feedback and your suggestions on how to make this material more comprehensive and accessible.\n\n\n\n\n\n\n\n\n\n\nTitle\n\n\n\n\n\n\n\n\n1: What is Statistics all about? Conceptual Foundations\n\n\n\n\n\n\n2: Data Fundamentals\n\n\n\n\n\n\n3: Descriptive Statistics\n\n\n\n\n\n\n4: Essentials in Probability Theory for Statistics\n\n\n\n\n\n\nNo matching items",
-    "crumbs": [
-      "📈 Statistics recap"
-    ]
-  },
-  {
-    "objectID": "content/material/index.html",
-    "href": "content/material/index.html",
-    "title": "Material overview",
-    "section": "",
-    "text": "The following textbooks offer a good general reference to the course content, and I think its a good idea to read into these books in a general way. Moreover, I often point to chapters in the respective session pages.\n\nWickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). R for data science: Import, tidy, transform, visualize, and model data (2nd edition). O’Reilly. https://r4ds.hadley.nz/\nIsmay, C., & Kim, A. Y.-S. (2020). Statistical inference via data science: A ModernDive, into R and the tidyverse. CRC Press, Taylor and Francis Group. https://moderndive.com/index.html\n\nFor more advanced details on the fundamentals of programming in R, I recommend the following:\n\nWickham, H. (2019). Advanced R (Second edition). CRC Press/Taylor & Francis Group. https://adv-r.hadley.nz/\n\nFor the model-related parts of the lecture I recommend the following book as a further reading reference:\n\nJames, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). An introduction to statistical learning: With applications in R (Second edition). Springer. https://www.statlearning.com/",
-    "crumbs": [
-      "🗓️ Material",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "content/material/index.html#general-references",
-    "href": "content/material/index.html#general-references",
-    "title": "Material overview",
-    "section": "",
-    "text": "The following textbooks offer a good general reference to the course content, and I think its a good idea to read into these books in a general way. Moreover, I often point to chapters in the respective session pages.\n\nWickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). R for data science: Import, tidy, transform, visualize, and model data (2nd edition). O’Reilly. https://r4ds.hadley.nz/\nIsmay, C., & Kim, A. Y.-S. (2020). Statistical inference via data science: A ModernDive, into R and the tidyverse. CRC Press, Taylor and Francis Group. https://moderndive.com/index.html\n\nFor more advanced details on the fundamentals of programming in R, I recommend the following:\n\nWickham, H. (2019). Advanced R (Second edition). CRC Press/Taylor & Francis Group. https://adv-r.hadley.nz/\n\nFor the model-related parts of the lecture I recommend the following book as a further reading reference:\n\nJames, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). An introduction to statistical learning: With applications in R (Second edition). Springer. https://www.statlearning.com/",
-    "crumbs": [
-      "🗓️ Material",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "content/material/index.html#session-specific-material",
-    "href": "content/material/index.html#session-specific-material",
-    "title": "Material overview",
-    "section": "🔖 Session-specific material",
-    "text": "🔖 Session-specific material\n\n\n\n\n\n\nNoteHow to use the exercise codes?\n\n\n\n\n\nFor information on how to use the exercise code, read this tutorial.\n\n\n\n\n\n\nSession\nTopic\nExercise code\n\n\n\n\n1\nGeneral introduction\n\n\n\n2\nBasics of R and R-Studio\nBasics, Functions\n\n\n3\nProject management\nProjectOrga\n\n\n4\nObject types\nObjectTypes1, ObjectTypes2\n\n\n5\nImporting data\nWrangling1, Wrangling2\n\n\n6\nPreparing data\nWrangling1, Wrangling2\n\n\n7\nVisualization\nVisualization1\n\n\n8\nQuarto\nQuarto",
-    "crumbs": [
-      "🗓️ Material",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "content/material/session02.html",
-    "href": "content/material/session02.html",
-    "title": "🗓️ Session 2: First steps in R",
-    "section": "",
-    "text": "In this session, you will learn about how to use the integrated development environment R-Studio to edit and execute R script and about the basic commands in R. Moreover, you will be introduced to two fundamental concepts: assignments and functions.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 02"
-    ]
-  },
-  {
-    "objectID": "content/material/session02.html#lecture-slides",
-    "href": "content/material/session02.html#lecture-slides",
-    "title": "🗓️ Session 2: First steps in R",
-    "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipThe R script of this session",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 02"
-    ]
-  },
-  {
-    "objectID": "content/material/session02.html#accompanying-lecture-videos",
-    "href": "content/material/session02.html#accompanying-lecture-videos",
-    "title": "🗓️ Session 2: First steps in R",
-    "section": "🎥 Accompanying lecture videos",
-    "text": "🎥 Accompanying lecture videos\nAll the videos are available via this playlist.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 02"
-    ]
-  },
-  {
-    "objectID": "content/material/session02.html#mandatory-reading",
-    "href": "content/material/session02.html#mandatory-reading",
-    "title": "🗓️ Session 2: First steps in R",
-    "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\n\nTutorial First steps in R\nChapter 2 in Wickham et al. (2023).\n\n\n🏆 Further readings\n\nR Studio Cheat Sheet\nChapter 4 in Wickham et al. (2023).\nChapter 8 in Wickham et al. (2023).",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 02"
-    ]
-  },
-  {
-    "objectID": "content/material/session02.html#coursework",
-    "href": "content/material/session02.html#coursework",
-    "title": "🗓️ Session 2: First steps in R",
-    "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the Basics exercises of the package DataScienceExercises\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Basics\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nDo the Functions exercises of the package DataScienceExercises\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Functions\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nIf you have questions or problems, please post them in the Moodle forum",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 02"
-    ]
-  },
-  {
-    "objectID": "content/material/session04.html",
-    "href": "content/material/session04.html",
-    "title": "🗓️ Session 4: Object types in R",
-    "section": "",
-    "text": "In the first part of this session you learn some additional details about R packages and about the most important and most fundamental object types in R, such as decimal numbers or words. While this might look a bit boring at first, understanding these basic types is fundamental for all the more advanced (and exiting) stuff in the future!\nIn the second part of this session, you are then introduced to two more advanced object types in R. The two object types covered, factors and data frames, are advanced in the sense that they can be thought of extensions of some of the basic object types you encountered before: factors and special kinds of integers, and data frames are special kinds of lists.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 04"
-    ]
-  },
-  {
-    "objectID": "content/material/session04.html#lecture-slides",
-    "href": "content/material/session04.html#lecture-slides",
-    "title": "🗓️ Session 4: Object types in R",
-    "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nFor the slides of the first part of this session (Packages and basic object types) on click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipSolutions to the intermediate exercises of part 1\n\n\n\n\n\n\n\n\n\nFor the slides of the second part of this session (Advanced object types) see the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipNotes and solutions for the second part of this session",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 04"
-    ]
-  },
-  {
-    "objectID": "content/material/session04.html#lecture-videos",
-    "href": "content/material/session04.html#lecture-videos",
-    "title": "🗓️ Session 4: Object types in R",
-    "section": "🎥 Lecture videos",
-    "text": "🎥 Lecture videos\nAll the videos for the first part on basic object types are available via this playlist.\n\n\n\nAll the videos for the second part on advanced object types are available via this playlist.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 04"
-    ]
-  },
-  {
-    "objectID": "content/material/session04.html#mandatory-reading",
-    "href": "content/material/session04.html#mandatory-reading",
-    "title": "🗓️ Session 4: Object types in R",
-    "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\nRead the following tutorials for the first part on basic object types:\n\nFundamental object types in R I: Functions\nFundamental object types in R II: Vectors\n\nThe topics of the second part on advanced object types are covered here:\n\nFundamental object types in R III: Factors and data frames\n\n\n🏆 Further readings\nI suggest you read these references after you learned about data wrangling techniques in session 10.\n\nSections 1-3 in Chapter 12 of Wickham et al. (2023).\nChapter 13 in Wickham et al. (2023).\nChapter 14 in Wickham et al. (2023).\nChapter 16 in Wickham et al. (2023).",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 04"
-    ]
-  },
-  {
-    "objectID": "content/material/session04.html#coursework",
-    "href": "content/material/session04.html#coursework",
-    "title": "🗓️ Session 4: Object types in R",
-    "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the ObjectTypes1 exercises of the package DataScienceExercises for the first part on basic object types:\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ObjectTypes1\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nFor the second part do the ObjectTypes2 exercises of the package DataScienceExercises\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ObjectTypes2\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nIf you have questions or problems, please post them in the Moodle forum",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 04"
+      "Session 08"
     ]
   },
   {
@@ -1353,69 +976,468 @@
     ]
   },
   {
-    "objectID": "content/material/session08.html",
-    "href": "content/material/session08.html",
-    "title": "🗓️ Session 8: A very short introduction to Quarto",
+    "objectID": "content/material/session04.html",
+    "href": "content/material/session04.html",
+    "title": "🗓️ Session 4: Object types in R",
     "section": "",
-    "text": "Quarto is a modern multi-language version of R Markdown. As with its predecessor, the idea is to provide people with the opportunity to write text and code into the very same document. This makes the creation of nice looking and reproducible reports or paper very easy. Moreoever, with Quarto it is very easy to create very nice papers, reports, websites or interactive apps. This website, for example, is fully written in Quarto. In this lecture, you learn everything you need to get started with writing your first Quarto documents. In fact, its really straightforward once you get the basic idea.",
+    "text": "In the first part of this session you learn some additional details about R packages and about the most important and most fundamental object types in R, such as decimal numbers or words. While this might look a bit boring at first, understanding these basic types is fundamental for all the more advanced (and exiting) stuff in the future!\nIn the second part of this session, you are then introduced to two more advanced object types in R. The two object types covered, factors and data frames, are advanced in the sense that they can be thought of extensions of some of the basic object types you encountered before: factors and special kinds of integers, and data frames are special kinds of lists.",
     "crumbs": [
       "🗓️ Material",
-      "Session 08"
+      "Session 04"
     ]
   },
   {
-    "objectID": "content/material/session08.html#lecture-slides",
-    "href": "content/material/session08.html#lecture-slides",
-    "title": "🗓️ Session 8: A very short introduction to Quarto",
+    "objectID": "content/material/session04.html#lecture-slides",
+    "href": "content/material/session04.html#lecture-slides",
+    "title": "🗓️ Session 4: Object types in R",
     "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\nDesasterMarkdown.pdf\nNicerMarkdown.pdf\n\n\n\n\n\n\n\nTipCode for the markdown desaster and a possible solution",
+    "text": "👨‍🏫 Lecture Slides\nFor the slides of the first part of this session (Packages and basic object types) on click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipSolutions to the intermediate exercises of part 1\n\n\n\n\n\n\n\n\n\nFor the slides of the second part of this session (Advanced object types) see the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipNotes and solutions for the second part of this session",
     "crumbs": [
       "🗓️ Material",
-      "Session 08"
+      "Session 04"
     ]
   },
   {
-    "objectID": "content/material/session08.html#lecture-videos",
-    "href": "content/material/session08.html#lecture-videos",
-    "title": "🗓️ Session 8: A very short introduction to Quarto",
+    "objectID": "content/material/session04.html#lecture-videos",
+    "href": "content/material/session04.html#lecture-videos",
+    "title": "🗓️ Session 4: Object types in R",
+    "section": "🎥 Lecture videos",
+    "text": "🎥 Lecture videos\nAll the videos for the first part on basic object types are available via this playlist.\n\n\n\nAll the videos for the second part on advanced object types are available via this playlist.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 04"
+    ]
+  },
+  {
+    "objectID": "content/material/session04.html#mandatory-reading",
+    "href": "content/material/session04.html#mandatory-reading",
+    "title": "🗓️ Session 4: Object types in R",
+    "section": "📚 Mandatory Reading",
+    "text": "📚 Mandatory Reading\nRead the following tutorials for the first part on basic object types:\n\nFundamental object types in R I: Functions\nFundamental object types in R II: Vectors\n\nThe topics of the second part on advanced object types are covered here:\n\nFundamental object types in R III: Factors and data frames\n\n\n🏆 Further readings\nI suggest you read these references after you learned about data wrangling techniques in session 10.\n\nSections 1-3 in Chapter 12 of Wickham et al. (2023).\nChapter 13 in Wickham et al. (2023).\nChapter 14 in Wickham et al. (2023).\nChapter 16 in Wickham et al. (2023).",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 04"
+    ]
+  },
+  {
+    "objectID": "content/material/session04.html#coursework",
+    "href": "content/material/session04.html#coursework",
+    "title": "🗓️ Session 4: Object types in R",
+    "section": "✍️ Coursework",
+    "text": "✍️ Coursework\n\nDo the ObjectTypes1 exercises of the package DataScienceExercises for the first part on basic object types:\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ObjectTypes1\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nFor the second part do the ObjectTypes2 exercises of the package DataScienceExercises\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ObjectTypes2\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nIf you have questions or problems, please post them in the Moodle forum",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 04"
+    ]
+  },
+  {
+    "objectID": "content/material/session02.html",
+    "href": "content/material/session02.html",
+    "title": "🗓️ Session 2: First steps in R",
+    "section": "",
+    "text": "In this session, you will learn about how to use the integrated development environment R-Studio to edit and execute R script and about the basic commands in R. Moreover, you will be introduced to two fundamental concepts: assignments and functions.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 02"
+    ]
+  },
+  {
+    "objectID": "content/material/session02.html#lecture-slides",
+    "href": "content/material/session02.html#lecture-slides",
+    "title": "🗓️ Session 2: First steps in R",
+    "section": "👨‍🏫 Lecture Slides",
+    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipThe R script of this session",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 02"
+    ]
+  },
+  {
+    "objectID": "content/material/session02.html#accompanying-lecture-videos",
+    "href": "content/material/session02.html#accompanying-lecture-videos",
+    "title": "🗓️ Session 2: First steps in R",
+    "section": "🎥 Accompanying lecture videos",
+    "text": "🎥 Accompanying lecture videos\nAll the videos are available via this playlist.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 02"
+    ]
+  },
+  {
+    "objectID": "content/material/session02.html#mandatory-reading",
+    "href": "content/material/session02.html#mandatory-reading",
+    "title": "🗓️ Session 2: First steps in R",
+    "section": "📚 Mandatory Reading",
+    "text": "📚 Mandatory Reading\n\nTutorial First steps in R\nChapter 2 in Wickham et al. (2023).\n\n\n🏆 Further readings\n\nR Studio Cheat Sheet\nChapter 4 in Wickham et al. (2023).\nChapter 8 in Wickham et al. (2023).",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 02"
+    ]
+  },
+  {
+    "objectID": "content/material/session02.html#coursework",
+    "href": "content/material/session02.html#coursework",
+    "title": "🗓️ Session 2: First steps in R",
+    "section": "✍️ Coursework",
+    "text": "✍️ Coursework\n\nDo the Basics exercises of the package DataScienceExercises\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Basics\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nDo the Functions exercises of the package DataScienceExercises\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Functions\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nIf you have questions or problems, please post them in the Moodle forum",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 02"
+    ]
+  },
+  {
+    "objectID": "content/material/index.html",
+    "href": "content/material/index.html",
+    "title": "Material overview",
+    "section": "",
+    "text": "The following textbooks offer a good general reference to the course content, and I think its a good idea to read into these books in a general way. Moreover, I often point to chapters in the respective session pages.\n\nWickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). R for data science: Import, tidy, transform, visualize, and model data (2nd edition). O’Reilly. https://r4ds.hadley.nz/\nIsmay, C., & Kim, A. Y.-S. (2020). Statistical inference via data science: A ModernDive, into R and the tidyverse. CRC Press, Taylor and Francis Group. https://moderndive.com/index.html\n\nFor more advanced details on the fundamentals of programming in R, I recommend the following:\n\nWickham, H. (2019). Advanced R (Second edition). CRC Press/Taylor & Francis Group. https://adv-r.hadley.nz/\n\nFor the model-related parts of the lecture I recommend the following book as a further reading reference:\n\nJames, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). An introduction to statistical learning: With applications in R (Second edition). Springer. https://www.statlearning.com/",
+    "crumbs": [
+      "🗓️ Material",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "content/material/index.html#general-references",
+    "href": "content/material/index.html#general-references",
+    "title": "Material overview",
+    "section": "",
+    "text": "The following textbooks offer a good general reference to the course content, and I think its a good idea to read into these books in a general way. Moreover, I often point to chapters in the respective session pages.\n\nWickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). R for data science: Import, tidy, transform, visualize, and model data (2nd edition). O’Reilly. https://r4ds.hadley.nz/\nIsmay, C., & Kim, A. Y.-S. (2020). Statistical inference via data science: A ModernDive, into R and the tidyverse. CRC Press, Taylor and Francis Group. https://moderndive.com/index.html\n\nFor more advanced details on the fundamentals of programming in R, I recommend the following:\n\nWickham, H. (2019). Advanced R (Second edition). CRC Press/Taylor & Francis Group. https://adv-r.hadley.nz/\n\nFor the model-related parts of the lecture I recommend the following book as a further reading reference:\n\nJames, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). An introduction to statistical learning: With applications in R (Second edition). Springer. https://www.statlearning.com/",
+    "crumbs": [
+      "🗓️ Material",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "content/material/index.html#session-specific-material",
+    "href": "content/material/index.html#session-specific-material",
+    "title": "Material overview",
+    "section": "🔖 Session-specific material",
+    "text": "🔖 Session-specific material\n\n\n\n\n\n\nNoteHow to use the exercise codes?\n\n\n\n\n\nFor information on how to use the exercise code, read this tutorial.\n\n\n\n\n\n\nSession\nTopic\nExercise code\n\n\n\n\n1\nGeneral introduction\n\n\n\n2\nBasics of R and R-Studio\nBasics, Functions\n\n\n3\nProject management\nProjectOrga\n\n\n4\nObject types\nObjectTypes1, ObjectTypes2\n\n\n5\nImporting data\nWrangling1, Wrangling2\n\n\n6\nPreparing data\nWrangling1, Wrangling2\n\n\n7\nVisualization\nVisualization1\n\n\n8\nQuarto\nQuarto",
+    "crumbs": [
+      "🗓️ Material",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "content/statrecap.html",
+    "href": "content/statrecap.html",
+    "title": "A short and friendly recap of mathematical and statistical fundamentals",
+    "section": "",
+    "text": "Here I provide you with explanations of the basics in statistics and mathematics that are required for this course, as explicated in the seminar description.\nThis is ongoing work, so I greatly value your feedback and your suggestions on how to make this material more comprehensive and accessible.\n\n\n\n\n\n\n\n\n\n\nTitle\n\n\n\n\n\n\n\n\n1: What is Statistics all about? Conceptual Foundations\n\n\n\n\n\n\n2: Data Fundamentals\n\n\n\n\n\n\n3: Descriptive Statistics\n\n\n\n\n\n\n4: Essentials in Probability Theory for Statistics\n\n\n\n\n\n\nNo matching items",
+    "crumbs": [
+      "📈 Statistics recap"
+    ]
+  },
+  {
+    "objectID": "content/exercises.html",
+    "href": "content/exercises.html",
+    "title": "Additional exercises",
+    "section": "",
+    "text": "Here are some additional exercises, on top of those provided by the exercise package.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Session date - Oldest\n      \n      \n        Session date - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\nSession date\n\n\n\nTitle\n\n\n\n\n\n\n\n\nMarch 28, 2024\n\n\nBasic object types: exercises\n\n\n\n\n\n\nMay 16, 2024\n\n\nQuarto exercises\n\n\n\n\n\n\nJune 7, 2024\n\n\nExercises on multiple linear regression\n\n\n\n\n\n\n \n\n\nExercise on experiments - possible solution\n\n\n\n\n\n\n \n\n\nExercise on experiments\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Theoretical and Empirical Research Methodology",
+    "section": "",
+    "text": "📑 The course in brief\nFocus: This course is part of the module Theoretical and Empirical Research Methodology. It complements the theoretical lectures by introducing you to the statistical programming language R and acquire practical knowledge about how to implement essential research tools and all theoretical concepts discussed during the main lecture in R.\nHow: The implementation lab comprises a mixture of (i) lectures, in which I introduce concepts in the classroom, (ii) automated hands-on exercises for you to do at home on your own and (iii) instructional videos for topics that are best learned and practiced by yourself. Of course, you are always invited to post your questions to the course forum on Moodle and more intricate problems can be solved in class.\nPrerequisites: The lab does not require you to have any prior knowledge in R or any other programming language. Depending on your prior knowledge or affinity to programming, the course will be quite demanding, but equip you with computational skills that are most valuable both within academia and the business world.\n\n\n🎯 Learning Objectives\n\nUse R together with the integrated development environment R Studio\nUnderstand the use of R packages to perform specific data analytic tasks\nWrite reproducible data analysis reports using Quarto\nTransform raw data into tidy data, which is suitable for further analysis\nChoose and justify the correct visualization approach, and create appealing visualizations using the R package ggplot2\nImplement and interpret linear regression models with numerical and categorial variables\nAnalyze experimental data in R\n\n\n The main course on moodle",
+    "crumbs": [
+      "🏠 Home"
+    ]
+  },
+  {
+    "objectID": "content/index.html",
+    "href": "content/index.html",
+    "title": "Theoretical and Empirical Research Methodology",
+    "section": "",
+    "text": "📍 Lecture\nMondays 13:00-14:30 in MAD (room MAD 099) & Fridays 11:00-12:30 in MAD (room MAD 225; biweekly, see seminar timetable)\nPlease make sure to check out the most recent version of the seminar timetable since lecture dates might differ from one week to another. The most recent version can be found in Moodle.\n\n\n💻 Exercises\nThere is an R package with interactive exercises for this course. I strongly recommend to do the exercises for each session since regular practice is the most important determinant in your success in learning R. You find more information on how to use the exercises in this tutorial. On top of that, there are some additional exercises on selected topics here.\n\n\n📂 Material\nYou find an overview about all lecture materials, such as slides and reading lists here. Complete material lists for the single sessions are distributed via the respective session pages. Lecture videos can, so far, only be accessed via Moodle. EUF students can register for the Moodle course 16256 using the password ResearchMethods25.\n\n\n📖 Tutorials\nComplementary to the lectures there are also short tutorials, which explain certain concepts in a more detailed and applied manner. You can find an overview over all tutorials here.\n\n\n💌 Contact and discussion\nFor asking questions and starting discussions, please use the forum in Moodle.",
+    "crumbs": [
+      "🏢 Getting Started"
+    ]
+  },
+  {
+    "objectID": "content/tutorials.html",
+    "href": "content/tutorials.html",
+    "title": "Tutorials",
+    "section": "",
+    "text": "Here are tutorials, meant to complement the course.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Session date - Oldest\n      \n      \n        Session date - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\nSession date\n\n\n\nTitle\n\n\n\n\n\n\n\n\nSeptember 19, 2025\n\n\nInstallation of the necessary software\n\n\n\n\n\n\nSeptember 19, 2025\n\n\nInstalling R packages\n\n\n\n\n\n\nSeptember 19, 2025\n\n\nUsing the exercise package\n\n\n\n\n\n\nSeptember 26, 2025\n\n\nFirst steps in R\n\n\n\n\n\n\nOctober 10, 2025\n\n\nSetting up an R project\n\n\n\n\n\n\nOctober 17, 2025\n\n\nFundamental object types in R I: Functions\n\n\n\n\n\n\nOctober 17, 2025\n\n\nFundamental object types in R II: Vectors\n\n\n\n\n\n\nOctober 17, 2025\n\n\nFundamental object types in R III: Factors and data frames\n\n\n\n\n\n\nOctober 20, 2025\n\n\nImporting and exporting data\n\n\n\n\n\n\nOctober 24, 2025\n\n\nData preparation\n\n\n\n\n\n\nOctober 31, 2025\n\n\nVisualization\n\n\n\n\n\n\nDecember 5, 2025\n\n\nExperiments\n\n\n\n\n\n\nDecember 5, 2025\n\n\nLinear Regression\n\n\n\n\n\n\nNo matching items",
+    "crumbs": [
+      "💻 Tutorials"
+    ]
+  },
+  {
+    "objectID": "content/material/session01.html",
+    "href": "content/material/session01.html",
+    "title": "🗓️ Session 01 - Introduction, overview and installation",
+    "section": "",
+    "text": "In this first week, we will cover what you can expect to learn from these exercises and how they differ from the main lecture. I will elaborate a bit on why I chose R for this course, what you can do with it, and what has helped previous participants helped excelling in this course. Finally, I explain a bit what R is, how it relates to R Studio and LaTeX.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 01"
+    ]
+  },
+  {
+    "objectID": "content/material/session01.html#lecture-slides",
+    "href": "content/material/session01.html#lecture-slides",
+    "title": "🗓️ Session 01 - Introduction, overview and installation",
+    "section": "👨‍🏫 Lecture Slides",
+    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 01"
+    ]
+  },
+  {
+    "objectID": "content/material/session01.html#accompanying-lecture-videos",
+    "href": "content/material/session01.html#accompanying-lecture-videos",
+    "title": "🗓️ Session 01 - Introduction, overview and installation",
+    "section": "🎥 Accompanying lecture videos",
+    "text": "🎥 Accompanying lecture videos\nAll the videos are available via this playlist.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 01"
+    ]
+  },
+  {
+    "objectID": "content/material/session01.html#mandatory-reading",
+    "href": "content/material/session01.html#mandatory-reading",
+    "title": "🗓️ Session 01 - Introduction, overview and installation",
+    "section": "📚 Mandatory Reading",
+    "text": "📚 Mandatory Reading\nRead the following tutorials:\n\nInstallation of the necessary software\nInstalling R packages\nUsing the exercise package",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 01"
+    ]
+  },
+  {
+    "objectID": "content/material/session01.html#coursework",
+    "href": "content/material/session01.html#coursework",
+    "title": "🗓️ Session 01 - Introduction, overview and installation",
+    "section": "✍️ Coursework",
+    "text": "✍️ Coursework\n\nMake sure you installed R, R-Studio, Git and all the required R packages\nIf you have questions or problems, please post them in the Moodle forum",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 01"
+    ]
+  },
+  {
+    "objectID": "content/material/session03.html",
+    "href": "content/material/session03.html",
+    "title": "🗓️ Session 3: Project management",
+    "section": "",
+    "text": "This is one of the most underestimated topics. In this session you learn how to adequately set up your working environment on your computer. This means where you should save which files, which directory structure you should use, and how to point the computer to other files on your computer. While this sounds boring at first, taking seriously the insights from this session will save you tons of hours of frustration in the future!",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 03"
+    ]
+  },
+  {
+    "objectID": "content/material/session03.html#lecture-slides",
+    "href": "content/material/session03.html#lecture-slides",
+    "title": "🗓️ Session 3: Project management",
+    "section": "👨‍🏫 Lecture Slides",
+    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nNoteLecture script",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 03"
+    ]
+  },
+  {
+    "objectID": "content/material/session03.html#lecture-videos",
+    "href": "content/material/session03.html#lecture-videos",
+    "title": "🗓️ Session 3: Project management",
+    "section": "🎥 Lecture videos",
+    "text": "🎥 Lecture videos\nCurrently, no videos are available for this session. Check out the tutorial on project setup instead.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 03"
+    ]
+  },
+  {
+    "objectID": "content/material/session03.html#mandatory-reading",
+    "href": "content/material/session03.html#mandatory-reading",
+    "title": "🗓️ Session 3: Project management",
+    "section": "📚 Mandatory Reading",
+    "text": "📚 Mandatory Reading\n\nThe tutorial Setting up an R project",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 03"
+    ]
+  },
+  {
+    "objectID": "content/material/session03.html#further-reading",
+    "href": "content/material/session03.html#further-reading",
+    "title": "🗓️ Session 3: Project management",
+    "section": "Further Reading",
+    "text": "Further Reading\nWhile we do not cover this in this course, I highly recommend learning the version control system Git. Personally, I can recommend the following:\n\nVery concise introduction to Git\nIntroduction to GitHub: GitHub skills and the official docs",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 03"
+    ]
+  },
+  {
+    "objectID": "content/material/session03.html#coursework",
+    "href": "content/material/session03.html#coursework",
+    "title": "🗓️ Session 3: Project management",
+    "section": "✍️ Coursework",
+    "text": "✍️ Coursework\n\nDo the exercises ProjectOrga from the DataScienceExercises package that refer to setting up an R project\nIf you still have problems with R Packages, re-read the respective section of the tutorial from session 2\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ProjectOrga\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 03"
+    ]
+  },
+  {
+    "objectID": "content/material/session05.html",
+    "href": "content/material/session05.html",
+    "title": "🗓️ Session 5: Importing data",
+    "section": "",
+    "text": "This is also one of the most underestimated topics. This session builds upon the previous session on setting up a project environment. Now you will learn how to import data obtained elsewhere into R. We focus on importing .csv files, but with the skills acquired in this context you will face no difficulties in importing other data types as well.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 05"
+    ]
+  },
+  {
+    "objectID": "content/material/session05.html#lecture-slides",
+    "href": "content/material/session05.html#lecture-slides",
+    "title": "🗓️ Session 5: Importing data",
+    "section": "👨‍🏫 Lecture Slides",
+    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\nData for the exercises",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 05"
+    ]
+  },
+  {
+    "objectID": "content/material/session05.html#lecture-videos",
+    "href": "content/material/session05.html#lecture-videos",
+    "title": "🗓️ Session 5: Importing data",
     "section": "🎥 Lecture videos",
     "text": "🎥 Lecture videos\nAll the videos are available via this playlist.",
     "crumbs": [
       "🗓️ Material",
-      "Session 08"
+      "Session 05"
     ]
   },
   {
-    "objectID": "content/material/session08.html#mandatory-reading",
-    "href": "content/material/session08.html#mandatory-reading",
-    "title": "🗓️ Session 8: A very short introduction to Quarto",
+    "objectID": "content/material/session05.html#mandatory-reading",
+    "href": "content/material/session05.html#mandatory-reading",
+    "title": "🗓️ Session 5: Importing data",
     "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\n\nThe CommonMark markdown tutorial\nQuarto tutorial I: the basics\nQuarto tutorial II: computations\nQuarto tutorial III: authoring quarto documents",
+    "text": "📚 Mandatory Reading\n\nThe tutorial Importing and exporting data using data.table",
     "crumbs": [
       "🗓️ Material",
-      "Session 08"
+      "Session 05"
     ]
   },
   {
-    "objectID": "content/material/session08.html#further-reading",
-    "href": "content/material/session08.html#further-reading",
-    "title": "🗓️ Session 8: A very short introduction to Quarto",
+    "objectID": "content/material/session05.html#further-reading",
+    "href": "content/material/session05.html#further-reading",
+    "title": "🗓️ Session 5: Importing data",
     "section": "Further Reading",
-    "text": "Further Reading\n\nBlog introducing Quarto\nQuarto and R Markdown\nThe comprehensive Quarto documentation\nMarkdown basics\nThe R Markdown Cookbook",
+    "text": "Further Reading\nTBA",
     "crumbs": [
       "🗓️ Material",
-      "Session 08"
+      "Session 05"
     ]
   },
   {
-    "objectID": "content/material/session08.html#coursework",
-    "href": "content/material/session08.html#coursework",
-    "title": "🗓️ Session 8: A very short introduction to Quarto",
+    "objectID": "content/material/session05.html#coursework",
+    "href": "content/material/session05.html#coursework",
+    "title": "🗓️ Session 5: Importing data",
     "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the exercises Quarto from the DataScienceExercises package\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Quarto\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nDo the following practical exercise:\n\n\n\n\n\n\n\nNoteExercise description\n\n\n\n\n\nCreate a new Quarto document where you set the title, date, and the author explicitly. Write a sample text that comprises…\n\n…at least one level 1 heading\n…at least two level 2 headings\n…a YAML part that specifies that R code remains hidden by default\n…one R chunk where both the output and the code is printed in the final document\n…one R chunk that produces a simply ggplot object and where the code producing the plot is hidden\n\nThen do the following:\n\nKnit the document to html with a floating table of contents and a special theme.\nMake the document available via Netlify Drop and add the possibility to download the underlying Rmd file. &gt; Note: For Netlify Drop to work, the html file must be called index.html!\nKnit the document to PDF and make sure that it includes a table of contents.\n\n\n\n\n\n\n\n\n\n\nTipPossible solution",
+    "text": "✍️ Coursework\n\nDo the exercises ImportData from the DataScienceExercises package\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ImportData\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))",
     "crumbs": [
       "🗓️ Material",
-      "Session 08"
+      "Session 05"
+    ]
+  },
+  {
+    "objectID": "content/material/session07.html",
+    "href": "content/material/session07.html",
+    "title": "🗓️ Session 7: Visualization",
+    "section": "",
+    "text": "One area for which R is particulary well-known for is the area of visualization. This is particularly because of the package ggplot2. This session introduces ggplot2 and the general approach to generate visualization in R. The good thing is that if you follow the approach described here, you can basically create every visualization type you can think of.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 07"
+    ]
+  },
+  {
+    "objectID": "content/material/session07.html#lecture-slides",
+    "href": "content/material/session07.html#lecture-slides",
+    "title": "🗓️ Session 7: Visualization",
+    "section": "👨‍🏫 Lecture Slides",
+    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipThe R script of this session",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 07"
+    ]
+  },
+  {
+    "objectID": "content/material/session07.html#lecture-videos",
+    "href": "content/material/session07.html#lecture-videos",
+    "title": "🗓️ Session 7: Visualization",
+    "section": "🎥 Lecture videos",
+    "text": "🎥 Lecture videos\nAll the videos are available via this playlist.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 07"
+    ]
+  },
+  {
+    "objectID": "content/material/session07.html#mandatory-reading",
+    "href": "content/material/session07.html#mandatory-reading",
+    "title": "🗓️ Session 7: Visualization",
+    "section": "📚 Mandatory Reading",
+    "text": "📚 Mandatory Reading\n\nThe tutorial visualization",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 07"
+    ]
+  },
+  {
+    "objectID": "content/material/session07.html#further-reading",
+    "href": "content/material/session07.html#further-reading",
+    "title": "🗓️ Session 7: Visualization",
+    "section": "Further Reading",
+    "text": "Further Reading\n\nWickham (2010), who introduces the theory underlying ggplot2\nggplot2 cheat sheet\nBrowse the website from Data to Viz and try to re-create some of the figures yourself",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 07"
+    ]
+  },
+  {
+    "objectID": "content/material/session07.html#coursework",
+    "href": "content/material/session07.html#coursework",
+    "title": "🗓️ Session 7: Visualization",
+    "section": "✍️ Coursework",
+    "text": "✍️ Coursework\n\nDo the exercises Visualization1 from the DataScienceExercises package\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Visualization1\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 07"
+    ]
+  },
+  {
+    "objectID": "content/material/session08b.html",
+    "href": "content/material/session08b.html",
+    "title": "🗓️ Session 8b: Recap",
+    "section": "",
+    "text": "TBD\n\nData for exercise 1\nData for exercise 2\nTemplate Exercise 1\nTemplate Exercise 2",
+    "crumbs": [
+      "🗓️ Material",
+      "Recap"
+    ]
+  },
+  {
+    "objectID": "content/material/session08b.html#lecture-slides",
+    "href": "content/material/session08b.html#lecture-slides",
+    "title": "🗓️ Session 8b: Recap",
+    "section": "",
+    "text": "TBD\n\nData for exercise 1\nData for exercise 2\nTemplate Exercise 1\nTemplate Exercise 2",
+    "crumbs": [
+      "🗓️ Material",
+      "Recap"
     ]
   },
   {

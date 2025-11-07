@@ -50,6 +50,8 @@ website:
            text: Session 07
          - href: content/material/session08.qmd
            text: Session 08
+         - href: content/material/session08b.qmd
+           text: Recap
          # - href: content/material/session09.qmd
          #   text: Session 09
          # - href: content/material/session10.qmd

@@ -1,0 +1,14 @@
+---
+title: "🗓️ Session 8b: Recap"
+date: "2025-11-07"
+date-modified: last-modified
+---
+
+## 👨‍🏫 Lecture Slides 
+
+TBD
+
+- [Data for exercise 1](/content/material/Recap8b/customer_satisfaction.csv)
+- [Data for exercise 2](/content/material/Recap8b/pricing_experiment.csv)
+- [Template Exercise 1](/content/material/Recap8b/r_recap_exercise1.R)
+- [Template Exercise 2](/content/material/Recap8b/r_recap_exercise2.R)
