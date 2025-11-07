@@ -1,7 +1,7 @@
 ---
 title: Quarto exercises # Also check out line 43
 author: Claudius Gräbner-Radkowitsch
-date: '2024-05-16'
+date: '2025-11-07'
 documentclass: scrartcl
 format: 
   html:
@@ -44,7 +44,7 @@ format:
         %\chead{Kopfzeile Mitte}
         \ohead{\pagemark} %
         \ifoot{}
-        \cfoot{\href{https://euf-datascience-spring24.netlify.app/}{\normalfont\color{eufblue}{Data Science Using R - Spring Semester 2024}}} % Fußzeile Mitte
+        \cfoot{\href{https://researchmethodology-fall25.netlify.app/}{\normalfont\color{eufblue}{Theoretical and Empirical Research Methodology - Fall Semester 2025}}} % Fußzeile Mitte
         \ofoot{} 
         \setkomafont{disposition}{\color{eufblue}\bfseries}
 ---

@@ -62,6 +62,8 @@ website:
          #   text: Session 13
       - href: content/tutorials.qmd
         text: "💻 Tutorials"
+      - href: content/exercises.qmd
+        text: "👾 Additional exercises"
       - href: content/statrecap.qmd
         text: "📈 Statistics recap"
 

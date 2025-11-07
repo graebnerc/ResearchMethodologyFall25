@@ -1,0 +1,136 @@
+---
+title: "Recap exercises: import, preparation and visualization"
+date: "2025-11-07"
+
+format:
+  html:
+    code-fold: false
+---
+
+The following exercises are meant to help you recap what you learned in the areas of 
+*data import*, *data preparation* and *visualization*. A possible solution 
+along with additional explanations can be found 
+[here](/content/exercises/dataprep-vis/solution/solution.html).
+
+## Customer Satisfaction Tracking
+
+- [Data for exercise 1](/content/exercises/dataprep-vis/customer_satisfaction.csv)
+
+> **Background:**
+You work for a company that recently implemented new customer service protocols.
+Customer satisfaction data was collected at three time points: before the change (Q1),
+and at two follow-up periods (Q2, Q3). Customers rated their satisfaction with
+service quality and product value on a 1-5 scale.
+Each row represents one customer's ratings across all three quarters.
+
+### Import data
+
+Download the file `customer_satisfaction.csv`and place it in your working directory.
+Import the CSV file and store it in a variable called `customers_data`.
+
+### Prepare data
+
+
+The data is currently in a *wide* format - each quarter is a separate column.
+Transform it to a tidy format where:
+- One column indicates the quarter (`q1`, `q2`, `q3`)
+- One column indicates the metric type (`service_quality`, `product_value`)
+- One column contains the rating value
+
+::: {.callout-tip collapse="true"}
+#### Hint: how to separate columns
+
+Try to use the argument  `names_sep` of `dplyr::pivot_longer()` or check out
+the function `dplyr::separate_wider_delim()`.
+:::
+
+### Compute grouped averages
+
+Calculate the mean rating for each combination of quarter and metric type.
+Store this in a new table called `satisfaction_summary`.
+
+### Visualization
+
+Create a line plot showing how average customer satisfaction changes over 
+quarters. It should have the quarters on the x-axis, the mean rating on the 
+y-axis, and it should show different colors for service quality and product
+value.
+
+### Bonus: compute improvements
+
+Compute the change from before the intervention (first quarter) to after the
+intervention (second and third quarter) for each metric.
+
+## Pricing Strategy Analysis
+
+- [Data for exercise 2](/content/material/Recap8b/pricing_experiment.csv)
+
+> **Background:**
+Your company conducted a pricing experiment testing three pricing strategies:
+
+- standard: current pricing model
+- discount: 10% discount off standard price
+- premium: 15% price increase over standard
+
+Each strategy was tested on different products over multiple trials to measure
+the impact on the conversion rate and the average transaction value.
+
+::: {.callout-tip collapse="true"}
+#### Conversion rate and transaction value
+
+**Conversion rate:** The proportion of potential customers who make a purchase.
+
+> Example: If 100 people view a product and 20 buy it, the conversion rate is 20%.
+Higher conversion rates generally mean more effective pricing/marketing.
+
+**Average transaction value:** The mean amount spent per purchase.
+This tells you how much revenue each successful sale generates.
+:::
+
+### Import data 
+
+Download the file `pricing_experiment.csv` and place it in your working directory.
+
+Import the CSV file and store it in a variable called `pricing_data`.
+
+### Compute new variables
+
+For each product and pricing strategy:
+
+- Calculate the mean conversion rate across the 3 trials
+- Calculate the mean transaction value across the 3 trials
+
+ Store this in a new table called `product_averages`.
+
+### Data transformation
+
+Transform the data such that each row is one product and the pricing strategies 
+become separate columns for both `conversion_rate` and `avg_transaction_value`
+(but with each column containing info on both metric and discount type;
+i.e. they should be called something like `conversion_rate_discount_10`,
+`transaction_value_premium`).
+
+::: {.callout-tip collapse="true"}
+#### Hint: how to combine columns
+
+Try to use the argument  `names_sep` of `dplyr::pivot_wider()` to merge
+row names into column names when making the data wider.
+:::
+
+### Compute expected revenue
+
+For each pricing strategy, compute expected revenue per customer by multiplying
+conversion rates and average transaction values.
+
+This tells you the expected revenue from each pricing approach.
+
+### Visualization
+
+Create a scatter plot comparing the pricing strategies. Your plot should have:
+
+- Expected revenue from standard pricing on x axis
+- Expected revenue from discount pricing on y axis
+- A diagonal reference line (`x=y`) to show where strategies perform equally
+
+
+> **Hint:** Use `ggplot2`'s `geom_point()` and `geom_abline()`.

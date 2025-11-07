@@ -1,7 +1,7 @@
 ---
 title: "Basic object types: exercises" # Also check out line 43
 author: Claudius Gräbner-Radkowitsch
-date: '2024-03-28'
+date: '2025-10-17'
 documentclass: scrartcl
 format: 
   html:
@@ -44,7 +44,7 @@ format:
         %\chead{Kopfzeile Mitte}
         \ohead{\pagemark} %
         \ifoot{}
-        \cfoot{\href{https://euf-datascience-spring24.netlify.app/}{\normalfont\color{eufblue}{Data Science Using R - Spring Semester 2024}}} % Fußzeile Mitte
+        \cfoot{\href{https://researchmethodology-fall25.netlify.app/}{\normalfont\color{eufblue}{Theoretical and Empirical Research Methodology - Fall Semester 2025}}} % Fußzeile Mitte
         \ofoot{} 
         \setkomafont{disposition}{\color{eufblue}\bfseries}
 ---
@@ -60,15 +60,18 @@ Create a vector containing the numbers `2`, `5`, `2.4` and `11.`
 4. Transform this vector into the type integer. What happens?
 
 # Task 2
+
 1. What type is the following vector: `"2"`, `"Hello"`, `4.0`, and `TRUE` 
 2. What hierarchy is underlying this?
 
 # Task 3
+
 1. Create a vector with the numbers from `-8` to `9` (step size: `0.5`)
 2. Compute the square root of each element of the first vector using vectorisation. 
 Anything that draws your attention?
 
 # Task 4
+
 Create a list that has three named elements: `"A"`, `"B"`, and `"C"`
 
 * The element `"A"` should contain the square root of the numbers form -2 to 8 (step size: `1`)

@@ -49,7 +49,7 @@
 
 # product_averages <- pricing |>
   # Your code to group and summarize here
-  
+
 
 # 3. TRANSFORM FROM LONG TO WIDE
 # -------------------------------
@@ -62,27 +62,27 @@
 # YOUR CODE HERE:
 # product_wide <- product_averages |>
   # Your transformation code here
-  
+
 
 # 4. COMPUTE EXPECTED REVENUE METRIC
 # -----------------------------------
 # For each pricing strategy, compute expected revenue per customer by multiplying:
 # conversion_rate * avg_transaction_value
-# 
+#
 # This tells you the expected revenue from each pricing approach.
 # Create these new variables: standard_revenue, discount_10_revenue, premium_revenue
 
 # YOUR CODE HERE:
 # product_wide <- product_wide |>
   # Your code to compute expected revenue here
-  
+
 
 # 5. CREATE A SCATTER PLOT
 # -------------------------
 # Create a scatter plot comparing pricing strategies:
 # - X-axis: expected revenue from standard pricing
 # - Y-axis: expected revenue from discount_10 pricing
-# 
+#
 # Add a diagonal reference line (y = x) to show where strategies perform equally
 # Add a smooth trend line to show the overall pattern
 #

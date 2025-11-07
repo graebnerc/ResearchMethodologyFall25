@@ -54,7 +54,7 @@ product_wide |>
   head(10)
 
 # Summary statistics for expected revenue by strategy
-product_wide |>
+expected_revs |>
   summarize(
     avg_standard_revenue = mean(standard_revenue),
     avg_discount_revenue = mean(discount_10_revenue),
@@ -64,7 +64,7 @@ product_wide |>
 
 # 5. CREATE A SCATTER PLOT
 # -------------------------
-ggplot(product_wide, aes(x = standard_revenue, y = discount_10_revenue)) +
+ggplot(expected_revs, aes(x = standard_revenue, y = discount_10_revenue)) +
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", 
               color = "gray50", linewidth = 1) +
   geom_point(size = 3, alpha = 0.6, color = "#0072B2") +

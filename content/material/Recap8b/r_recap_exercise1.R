@@ -38,11 +38,26 @@
 # You'll need to separate the quarter and metric from the column names
 
 # YOUR CODE HERE:
-# library()
+library(dplyr)
+library(tidyr)
+library(readr)
 
-# customers_long <- customers |>
-  # Your transformation code here
-  
+customers <- read_csv("content/material/Recap8b/customer_satisfaction.csv")
+head(customers)
+
+customers_long <- customers |>
+  pivot_longer(
+    cols = all_of(
+      starts_with("q")), 
+    names_sep = "_", 
+    names_to = c("quarter", "metric")
+    ) 
+head(customers_long)
+
+
+|> 
+  separate_wider_regex(cols = "name", patterns = "_")
+customers_long
 
 # 3. COMPUTE AVERAGE RATINGS
 # ---------------------------
