@@ -64,7 +64,7 @@ solution we find for your problem together.
 Please also note that there is a separate tutorial on how to install the 
 packages (a.k.a. R extensions) that we are 
 going to use over the semester. Its best to continue with this tutorial 
-on [installing the required R packages](/tutorial/installing-packages/)
+on [installing the required R packages](/content/tutorials/installing-packages/)
 directly after you have complete this one.
 
 # An overview over the apps and services we will be using - and why
