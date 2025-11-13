@@ -45,4 +45,6 @@ Your marketing team needs insights to develop targeted campaigns that will incre
 
 **Your task:** Create a visualization that reveals an interesting pattern in this data that could help inform marketing strategy.
 
+<!---
 - [Example solution](session08-ex-solution.qmd)
+--->

@@ -1139,7 +1139,7 @@
     "href": "content/material/session09-Exercise.html",
     "title": "Identify Patterns in E-Commerce Data",
     "section": "",
-    "text": "This dataset contains information about 200 customers of an e-commerce platform. It includes demographic information, spending habits, and behavioral metrics that the marketing team wants to analyze to develop more targeted campaigns.\n\n\n\ncustomer_sample.csv\n\n\n\n\n\n\n\n\n\n\n\nVariable\nDescription\nType\n\n\n\n\ncustomer_id\nUnique identifier for each customer\nInteger\n\n\nage\nCustomer’s age in years\nInteger\n\n\nspending\nMonthly spending on the platform (in dollars)\nNumeric\n\n\nvisit_frequency\nAverage number of website visits per month\nNumeric\n\n\ncustomer_type\nCustomer classification based on purchasing history\nCategorical\n\n\npreferred_category\nPrimary product category the customer purchases\nCategorical\n\n\n\n\n\ncustomer_type:\n\nNew: Recently joined customers (first purchases within last 3 months)\nOccasional: Make purchases sporadically (no consistent pattern)\nRegular: Consistent purchases but not at high frequency\nLoyal: Frequent, consistent purchasers over extended period\n\npreferred_category:\n\nElectronics: Technology products, gadgets, computers, etc.\nClothing: Apparel items, accessories, shoes\nHome: Furniture, decor, kitchen items, garden supplies\nBeauty: Cosmetics, personal care, grooming products\nFood: Groceries, specialty foods, meal kits\n\n\n\n\n\nYour marketing team needs insights to develop targeted campaigns that will increase customer engagement and spending. The team believes there may be hidden patterns in how different customer segments interact with their platform.\nYour task: Create a visualization that reveals an interesting pattern in this data that could help inform marketing strategy.\n\nExample solution"
+    "text": "This dataset contains information about 200 customers of an e-commerce platform. It includes demographic information, spending habits, and behavioral metrics that the marketing team wants to analyze to develop more targeted campaigns.\n\n\n\ncustomer_sample.csv\n\n\n\n\n\n\n\n\n\n\n\nVariable\nDescription\nType\n\n\n\n\ncustomer_id\nUnique identifier for each customer\nInteger\n\n\nage\nCustomer’s age in years\nInteger\n\n\nspending\nMonthly spending on the platform (in dollars)\nNumeric\n\n\nvisit_frequency\nAverage number of website visits per month\nNumeric\n\n\ncustomer_type\nCustomer classification based on purchasing history\nCategorical\n\n\npreferred_category\nPrimary product category the customer purchases\nCategorical\n\n\n\n\n\ncustomer_type:\n\nNew: Recently joined customers (first purchases within last 3 months)\nOccasional: Make purchases sporadically (no consistent pattern)\nRegular: Consistent purchases but not at high frequency\nLoyal: Frequent, consistent purchasers over extended period\n\npreferred_category:\n\nElectronics: Technology products, gadgets, computers, etc.\nClothing: Apparel items, accessories, shoes\nHome: Furniture, decor, kitchen items, garden supplies\nBeauty: Cosmetics, personal care, grooming products\nFood: Groceries, specialty foods, meal kits\n\n\n\n\n\nYour marketing team needs insights to develop targeted campaigns that will increase customer engagement and spending. The team believes there may be hidden patterns in how different customer segments interact with their platform.\nYour task: Create a visualization that reveals an interesting pattern in this data that could help inform marketing strategy."
   },
   {
     "objectID": "content/material/session09-Exercise.html#overview",
@@ -1167,49 +1167,51 @@
     "href": "content/material/session09-Exercise.html#your-task",
     "title": "Identify Patterns in E-Commerce Data",
     "section": "",
-    "text": "Your marketing team needs insights to develop targeted campaigns that will increase customer engagement and spending. The team believes there may be hidden patterns in how different customer segments interact with their platform.\nYour task: Create a visualization that reveals an interesting pattern in this data that could help inform marketing strategy.\n\nExample solution"
+    "text": "Your marketing team needs insights to develop targeted campaigns that will increase customer engagement and spending. The team believes there may be hidden patterns in how different customer segments interact with their platform.\nYour task: Create a visualization that reveals an interesting pattern in this data that could help inform marketing strategy."
   },
   {
     "objectID": "content/material/session09.html",
     "href": "content/material/session09.html",
     "title": "🗓️ Session 9: Using AI for coding",
     "section": "",
-    "text": "In this lecture you learn the basics of using AI tools for coding tasks. While no AI tool will help you to write code in a language you do not understand, modern AI tools are well suited to assist you in writing code in a language you are familiar with. Here we discuss some of the most common use cases for AI when it comes to the development of R code. We focus on, first, getting a first sketch of an R script and, second, on using AI to help you find mistakes in your current code.\nYou also learn how important it is to provide the AI with context - something you can only do if you already know the basics of the programming language you and the AI are working with. Finally, we also touch upon some AI-like tools and advice on how to avoid typos in code."
+    "text": "In this lecture you learn the basics of using AI tools for coding tasks. While no AI tool will help you to write code in a language you do not understand, modern AI tools are well suited to assist you in writing code in a language you are familiar with. Here we discuss some of the most common use cases for AI when it comes to the development of R code. We focus on, first, getting a first sketch of an R script and, second, on using AI to help you find mistakes in your current code.\nYou also learn how important it is to provide the AI with context - something you can only do if you already know the basics of the programming language you and the AI are working with. Finally, we also touch upon some AI-like tools and advice on how to avoid typos in code.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 09"
+    ]
   },
   {
     "objectID": "content/material/session09.html#lecture-slides",
     "href": "content/material/session09.html#lecture-slides",
     "title": "🗓️ Session 9: Using AI for coding",
     "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipPrompts and code examples from the lecture\n\n\n\n\n\n\n\n\n\n\nDetails for the exercise on e-commerce data (“generate R code”)\n\n\n\n\n\n\n\nTipBase code for exercises on debugging, documenting and optimizing R code"
+    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipPrompts and code examples from the lecture\n\n\n\n\n\n\n\n\n\n\nDetails for the exercise on e-commerce data (“generate R code”)\n\n\n\n\n\n\n\nTipBase code for exercises on debugging, documenting and optimizing R code",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 09"
+    ]
   },
   {
-    "objectID": "content/material/session09.html#lecture-videos",
-    "href": "content/material/session09.html#lecture-videos",
+    "objectID": "content/material/session09.html#suggested-reading",
+    "href": "content/material/session09.html#suggested-reading",
     "title": "🗓️ Session 9: Using AI for coding",
-    "section": "🎥 Lecture videos",
-    "text": "🎥 Lecture videos\nSo far, there are no learning videos available for this lecture."
-  },
-  {
-    "objectID": "content/material/session09.html#mandatory-reading",
-    "href": "content/material/session09.html#mandatory-reading",
-    "title": "🗓️ Session 9: Using AI for coding",
-    "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\nNA"
-  },
-  {
-    "objectID": "content/material/session09.html#further-reading",
-    "href": "content/material/session09.html#further-reading",
-    "title": "🗓️ Session 9: Using AI for coding",
-    "section": "Further Reading",
-    "text": "Further Reading\n\nHow to use Github Copilot in R Studio and a guideline on how to get free student accessthrough Github Education\nResources for Gemini Code Assist, which is free but cannot be integrated directly into R Studio\nMore information on Claude Code, which is most interesting for doing advanced programming work\nMore information on Windsurf, which has a good free tier but no plugin for R Studio"
+    "section": "📚 Suggested Reading",
+    "text": "📚 Suggested Reading\n\nAnthropic’s Prompt Engineering Interactive Tutorial: a more extensive but very good course on how to develop good prompts\nHow to use Github Copilot in R Studio and a guideline on how to get free student access through Github Education\nResources for Gemini Code Assist, which is free but cannot be integrated directly into R Studio\nMore information on Claude Code, which is most interesting for doing advanced programming work\nMore information on Windsurf, which has a good free tier but no plugin for R Studio",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 09"
+    ]
   },
   {
     "objectID": "content/material/session09.html#coursework",
     "href": "content/material/session09.html#coursework",
     "title": "🗓️ Session 9: Using AI for coding",
     "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the in-class exercises you did not complete during the session"
+    "text": "✍️ Coursework\n\nDo the in-class exercises you did not complete during the session",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 09"
+    ]
   },
   {
     "objectID": "content/material/session13.html",

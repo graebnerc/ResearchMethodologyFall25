@@ -19,12 +19,12 @@ AI-like tools and advice on how to avoid typos in code.
 ## 👨‍🏫 Lecture Slides 
 
 Either click on the slide area below or click 
-[here](/content/material/slides/L9-AICoding.pdf) to download the slides.
+[here](/content/material/slides/E9-AICoding.pdf) to download the slides.
 
 ```{=html}
 <div class="embed-container">
   <iframe 
-  src="/content/material/slides/L9-AICoding.pdf" 
+  src="/content/material/slides/E9-AICoding.pdf" 
   style="border: 0.5px" 
   width="80%"
   height="80%"
@@ -45,19 +45,10 @@ Either click on the slide area below or click
 :::
 
 
+## 📚 Suggested Reading
 
-
-## 🎥 Lecture videos 
-
-So far, there are no learning videos available for this lecture. 
-
-## 📚 Mandatory Reading
-
-NA
-
-## Further Reading
-
-- How to use [Github Copilot in R Studio](https://docs.posit.co/ide/user/ide/guide/tools/copilot.html) and a guideline on how to get free student access[through Github Education](https://github.com/education/students)
+- [Anthropic's Prompt Engineering Interactive Tutorial](https://github.com/anthropics/prompt-eng-interactive-tutorial): a more extensive but very good course on how to develop good prompts
+- How to use [Github Copilot in R Studio](https://docs.posit.co/ide/user/ide/guide/tools/copilot.html) and a guideline on how to get free student access [through Github Education](https://github.com/education/students)
 - Resources for [Gemini Code Assist](https://codeassist.google), which is free but cannot be integrated directly into R Studio
 - More information on [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview), which is most interesting for doing advanced programming work
 - More information on [Windsurf](https://windsurf.com), which has a good free tier but no plugin for R Studio
