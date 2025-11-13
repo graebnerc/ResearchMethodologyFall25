@@ -20,7 +20,7 @@ Let's begin with the precise definitions that form the foundation of statistical
 
 **A census** is the process of collecting data from every single member of the population to determine the exact value of any population characteristic (called a population parameter). In a census, we study the entire population, not just a subset.
 
-**A sample** is a subset of the population that we actually study. When elements of the sample are selected randomly, we call it a **random sample**. The **sample size** is denoted by *n*, and by definition, *n < N* (except in the case of a census where *n = N*).
+**A sample** is a subset of the population that we actually study. When elements of the sample are selected randomly, we call it a **random sample**. The **sample size** is denoted by *n*, and by definition, *n \< N* (except in the case of a census where *n = N*).
 
 ### Statistics, Estimators, and Estimates
 
@@ -36,7 +36,7 @@ Here's where the terminology becomes crucial for understanding inference:
 
 **Point estimate** and **sample statistic** are often used interchangeably - they both refer to a single numerical value computed from our sample that we use to estimate an unknown population parameter. We typically denote sample statistics with a "hat" symbol, such as $\hat{\mu}$ (read as "mu-hat") for the sample mean estimating the population mean μ.
 
-*[Suggested visualization: A simple diagram showing Population Parameter → Estimator Applied to Sample → Estimate (with specific symbols like μ → sample mean formula → x̄)]*
+*\[Suggested visualization: A simple diagram showing Population Parameter → Estimator Applied to Sample → Estimate (with specific symbols like μ → sample mean formula → x̄)\]*
 
 **R Note**: This would be an excellent place to show students how to calculate basic statistics in R using functions like `mean()`, `sd()`, and `summary()` on a sample dataset, emphasizing that these functions are estimators producing estimates.
 
@@ -74,11 +74,11 @@ The answer is almost certainly no. Here's why: if you selected a different rando
 
 Let's imagine you could repeat this sampling process:
 
-- Sample 1 (n=100): $\hat{\mu}_1 = 18.5$ hours
-- Sample 2 (n=100): $\hat{\mu}_2 = 18.1$ hours  
-- Sample 3 (n=100): $\hat{\mu}_3 = 18.9$ hours
-- Sample 4 (n=100): $\hat{\mu}_4 = 18.3$ hours
-- And so on...
+-   Sample 1 (n=100): $\hat{\mu}_1 = 18.5$ hours
+-   Sample 2 (n=100): $\hat{\mu}_2 = 18.1$ hours\
+-   Sample 3 (n=100): $\hat{\mu}_3 = 18.9$ hours
+-   Sample 4 (n=100): $\hat{\mu}_4 = 18.3$ hours
+-   And so on...
 
 Each sample gives us a different estimate! This **sampling variability** is the fundamental challenge of statistical inference. Our sample statistic (the estimate) varies from sample to sample, but the population parameter (the true average battery life) remains fixed - we just don't know what it is.
 
@@ -86,9 +86,9 @@ Each sample gives us a different estimate! This **sampling variability** is the 
 
 This variability doesn't mean sampling is "wrong" - it reveals the inherent challenge of **inference under uncertainty**. When you report to your management that the average battery life is 18.5 hours based on your sample, you need to address several crucial questions:
 
-1. How much might this estimate vary if we tested different phones?
-2. How confident can we be that the true average is close to 18.5 hours?
-3. Should we set our marketing claims based on this single estimate?
+1.  How much might this estimate vary if we tested different phones?
+2.  How confident can we be that the true average is close to 18.5 hours?
+3.  Should we set our marketing claims based on this single estimate?
 
 This is where the mathematical machinery of sampling distributions, standard error, and the Central Limit Theorem becomes essential. These tools help us quantify our uncertainty and make principled business decisions despite the inherent variability in sampling.
 
@@ -144,7 +144,7 @@ Bad sampling can lead to wrong conclusions with serious business consequences. T
 
 In business contexts, poor sampling might lead to launching a product based on feedback from unrepresentative customers, or implementing policies based on employee surveys that missed important worker groups.
 
-*[Suggested visualization: A series of diagrams showing different sampling methods - random dots for simple random sampling, different colored groups for stratified sampling, evenly spaced dots for systematic sampling]*
+*\[Suggested visualization: A series of diagrams showing different sampling methods - random dots for simple random sampling, different colored groups for stratified sampling, evenly spaced dots for systematic sampling\]*
 
 **R Note**: Here you could demonstrate different sampling techniques using R, showing how `dplyr::slice_sample()` can be used for random sampling and how `group_by()` with `slice_sample()` creates stratified samples.
 
@@ -158,7 +158,7 @@ This concept is crucial but often misunderstood. We're not talking about the dis
 
 The remarkable property of sampling distributions is that they tend toward a normal (bell-shaped) pattern, even when the original population isn't normally distributed. This happens especially as our sample size gets larger, and it's the foundation of many statistical techniques we'll explore.
 
-*[Suggested visualization: Three panels showing (1) a potentially skewed distribution of individual battery lives, (2) the distribution of sample means starting to look more normal, and (3) a clearly normal sampling distribution]*
+*\[Suggested visualization: Three panels showing (1) a potentially skewed distribution of individual battery lives, (2) the distribution of sample means starting to look more normal, and (3) a clearly normal sampling distribution\]*
 
 ## Standard Error: Measuring the Precision of Our Estimates
 
@@ -194,13 +194,13 @@ In our smartphone example, individual battery lives might follow a skewed distri
 
 The practical implications are enormous:
 
-- We can calculate confidence intervals for population means regardless of population shape
-- We can perform hypothesis tests even when we don't know the population distribution
-- We can make probability statements about our estimates using normal distribution properties
+-   We can calculate confidence intervals for population means regardless of population shape
+-   We can perform hypothesis tests even when we don't know the population distribution
+-   We can make probability statements about our estimates using normal distribution properties
 
 > Whether you're studying highly skewed data like company revenues (where a few companies make much more than others) or customer wait times (which might follow an exponential pattern), the CLT ensures that averages from sufficiently large samples will be normally distributed.
 
-*[Suggested visualization: An animation or series of graphs showing how the sampling distribution becomes normal as sample size increases, starting from a skewed population of individual battery lives]*
+*\[Suggested visualization: An animation or series of graphs showing how the sampling distribution becomes normal as sample size increases, starting from a skewed population of individual battery lives\]*
 
 ## The Law of Large Numbers: Why Bigger Samples Are (Often) Better
 
@@ -226,24 +226,24 @@ However, it's important to understand that "larger" doesn't always mean "better"
 
 Understanding these concepts allows us to make the crucial leap from sample to population. Here's how the pieces fit together in our smartphone battery life example:
 
-1. We take a **representative random sample** of 100 phones from our population of interest (all phones of this model)
+1.  We take a **representative random sample** of 100 phones from our population of interest (all phones of this model)
 
-2. We calculate our **sample statistic** (mean battery life = 18.5 hours)
+2.  We calculate our **sample statistic** (mean battery life = 18.5 hours)
 
-3. We use our knowledge of **sampling distributions** to understand that if we repeated this process many times, our sample means would be normally distributed around the true population mean
+3.  We use our knowledge of **sampling distributions** to understand that if we repeated this process many times, our sample means would be normally distributed around the true population mean
 
-4. **Standard error** tells us how precise our estimate is (how much our sample means typically vary from the true population mean)
+4.  **Standard error** tells us how precise our estimate is (how much our sample means typically vary from the true population mean)
 
-5. The **Central Limit Theorem** ensures we can use normal distribution properties to make inferences, even if individual battery lives aren't normally distributed
+5.  The **Central Limit Theorem** ensures we can use normal distribution properties to make inferences, even if individual battery lives aren't normally distributed
 
-6. The **Law of Large Numbers** gives us confidence that larger samples yield estimates closer to the true population value
+6.  The **Law of Large Numbers** gives us confidence that larger samples yield estimates closer to the true population value
 
 This framework allows us to:
 
-- Estimate the population mean battery life with known precision
-- Calculate confidence intervals ("we're 95% confident the true average battery life is between 18.1 and 18.9 hours")
-- Test hypotheses about battery performance claims
-- Make informed business decisions about quality standards and marketing claims
+-   Estimate the population mean battery life with known precision
+-   Calculate confidence intervals ("we're 95% confident the true average battery life is between 18.1 and 18.9 hours")
+-   Test hypotheses about battery performance claims
+-   Make informed business decisions about quality standards and marketing claims
 
 > Your engineering team sets a target of 18 hours average battery life. After testing 100 phones and finding a sample mean of 18.5 hours with a standard error of 0.2 hours, you can use statistical inference to determine whether you've met your target with high confidence, without having to test every single phone.
 
@@ -267,7 +267,7 @@ The CLT applies specifically to sampling distributions of means (and other sampl
 
 No amount of sophisticated statistics can correct for a fundamentally biased sampling method. If you only test phones during day shifts, no statistical adjustment can tell you about night-shift quality. The foundation of good inference is good sampling.
 
-*[Suggested visualization: An infographic summarizing the key concepts and showing the flow from population through sampling to inference]*
+*\[Suggested visualization: An infographic summarizing the key concepts and showing the flow from population through sampling to inference\]*
 
 This understanding of samples and populations forms the foundation for everything that follows in inferential statistics. In our next chapters, we'll build on these concepts to construct confidence intervals, test hypotheses, and make informed decisions based on uncertain data.
 
