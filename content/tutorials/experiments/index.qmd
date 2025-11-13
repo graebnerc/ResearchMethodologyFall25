@@ -1,6 +1,5 @@
 ---
 title: Experiments # Also check out line 43
-author: Claudius Gräbner-Radkowitsch
 date: '2025-12-05'
 documentclass: scrartcl
 execute: 

@@ -1,6 +1,5 @@
 ---
 title: Setting up an R project # Also check out line 43
-author: Claudius Gräbner-Radkowitsch
 date: '2025-10-10'
 documentclass: scrartcl
 format: 

@@ -1,6 +1,5 @@
 ---
 title: Visualization # Also check out line 43
-author: Claudius Gräbner-Radkowitsch
 date: '2025-10-31'
 documentclass: scrartcl
 execute: 
