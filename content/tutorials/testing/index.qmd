@@ -1,0 +1,1688 @@
+---
+title: "Hypothesis Testing and Confidence Intervals" # Also check out line 43
+date: '2025-11-24'
+documentclass: scrartcl
+execute: 
+  freeze: auto
+format: 
+  html: # Settings set in _metadata.yml
+    toc: true
+  pdf:
+    include-in-header: 
+      text: |
+        \usepackage{lmodern} 
+        \usepackage{graphicx}
+        \usepackage{hyperref}
+        \usepackage{url}                
+        \usepackage{xcolor}
+        \usepackage{booktabs}
+        \usepackage{listings}
+        \lstloadlanguages{R}
+        
+        \definecolor{eufblue}{RGB}{0,57,91}
+        \definecolor{eufgrey}{RGB}{111,111,111}
+        \definecolor{euflightblue}{RGB}{105,170,205}
+        
+        \hypersetup{
+        pdfauthor={Claudius Graebner-Radkowitsch}
+        colorlinks=true,
+        linkcolor=euflightblue,
+        urlcolor=euflightblue
+        }
+        \usepackage[includehead,includefoot,top=2cm, bottom=1.5cm]{geometry}
+        \usepackage[headsepline, footsepline]{scrlayer-scrpage}
+        \pagestyle{scrheadings}
+        \clearpairofpagestyles
+        \ihead{Tutorial: Visualization}
+        %\chead{Kopfzeile Mitte}
+        \ohead{\pagemark} %
+        \ifoot{}
+        \cfoot{\href{https://researchmethodology-fall25.netlify.app/}{\normalfont\color{eufblue}{Data Science Using R - Fall Semester 2025}}} % Fußzeile Mitte
+        \ofoot{} 
+        \setkomafont{disposition}{\color{eufblue}\bfseries}
+---
+
+```{r}
+#| code-summary: "Packages used for R examples"
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(ggpubr)
+library(latex2exp)
+library(kableExtra)
+```
+
+## Introduction: From Sampling to Inference
+
+In Lecture 11, you learned about the fundamental concepts of sampling: how we draw conclusions about unknown populations by studying samples, and how the Central Limit Theorem provides the theoretical foundation for making these inferences. Among the key take aways from this lecture were the following:
+
+- **Populations** have parameters ($\mu$, $\sigma$) that are typically unknown
+- **Samples** provide statistics ($\bar{x}$, $s$) that we can use to estimate these parameters  
+- **Sampling distributions** describe how sample statistics vary across different samples
+- **Standard errors** quantify the precision of our estimates
+
+Now we face two crucial questions that arise in almost every business and research context:
+
+1. **Testing claims:** "Someone claims the average customer satisfaction is 8.0/10. Based on my sample of 100 customers with mean 7.5, should I believe this claim?"
+
+2. **Quantifying uncertainty:** "My sample of 500 SMEs in Schleswig Holstein shows average monthly revenue of EUR 50,000. What's the plausible range for the true population mean of all SMEs in Schleswig Holstein?"
+
+These questions represent two main approaches to statistical inference:
+
+- **Hypothesis testing:** Evaluating specific claims using sample data
+- **Confidence intervals:** Constructing ranges of plausible values for parameters
+
+Both build directly on the sampling concepts you've learned, and both are essential for interpreting the regression models you'll study in later lectures.
+
+::: {.callout-note collapse="true"}
+## When to read this tutorial
+
+I suggest you read this tutorial after having heard the lecture on sampling. The concepts in this tutorial — particularly hypothesis testing — make much more sense once you've seen how sampling works through Monte Carlo simulations and understand sampling distributions intuitively. But if you feel more or less comfortable in these areas you can also read it directly after the recap text on probability theory as I also included a very concise recap of this session below.
+:::
+
+### Learning Objectives
+
+By the end of this tutorial, you will be able to:
+
+- Construct and interpret hypothesis tests for business decisions
+- Calculate and explain confidence intervals for population parameters  
+- Distinguish between statistical and practical significance
+- Avoid common misinterpretations of $p$-values and confidence intervals
+- Connect these concepts to the regression output you'll encounter later on
+- Recognize when hypothesis testing is (and isn't) the appropriate tool
+
+---
+
+## 1. Quick Recap: Essential Concepts from Sampling
+
+Before diving into inference, let's briefly review the key concepts from our sampling section that form the foundation for everything in this session.
+
+### The Sample-Population Relationship
+
+```{r}
+#| echo: false
+#| fig-height: 3
+#| warning: false
+
+# Create visualization of population vs sample
+set.seed(123)
+population_data <- tibble(
+  id = 1:1000,
+  value = rnorm(1000, mean = 65, sd = 10),
+  type = "Population"
+)
+
+sample_data <- population_data %>%
+  slice_sample(n = 50) %>%
+  mutate(type = "Sample")
+
+ggplot() +
+  geom_histogram(data = population_data, aes(x = value, fill = type), 
+                 alpha = 0.3, bins = 30) +
+  geom_histogram(data = sample_data, aes(x = value, fill = type), 
+                 alpha = 0.7, bins = 30) +
+  geom_vline(xintercept = mean(population_data$value), 
+             color = "blue", linetype = "dashed", linewidth = 1) +
+  geom_vline(xintercept = mean(sample_data$value), 
+             color = "red", linetype = "dashed", linewidth = 1) +
+  scale_fill_manual(values = c("Population" = "lightblue", "Sample" = "darkred")) +
+  labs(title = "Population vs. Sample",
+       subtitle = "Blue line: Population mean (μ = 65) | Red line: Sample mean (x̄ = 64.2)",
+       x = "Value", y = "Frequency") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+**Key points to remember:**
+
+**Population:**
+
+- The complete group we want to learn about
+- Has fixed parameters ($\mu$, $\sigma$, etc.) that are typically unknown
+- Example: All customers of a company, all products in a market
+
+**Sample:**
+
+- A subset of the population we actually observe
+- Provides statistics ($\bar{x}$, $s$) that we can use to estimate population parameters
+- Random sampling common to improve representativeness, but also means each sample usually shows different sample statistics
+
+**The inference challenge:**
+
+- We observe: Sample statistics ($\bar{x}$ = 64.2)
+- We want to know: Population parameter ($\mu$ = ?)
+- The potential gap between these creates uncertainty
+
+### Sampling Distributions
+
+This was one of the crucial statement from the sampling lecture: 
+if we could draw many samples from the same population, each sample would give us a slightly different estimate due to sampling variation. While in reality we usually draw only one sample, the *sampling distribution* provides us with important information about how to interpret the results obtained from this single sample.
+
+**The sampling distribution** describes how these sample statistics (like $\bar{x}$) are distributed across many different samples. This is relevant even (or *especially*) when we draw only sample as it helps us to quantify the uncertainty associated with using the statistics obtained from this sample.
+
+```{r}
+#| echo: false
+#| fig-height: 3
+#| warning: false
+
+# Simulate sampling distribution
+set.seed(456)
+n_samples <- 1000
+sample_size <- 50
+population_mean <- 65
+population_sd <- 10
+
+sampling_dist <- tibble(
+  sample_id = 1:n_samples,
+  sample_mean = replicate(n_samples, 
+                          mean(rnorm(sample_size, 
+                                     mean = population_mean, 
+                                     sd = population_sd)))
+)
+
+ggplot(sampling_dist, aes(x = sample_mean)) +
+  geom_histogram(bins = 40, fill = "steelblue", alpha = 0.7) +
+  geom_vline(xintercept = population_mean, 
+             color = "red", linetype = "dashed", linewidth = 1) +
+  labs(title = "Sampling Distribution of the Mean",
+       subtitle = paste0("1000 samples of size n=", sample_size, 
+                        " from population with μ=", population_mean),
+       x = "Sample Mean", y = "Frequency") +
+  theme_minimal()
+```
+
+In the cases where the Central Limit Theorem (CLT) holds, the sampling distribution has the following properties:
+
+1. **Center:** The sampling distribution centers on the true population parameter ($\mu$)
+2. **Spread:** The standard deviation of this distribution is the **standard error** (SE):
+   $$SE = \frac{\sigma}{\sqrt{n}}$$
+3. **Shape:** For large enough samples, it's approximately normal regardless of the underlying population distribution
+
+**Why this matters:**
+
+- The standard error tells us how much sampling variation to expect
+- Smaller SE (from larger $n$) means more precise estimates (so we can trust the sample statistics more)
+- The normal shape lets us calculate probabilities
+
+### Point Estimates and Their Uncertainty
+
+**Point estimate:** A single number calculated from sample data to estimate a population parameter
+
+- $\bar{x}$ estimates $\mu$ (population mean)
+- $s$ estimates $\sigma$ (population standard deviation)  
+- $\hat{p}$ estimates $p$ (population proportion)
+
+::: {.callout-warning collapse="true"}
+## Reminder: be careful when choosing your estimator
+
+An estimator is a procedure for producing an estimate. The most straightforward was to produce an estimate for a population parameter (say, $\mu$) is to choose its sample equivalent (here: $\bar{x}$).
+
+But remember the cautionary tales at the end of the lecture: it is not always a good idea to use the sample equivalents directly, as, for instance, in the case of the sample variance of the sample maximum.
+:::
+
+**The fundamental problem:** Point estimates alone don't convey information about uncertainty!
+
+If I tell you "average customer satisfaction is 7.5/10 based on my sample," you should ask:
+
+- How large was the sample?
+- How variable were the responses?
+- What's the plausible range for the true population mean?
+
+This is where hypothesis testing and confidence intervals come in. They both use the sampling distribution to quantify uncertainty in principled ways.
+
+---
+
+## 2. Confidence Intervals: Quantifying Uncertainty
+
+### 2.1 The Concept
+
+Imagine you're a marketing manager who surveyed 100 customers about monthly spending. Your sample shows:
+
+- Sample mean: $\bar{x}$ = 250 EUR
+- Sample standard deviation: $s = 50$ EUR
+- Sample size: $n=100$
+
+**Question:** What's the true average spending for all customers ($\mu$)?
+
+**Naive answer:** "250 EUR"
+
+- Just reports the point estimate, no information about uncertainty involved in the sample process
+
+**Better answer:** "Somewhere between 240 EUR and 260 EUR"
+
+- Reports a range; from the size of the range we can get information about the sampling uncertainty
+
+**Best answer:** "Based on a method that works 95% of the time, I can say that the true average lies in the interval between 240.2 and 259.8 EUR."
+
+- This range is called a **confidence interval (CI)**, and it's one of the most important tools in statistics for communicating uncertainty.
+
+::: {.callout-important}
+## Speaking Correctly About Confidence Intervals
+
+The correct interpretation of confidence intervals is surprisingly subtle. Here are the right and wrong ways to talk about them:
+
+**❌ INCORRECT formulations:**
+
+- "There's a 95% probability that $\mu$ is between 240 EUR and 260 EUR"
+- "I'm 95% confident that $\mu$ is between 240 EUR and 260 EUR"
+- "We can be 95% certain that $\mu$ is between 240 EUR and 260 EUR"
+
+**Why these are wrong:** Once you've calculated a specific interval from your data, the true parameter $\mu$ either is or isn't in that interval (probability = 1 or 0). The parameter is fixed, not random; the *interval* is what's random (it varies from sample to sample).
+
+**✅ CORRECT formulations:**
+
+- "The interval 240 EUR to 260 EUR was constructed using a procedure that captures the true parameter in 95% of samples"
+- "If we repeated this sampling process many times, approximately 95% of the resulting intervals would contain $\mu$."
+- "This interval was calculated using a method with a 95% success rate"
+
+**Acceptable shorthand (with caveats):**
+
+- "We are 95% confident the true mean is between 240 EUR and 260 EUR"
+
+This phrasing is widely used and generally accepted in practice, but it's somewhat imprecise. The word "confident" here refers to confidence in the *procedure*, not subjective certainty about this particular interval. If you use this shorthand, be aware that it's a convention that technically conflates procedure-level properties with interval-level statements.
+
+**Best practice:** When precision matters (academic writing, technical reports), use the explicit formulation about the procedure. In business contexts, the shorthand is acceptable if your audience understands it refers to the method's reliability.
+:::
+
+
+
+### 2.2 What is a Confidence Interval?
+
+A confidence interval is a range of values that is likely to contain the true population parameter, constructed using sample data and a specified confidence level.
+
+**General form for a mean:**
+
+$$\text{CI} = \bar{x} \pm t^* \cdot SE$$
+
+where:
+
+- $\bar{x}$: sample mean (point estimate)
+- $t^*$: critical value from t-distribution (depends on confidence level and sample size; more details below)
+- $SE = \frac{s}{\sqrt{n}}$: standard error
+
+::: {.callout-note collapse="true"}
+## Understanding Critical Values and the t-Distribution
+
+When we construct a confidence interval, we need to account for sampling variability. The **critical value** ($t^*$) tells us how many standard errors to extend on either side of our sample mean to achieve our desired confidence level.
+
+**Why the t-distribution?**
+
+From the sampling lecture, you know that the Central Limit Theorem tells us the sampling distribution of $\bar{x}$ is approximately normal. If we *knew* the true population standard deviation $\sigma$, we could use the standard normal distribution (also called $z$-distribution) for our critical values.
+
+However, in practice we almost never know $\sigma$v-vwe estimate it with our sample standard deviation $s$. This estimation adds extra uncertainty. The **t-distribution** accounts for this additional uncertainty:
+
+- When $n$ is small, $s$ is an imprecise estimate of $\sigma$ $\rightarrow$ $t$-distribution has heavier tails than normal
+- When $n$ is large, $s$ becomes a good estimate of $\sigma$ $\rightarrow$ $t$-distribution approaches the normal distribution
+- The $t$-distribution has a parameter called **degrees of freedom** (df = $n-1$) that controls how close it is to normal
+
+**For confidence intervals:**
+
+- For a 95% CI, we want to capture the middle 95% of the sampling distribution
+- This leaves 2.5% in each tail (5% total)
+- The critical value $t^*$ marks the boundary points for these tails
+- In R: `qt(0.975, df = n-1)` gives us $t^*$ for a 95% CI (0.975 because we want the 97.5th percentile, leaving 2.5% in the upper tail)
+
+**The critical value depends on:**
+
+- **Confidence level:** Higher confidence $\rightarrow$ larger $t^*$ $\rightarrow$ wider interval
+- **Sample size (df):** Larger $n$ $\rightarrow$ smaller $t^*$ $\rightarrow$ narrower interval (approaches z-value)
+
+:::
+
+**For our customer spending example:**
+
+```{r}
+#| echo: true
+
+# Sample data
+x_bar <- 250  # sample mean
+s <- 50       # sample standard deviation
+n <- 100      # sample size
+
+# Calculate standard error
+se <- s / sqrt(n)
+
+# Critical value for 95% confidence (df = n-1 = 99)
+t_star <- qt(0.975, df = 99)  # 0.975 because two-tailed
+
+# Margin of error
+margin_of_error <- t_star * se
+
+# Confidence interval
+ci_lower <- x_bar - margin_of_error
+ci_upper <- x_bar + margin_of_error
+
+# Display results
+ci_results <- data.frame(
+  Statistic = c("Standard Error", "Critical Value (t*)", "Margin of Error", 
+                "Lower Bound", "Upper Bound"),
+  Value = c(se, t_star, margin_of_error, ci_lower, ci_upper)
+)
+knitr::kable(ci_results, digits = 2)
+```
+
+The standard error is `r round(se, 2)` EUR, and our 95% confidence interval is [`r round(ci_lower, 2)` EUR, `r round(ci_upper, 2)` EUR].
+
+**Interpretation:** "We are 95% confident that the true average monthly spending for all customers is between `r round(ci_lower, 2)` EUR and `r round(ci_upper, 2)` EUR."
+
+### 2.3 Understanding "95% Confidence"
+
+This is one of the most commonly misunderstood concepts in statistics. Let's be very precise about what it means and doesn't mean.
+
+**What "95% confidence" DOES mean:**
+
+"If we repeated this sampling process many times and constructed a 95% CI each time using the same procedure, approximately 95% of those intervals would contain the true population parameter."
+
+It's a statement about the **long-run behavior of the procedure**, not about any single interval you've calculated.
+
+**The key insight:** The randomness is in the *sampling process* and therefore in which interval you get. The parameter $\mu$ is fixed (though unknown). Before you draw your sample, the interval you'll get is random - it has a 95% probability of covering $\mu$. After you've calculated it, that specific interval either covers $\mu$ or it doesn't. And the true parameter $\mu$ is never random!
+
+```{r}
+#| echo: false
+#| fig-height: 4
+#| warning: false
+
+# Simulate multiple confidence intervals
+set.seed(789)
+n_intervals <- 50
+true_mean <- 250
+
+ci_data <- tibble(
+  sample_id = 1:n_intervals,
+  sample_mean = rnorm(n_intervals, mean = true_mean, sd = 5),
+  se = 50/sqrt(100),
+  ci_lower = sample_mean - qt(0.975, 99) * se,
+  ci_upper = sample_mean + qt(0.975, 99) * se,
+  contains_true = ci_lower <= true_mean & ci_upper >= true_mean
+)
+
+ggplot(ci_data, aes(y = sample_id)) +
+  geom_point(aes(x = sample_mean, color = contains_true), size = 2) +
+  geom_errorbarh(aes(xmin = ci_lower, xmax = ci_upper, color = contains_true),
+                 height = 0.3, alpha = 0.6) +
+  geom_vline(xintercept = true_mean, linetype = "dashed", color = "black", linewidth = 1) +
+  scale_color_manual(values = c("TRUE" = "steelblue", "FALSE" = "red"),
+                     labels = c("Captures μ", "Misses μ")) +
+  labs(title = "50 Random 95% Confidence Intervals",
+       subtitle = paste0("True population mean μ = ", true_mean, 
+                        " (black line) | ", 
+                        sum(ci_data$contains_true), 
+                        " of 50 intervals capture it"),
+       x = "Customer Spending (EUR)", 
+       y = "Sample Number",
+       color = "") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+In this simulation, we drew 50 different samples and constructed a 95% CI for each. Notice that:
+
+- Most intervals (blue) contain the true mean $\mu$ = 250
+- A few intervals (red) miss it—this is expected!
+- About 95% capture the true value (47 out of 50 in this simulation)
+
+**What "95% confidence" DOES NOT mean:**
+
+❌ **"There's a 95% probability that $\mu$ is in this interval"**
+
+- No! Once you've calculated a specific interval (say, [240, 260]), the true parameter $\mu$ is either in it (probability = 1) or not in it (probability = 0)
+- The parameter is fixed; it doesn't have a probability distribution
+- This would be a Bayesian credible interval, not a frequentist confidence interval
+
+❌ **"I'm 95% sure the true value is in this interval"**
+
+- This phrasing suggests subjective probability about $\mu$
+- The 95% refers to the procedure's success rate, not your personal certainty
+- If forced to use this language, be clear you mean confidence in the method, not the specific interval
+
+❌ **"95% of the data falls in this interval"**
+
+- No! The CI is about the population parameter (mean), not individual data points
+- For that, you'd calculate: $\bar{x} \pm 2s$ (approximately)
+- These are two completely different concepts
+
+❌ **"The interval [240, 260] has a 95% chance of containing $\mu$**
+
+- No! This specific interval either does or doesn't contain $\mu$
+- *Before* you calculated it, the random interval you were about to compute had a 95% probability
+- *After* calculation, no probability remains - it's determined (even though you don't know which)
+
+### 2.4 Factors Affecting Interval Width
+
+The width of a confidence interval tells us about the precision of our estimate. Narrower is generally better (more precise).
+
+**Three factors determine width:**
+
+**1. Sample size (n):**
+- Larger $n$ $\rightarrow$ smaller $SE$ $\rightarrow$ narrower $CI$
+- Precision improves with $\sqrt{n}$ (doubling $n$ doesn't double precision)
+
+```{r}
+#| echo: true
+
+# Compare CI width for different sample sizes
+sample_sizes <- c(25, 100, 400)
+s <- 50  # keep constant
+
+ci_comparison <- data.frame(
+  n = sample_sizes,
+  SE = s / sqrt(sample_sizes),
+  Margin_Error = qt(0.975, sample_sizes - 1) * (s / sqrt(sample_sizes))
+)
+
+knitr::kable(ci_comparison, 
+             digits = 2,
+             col.names = c("Sample Size", "Standard Error (€)", "Margin of Error (€)"))
+```
+
+Notice how the margin of error decreases as sample size increases: from $\pm$`r round(ci_comparison$Margin_Error[1], 2)` EUR with $n=25$ to $\pm$`r round(ci_comparison$Margin_Error[3], 2)` EUR with $n=400$.
+
+**2. Variability (s):**
+- More variable population $\rightarrow$ larger $SE$ $\rightarrow$ wider $CI$
+- Can't control this, but larger samples help
+
+**3. Confidence level:**
+
+- So far we only talked about the 95% confidence interval
+- But we can increase or decrease the confidence level
+- Higher confidence $\rightarrow$ wider interval
+- Trade-off between confidence and precision
+
+```{r}
+#| echo: true
+
+# Compare CI width for different confidence levels
+confidence_levels <- c(0.90, 0.95, 0.99)
+n <- 100
+s <- 50
+
+conf_comparison <- data.frame(
+  Confidence_Level = paste0(confidence_levels * 100, "%"),
+  Alpha = 1 - confidence_levels,
+  Critical_Value = qt(1 - (1 - confidence_levels)/2, n-1),
+  Margin_Error = qt(1 - (1 - confidence_levels)/2, n-1) * (s / sqrt(n))
+)
+
+knitr::kable(conf_comparison,
+             digits = 2,
+             col.names = c("Confidence Level", "α", "t*", "Margin of Error (€)"))
+```
+
+The trade-off is clear: higher confidence requires a wider interval. At 90% confidence, the margin is $\pm$`r round(conf_comparison$Margin_Error[1], 2)` EUR, while at 99% confidence it increases to $\pm$`r round(conf_comparison$Margin_Error[3], 2)` EUR. But the gain we have with the 99% confidence interval is that we can be more confident about the interval containing the true parameter...
+
+**Key insight:** There's always a trade-off between confidence and precision. You can be more confident by making the interval wider, but that makes it less informative.
+
+### 2.5 Confidence Intervals in R
+
+**For a single mean:**
+
+```{r}
+#| echo: true
+#| eval: false
+
+# Using t.test() function
+customer_spending <- c(245, 267, 223, 289, 241, ...)  # your sample data
+
+result <- t.test(customer_spending, conf.level = 0.95)
+result$conf.int  # Extract the confidence interval
+```
+
+**For a proportion:**
+
+```{r}
+#| echo: true
+#| eval: false
+
+# Example: conversion rate from sample of 500 customers
+# 125 made a purchase
+prop.test(x = 125, n = 500, conf.level = 0.95)
+```
+
+**For regression coefficients (preview for regression lecture):**
+
+```{r}
+#| echo: true
+#| eval: false
+
+# Confidence intervals are automatically included in regression output
+model <- lm(consumption ~ price, data = beer_data)
+confint(model, level = 0.95)
+```
+
+### 2.6 Interpreting Confidence Intervals in Business Context
+
+**Example 1: Market Research**
+
+A company surveys 200 potential customers about willingness to pay for a new product.
+
+- Sample mean: 45 EUR
+- 95% CI: [42, 48] EUR
+
+**Good interpretation:** "We're 95% confident that the average willingness to pay for all potential customers is between 42 and 48 EUR. This suggests a price point around 40-45 EUR would be reasonable."
+
+**Why this matters:** The interval helps with business decisions:
+
+- If production cost is 40 EUR, the lower bound (42 EUR) still provides margin
+- If cost is 50 EUR, even the upper bound (48 EUR) suggests unprofitability
+
+**Example 2: A/B Testing**
+
+An e-commerce site tests two checkout designs:
+
+- Design A: 100 users, 23 conversions $\rightarrow$ 23% (95% CI: [15%, 31%])
+- Design B: 100 users, 31 conversions $\rightarrow$ 31% (95% CI: [22%, 40%])
+
+**Interpretation:** The intervals overlap substantially. While Design B has a higher point estimate, we can't confidently say it's better. The true conversion rates might be equal, or Design A might even be better (both plausible given the overlap).
+
+**Business decision:** Need more data before making a costly redesign decision.
+
+### 2.7 Preview: Relationship Between Confidence Intervals and Hypothesis Tests
+
+Confidence intervals and hypothesis tests are two sides of the same coin. They use the same underlying sampling distribution concepts but answer different questions:
+
+- **Hypothesis test:** "Is the claim $\mu$ = 250 compatible with my data?"
+- **Confidence interval:** "What values of $\mu$ are compatible with my data?"
+
+**Key connection:** A 95% confidence interval contains all values of $\mu$ that would NOT be rejected in a two-sided hypothesis test at $\alpha = 0.05$.
+
+```{r}
+#| echo: false
+#| fig-height: 3
+
+# Illustration
+library(ggplot2)
+
+ggplot() +
+  annotate("segment", x = 240, xend = 260, y = 1, yend = 1, 
+           linewidth = 2, color = "steelblue") +
+  annotate("point", x = 250, y = 1, size = 4, color = "darkblue") +
+  annotate("point", x = 235, y = 1, size = 3, color = "red") +
+  annotate("point", x = 265, y = 1, size = 3, color = "red") +
+  annotate("text", x = 250, y = 1.15, label = "Sample mean\nx̄ = 250") +
+  annotate("text", x = 240, y = 0.85, label = "CI: [240, 260]") +
+  annotate("text", x = 235, y = 0.7, label = "Would reject\n$H_0$: μ=235", 
+           color = "red", size = 3) +
+  annotate("text", x = 265, y = 0.7, label = "Would reject\n$H_0$: μ=265", 
+           color = "red", size = 3) +
+  xlim(230, 270) +
+  ylim(0.6, 1.3) +
+  theme_void()
+```
+
+This connection is incredibly useful: you can often "test" hypotheses just by checking whether a claimed value falls inside the confidence interval!
+
+---
+
+## 3. Hypothesis Testing: Evaluating Claims
+
+### 3.1 The Logic of Hypothesis Testing
+
+Hypothesis testing provides a formal framework for using sample data to evaluate claims about population parameters. Unlike confidence intervals, which give us a range of plausible values, hypothesis tests answer a specific yes/no question.
+
+**The fundamental question:** "Is our sample data consistent with a specific claim about the population?"
+
+#### The Courtroom Analogy
+
+Think of hypothesis testing like a trial:
+
+**Presumption of innocence** = **Null hypothesis ($H_0$)**
+
+- We assume the defendant (claim) is innocent (true) until proven guilty (false)
+- The burden of proof lies with the prosecution (the data)
+
+**Evidence** = **Sample data**
+
+- Must be strong enough to overcome presumption
+
+**Verdict** = **Decision**
+
+- "Guilty" = Reject $H_0$ (evidence strong enough)
+- "Not guilty" = Fail to reject $H_0$ (evidence insufficient)
+
+**Crucial point:** "Not proven guilty" ≠ "innocent"
+
+- Similarly, "fail to reject $H_0$" ≠ "$H_0$ is true"
+- It only means we don't have strong enough evidence against it
+
+#### Example: Testing a Business Claim
+
+A coffee shop claims their average service time is 3 minutes. You observe 40 customers and find:
+
+- Sample mean: $\bar{x}$ = 3.4 minutes  
+- Sample SD: s = 0.8 minutes
+
+**Question:** Is the claim of $\mu$ = 3 minutes consistent with your data?
+
+**Intuitive reasoning:**
+
+- Your sample mean (3.4) is higher than the claimed value (3.0)
+- But samples vary due to randomness. Maybe you just happened to observe slower customers?
+- How do we decide if 0.4 minutes difference is "too large" to be explained by chance alone?
+
+This is exactly what hypothesis testing answers!
+
+### 3.2 The Five-Step Process
+
+#### Step 1: State the Hypotheses
+
+Every hypothesis test requires two complementary statements:
+
+**Null Hypothesis ($H_0$):**
+
+- A specific claim we're testing
+- Usually represents "no effect," "no difference," or "no change"
+- Always includes an equality ($=$, $\geq$, or $\leq$)
+
+**Alternative Hypothesis ($H_1$ or $H_A$):**
+
+- What we suspect might be true
+- What we're trying to find evidence for
+- Can be one-sided or two-sided
+
+**For our coffee shop example:**
+
+- $H_0$: $\mu=3$  (service time equals claimed value)
+- $H_1$: $\mu \neq 3$ (service time differs from claimed value)
+
+**Types of alternative hypotheses:**
+
+1. **Two-sided:** $H_1$: $\mu \neq  3$
+
+   - Used when we care about deviations in either direction
+   - "Is the service time different from 3 minutes?"
+
+2. **Right-sided:** $H_1$: $\mu > 3$
+
+   - Used when we only care about increases
+   - "Is the service time longer than 3 minutes?"
+
+3. **Left-sided:** $H_1$: $\mu < 3$
+
+   - Used when we only care about decreases  
+   - "Is the service time shorter than 3 minutes?"
+
+**Business example with all three types:**
+
+Testing a new website design's effect on conversion rates:
+
+- **Two-sided test:** "Does the new design change conversion rates?" ($H_1$: $\mu \neq \mu_0$)
+  - Use when you're genuinely unsure of direction
+  
+- **Right-sided test:** "Does the new design increase conversion rates?" ($H_1$: $\mu > \mu_0$)
+  - Use when you're specifically trying to show improvement
+  
+- **Left-sided test:** "Does the new design decrease bounce rates?" ($H_1$: $\mu < \mu_0$)
+  - Use when you're testing for reduction in negative outcomes
+  
+::: {.callout-note collapse="true"}
+## $>$ or $\geq$ in the alternative hypothesis?
+
+You should use strict inequality (greater than, not greater or equal to) for the
+formulation of the alternative hypothesis $H_1$!
+
+Why? The null and alternative hypotheses must be mutually exclusive and exhaustive. 
+The standard approach is to assign the equality to $H_0$.
+
+From a practical standpoint, the exact boundary point has probability zero in continuous distributions, so whether you include the equality in $H_0$ or $H_1$ doesn't affect the test's behavior.
+But the convention is to put it in $H_0$ for consistency with the testing framework.
+
+
+:::
+
+#### Step 2: Choose a Significance Level ($\alpha$)
+
+The **significance level** (alpha, $\alpha$) is the threshold for how much evidence we require before rejecting $H_0$. It represents the probability of Type I error we're willing to accept.
+
+**Common choices:**
+
+- **$\alpha = 0.05$:** Standard in most business/research contexts (5% risk of false positive)
+- **$\alpha = 0.01$:** More conservative, used when Type I errors are costly
+- **$\alpha = 0.10$:** More liberal, used in exploratory research
+
+**For our example:** $\alpha = 0.05$ (we'll use the conventional threshold)
+
+::: {.callout-warning}
+## The $\alpha = 0.05$ Convention
+
+The choice of $\alpha = 0.05$ is largely arbitrary, originating from Ronald Fisher's work in the 1920s. It's a convention, not a law of nature. The specific value should ideally depend on the costs of different types of errors in your specific context. More on this later when we discuss Type I and Type II errors.
+:::
+
+#### Step 3: Calculate the Test Statistic
+
+The **test statistic** standardizes our sample evidence so we can compare it to a known probability distribution. For testing a mean, we use the t-statistic:
+
+$$t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}}$$
+
+Components:
+
+- **Numerator:** How far is our sample mean from the claimed value $\mu_0$?
+- **Denominator:** Standard error (expected sampling variation)
+- **Result:** Number of standard errors away from claimed value
+
+**For our coffee shop example:**
+```{r}
+#| echo: true
+
+x_bar <- 3.4  # sample mean
+mu_0 <- 3.0   # claimed value
+s <- 0.8      # sample SD
+n <- 40       # sample size
+
+# Calculate test statistic
+se <- s / sqrt(n)
+t_stat <- (x_bar - mu_0) / se
+
+# Create results table
+test_results <- data.frame(
+  Statistic = c("Standard Error", "Test Statistic (t)"),
+  Value = c(se, t_stat)
+)
+knitr::kable(test_results, digits = 3)
+```
+
+The standard error is `r round(se, 3)` minutes, and our test statistic is $t = `r round(t_stat, 3)`$.
+
+**Interpretation:** Our sample mean is `r round(t_stat, 2)` standard errors above the claimed mean. Is this unusual enough to doubt the claim?
+
+#### Step 4: Calculate the $p$-value
+
+The **p-value** is the probability of observing a test statistic as extreme as (or more extreme than) what we actually observed, *assuming $H_0$ is true*.
+
+**Critical insight from sampling lecture:** Remember the sampling distribution? If $H_0$ is true ($\mu = 3$), then our sample means would follow a $t$-distribution centered at $3$. The $p$-value tells us how far out in the tail our observed value sits.
+
+```{r}
+#| echo: true
+
+# Degrees of freedom
+df <- n - 1
+
+# P-value for two-sided test
+p_value <- 2 * pt(abs(t_stat), df = df, lower.tail = FALSE)
+
+# Display result
+pvalue_result <- data.frame(
+  Statistic = c("Degrees of Freedom", "P-value"),
+  Value = c(df, p_value)
+)
+knitr::kable(pvalue_result, digits = 4)
+```
+
+With $p=$ `r round(p_value, 4)`, we have very strong evidence against $H_0$.
+
+**Interpretation:** If the true average service time were actually 3 minutes, we would observe a sample mean as extreme as 3.4 minutes (or more extreme) only about `r round(p_value * 100, 1)`% of the time due to random sampling variation alone.
+
+```{r}
+#| echo: false
+#| fig-height: 3
+#| warning: false
+
+# Visualize p-value
+t_range <- seq(-4, 4, 0.01)
+t_density <- dt(t_range, df = 39)
+t_df <- data.frame(t = t_range, density = t_density)
+
+ggplot(t_df, aes(x = t, y = density)) +
+  geom_line(color = "steelblue", linewidth = 1) +
+  geom_area(data = subset(t_df, t >= abs(t_stat)), 
+            fill = "red", alpha = 0.3) +
+  geom_area(data = subset(t_df, t <= -abs(t_stat)), 
+            fill = "red", alpha = 0.3) +
+  geom_vline(xintercept = t_stat, color = "darkred", 
+             linetype = "dashed", linewidth = 1) +
+  geom_vline(xintercept = -t_stat, color = "darkred", 
+             linetype = "dashed", linewidth = 1) +
+  labs(title = "Sampling Distribution Under $H_0$",
+       subtitle = paste0("Shaded area = p-value = ", round(p_value, 4)),
+       x = "Test Statistic (t)",
+       y = "Density") +
+  theme_minimal()
+```
+
+#### Step 5: Make a Decision
+
+Compare p-value to $\alpha$:
+
+- **If p-value < $\alpha$:** Reject $H_0$ (evidence is strong enough)
+- **If p-value \geq $\alpha$:** Fail to reject $H_0$ (evidence is insufficient)
+
+**For our example:** 
+
+- $p$-value (`r round(p_value, 3)`) < $\alpha$ (0.05)
+- **Decision:** Reject $H_0$
+- **Conclusion:** There is strong evidence that the average service time differs from the claimed 3 minutes. The data suggest service times are longer than claimed.
+
+### 3.3 Understanding $p$-values
+
+$p$-values are among the most misunderstood concepts in statistics. Let's be very precise about what they mean and don't mean.
+
+#### What $p$-values ARE
+
+**Definition:** The $p$-value is the probability of observing data at least as extreme as what we actually observed, *if the null hypothesis were true*.
+
+**Key points:**
+
+- It's calculated *assuming* $H_0$ is true (not testing whether $H_0$ is true)
+- It measures how "surprising" or "extreme" our data are under $H_0$
+- It's a continuous measure of evidence (not binary)
+- Lower $p$-values indicate stronger evidence against $H_0$
+
+**Think of it as:**
+
+- A measure of compatibility between your data and $H_0$
+- How awkward it would be to maintain the null hypothesis given what you observed
+- The probability of getting "unlucky" with a sample if $H_0$ were true
+
+#### What $p$-values ARE NOT
+
+❌ **"The probability that $H_0$ is true"**
+
+- No! The $p$-value is calculated *assuming* $H_0$ is true
+- It can't tell you the probability that $H_0$ is true
+
+❌ **"The probability that the result occurred by chance"**
+
+- No! The result already occurred ($p = 1$ for that)
+- It's about how likely such results are under $H_0$
+
+❌ **"The probability that you made a mistake"**
+
+- No! That's related to Type I error ($\alpha$), not the $p$-value
+- Confusing these is very common
+
+❌ **"The size or importance of an effect"**
+
+- No! Small effects can have tiny $p$-values with large samples
+- Large effects can have large $p$-values with small samples
+- $p$-values conflate effect size and sample size
+
+#### Common Misinterpretations - Business Examples
+
+**Scenario:** A marketing campaign test shows $p = 0.03$
+
+- **Wrong:** "There's a 3% chance the campaign doesn't work."
+
+- **Right:** "If the campaign truly had no effect, we'd see results this extreme only 3% of the time by chance alone."
+
+**Scenario:** Your analysis yields $p = 0.12$
+
+- **Wrong:** "The effect doesn't exist."
+- **Right:** "We don't have sufficient evidence to reject the hypothesis of no effect at $\alpha = 0.05$. This could mean: no effect exists. But it could also mean: our sample size was too small to detect it."
+
+**Scenario:** One study finds $p = 0.04$, another finds $p = 0.06$
+
+- **Wrong:** "The first study found an effect but the second didn't."
+
+- **Right:** "Both studies found similar evidence. The first barely crossed an arbitrary threshold while the second barely didn't. The results are likely more similar than different."
+
+### 3.4 Types of Errors
+
+Every hypothesis test can result in one of four outcomes, two of which are errors:
+
+|                          | **$H_0$ is True**           | **$H_0$ is False**          |
+|--------------------------|--------------------------|--------------------------|
+| **Reject $H_0$**            | **Type I Error** ($\alpha$)     | Correct Decision (Power) |
+| **Fail to Reject $H_0$**    | Correct Decision         | **Type II Error** (\beta)    |
+
+#### Type I Error (False Positive)
+
+**Definition:** Rejecting $H_0$ when it's actually true
+
+**Also called:** False positive, $\alpha$-error
+
+**Probability:** $\alpha$ (significance level)
+
+**Business example:** 
+A pharmaceutical company concludes their new drug is effective when it actually isn't. They invest millions in production and marketing of an ineffective treatment.
+
+**Coffee shop example:**
+Concluding that service times differ from 3 minutes when they actually don't, leading to unnecessary process changes.
+
+#### Type II Error (False Negative)
+
+**Definition:** Failing to reject $H_0$ when it's actually false
+
+**Also called:** False negative, $\beta$ error
+
+**Probability:** $\beta$ (depends on effect size, sample size, and $\alpha$)
+
+**Power:** 1 - $\beta$ (probability of correctly rejecting a false $H_0$)
+
+**Business example:**
+A company fails to detect that a new training program actually does improve productivity, so they don't implement it company-wide, missing an opportunity for improvement.
+
+**Coffee shop example:**
+Concluding there's insufficient evidence that service times differ from 3 minutes when they actually do, missing a genuine service problem.
+
+#### Which Error is Worse?
+
+This depends entirely on context! Consider the consequences:
+
+**Example 1: Quality Control**
+
+- $H_0$: Production process is working correctly
+- **Type I Error:** Stop production unnecessarily $\rightarrow$ Costly but safe
+- **Type II Error:** Miss a defect problem $\rightarrow$ Potentially dangerous
+- **Typical choice:** Accept higher $\alpha$ (0.10) to minimize Type II errors
+
+**Example 2: New Product Launch**
+- $H_0$: New product won't be profitable
+- **Type I Error:** Launch unprofitable product $\rightarrow$ Waste resources
+- **Type II Error:** Don't launch profitable product $\rightarrow$ Missed opportunity
+- **Typical choice:** Balance depends on launch costs vs. opportunity costs
+
+**Example 3: Medical Diagnosis** (Classic example for intuition)
+- $H_0$: Patient is healthy
+- **Type I Error:** False positive $\rightarrow$ Unnecessary anxiety/treatment
+- **Type II Error:** False negative $\rightarrow$ Missed diagnosis
+- **Typical choice:** Depends on disease seriousness and treatment costs
+
+#### The Trade-off
+
+There's a fundamental trade-off between Type I and Type II errors:
+
+- **Decrease $\alpha$** (be more conservative) $\rightarrow$ Fewer false positives but more false negatives
+- **Increase $\alpha$** (be more liberal) $\rightarrow$ Fewer false negatives but more false positives
+
+**The only way to reduce both:** Increase sample size!
+
+```{r}
+#| echo: false
+#| fig-height: 3
+#| warning: false
+
+# Illustration of Type I and II errors
+
+# Create distributions
+x <- seq(-4, 6, 0.01)
+h0_dist <- dnorm(x, mean = 0, sd = 1)
+h1_dist <- dnorm(x, mean = 2.5, sd = 1)
+
+dist_df <- data.frame(
+  x = x,
+  h0 = h0_dist,
+  h1 = h1_dist
+)
+
+# Critical value for alpha = 0.05
+crit_val <- qnorm(0.95, mean = 0, sd = 1)
+
+ggplot(dist_df) +
+  geom_line(aes(x = x, y = h0, color = "$H_0$ True"), linewidth = 1) +
+  geom_line(aes(x = x, y = h1, color = "$H_0$ False"), linewidth = 1) +
+  geom_vline(xintercept = crit_val, linetype = "dashed", color = "black") +
+  geom_area(data = subset(dist_df, x >= crit_val), 
+            aes(x = x, y = h0), fill = "red", alpha = 0.3) +
+  geom_area(data = subset(dist_df, x < crit_val), 
+            aes(x = x, y = h1), fill = "blue", alpha = 0.3) +
+  annotate("text", x = crit_val + 0.3, y = 0.35, 
+           label = "Type I Error\n(α)", color = "red", size = 3) +
+  annotate("text", x = crit_val - 1.5, y = 0.25, 
+           label = "Type II Error\n(β)", color = "blue", size = 3) +
+  annotate("text", x = 0, y = 0.45, label = "$H_0$ True", color = "darkred") +
+  annotate("text", x = 2.5, y = 0.45, label = "$H_0$ False", color = "darkgreen") +
+  scale_color_manual(values = c("$H_0$ True" = "darkred", "$H_0$ False" = "darkgreen")) +
+  labs(title = "Type I and Type II Errors",
+       x = "Test Statistic", y = "Density") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+### 3.5 Common Hypothesis Tests
+
+#### One-Sample t-test
+
+**When to use:** Testing a claim about a single population mean
+
+**Requirements:**
+
+- One numerical variable
+- Random sample
+- Approximately normal distribution (or large sample, typically $n > 30$)
+
+**Example:** Employee Productivity
+
+A company claims average employee productivity is 85 units/day. You sample 50 employees:
+
+```{r}
+#| echo: true
+
+# Simulate data
+set.seed(123)
+productivity <- rnorm(50, mean = 82, sd = 12)
+
+# Perform one-sample t-test
+result <- t.test(productivity, mu = 85, alternative = "two.sided")
+result
+```
+
+**Interpreting output:**
+
+- **t-statistic:** $-1.77$ (sample mean is $1.77 SE$ below claimed value)
+- **p-value:** $0.083$ (if $\mu = 85$, we'd see this difference 8.3% of the time)
+- **Decision:** At $\alpha = 0.05$, fail to reject $H_0$ (insufficient evidence)
+- **95% CI:** [78.6, 85.4] (notice that 85 is inside the interval)
+
+**Business interpretation:** "While the sample mean (82) is lower than the claimed value (85), the difference isn't statistically significant at the 5% level. We don't have strong evidence that the true productivity differs from 85 units/day. However, the result is borderline ($p = 0.083$), suggesting we might want to collect more data or investigate further."
+
+#### Two-Sample t-test
+
+**When to use:** Comparing means between two independent groups
+
+**Requirements:**
+
+- One numerical outcome variable
+- One categorical grouping variable (two groups)
+- Independent groups (no overlap)
+- Random samples from each group
+
+**Example:** Marketing Campaign Effectiveness
+
+Control group (no email) vs. Treatment group (email campaign):
+
+```{r}
+#| echo: true
+
+# Simulate data
+set.seed(456)
+control <- rnorm(100, mean = 45, sd = 15)
+treatment <- rnorm(100, mean = 52, sd = 15)
+
+# Perform two-sample t-test
+result <- t.test(treatment, control, 
+                 alternative = "greater",  # one-sided: treatment > control
+                 var.equal = FALSE)       # don't assume equal variances
+result
+```
+
+**Interpreting output:**
+
+- **t-statistic:** 3.30 (treatment mean is 3.30 SE higher than control)
+- **p-value:** 0.0006 (very strong evidence)
+- **Decision:** Reject $H_0$ (treatment effect is real)
+- **95% CI:** [3.2, Inf] (one-sided, so only lower bound)
+
+**Business interpretation:** "Customers who received the email campaign spent significantly more (mean = €52) than those who didn't (mean = 45 EUR). The difference of 7 EUR is statistically significant ($p < 0.001$), suggesting the campaign was effective. The 95% confidence interval suggests the true effect is at least 3.2 EUR."
+
+#### Important Variations
+
+**Paired t-test:** When observations are naturally paired
+
+```{r}
+#| echo: true
+#| eval: false
+
+# Example: Before-after measurements on same individuals
+before <- c(7.2, 6.8, 7.5, 6.9, 7.1)
+after <- c(7.8, 7.2, 8.1, 7.4, 7.7)
+
+t.test(after, before, paired = TRUE)
+```
+
+**Welch's t-test vs. Student's t-test:**
+
+- `var.equal = FALSE` (default): Welch's test, doesn't assume equal variances (safer)
+- `var.equal = TRUE`: Student's t-test, assumes equal variances (slightly more powerful if true)
+
+**When in doubt:** Use Welch's (var.equal = FALSE) - it's more robust
+
+### 3.6 Connection to Regression (Preview for regression lecture)
+
+Everything you've learned about hypothesis testing directly applies to regression. In fact, regression output is dominated by hypothesis tests!
+
+**Every regression coefficient has a t-test:**
+
+From your the beer consumption example from the lecture:
+
+```
+term        estimate  std_error  statistic  p_value
+intercept   86.4      4.32       20.0       0.000
+price       -9.84     1.38       -7.15      0.000
+```
+
+**What's being tested?**
+
+- $H_0$: $\beta_1 = 0$ (price has no relationship with consumption)
+- $H_1$: $\beta_1\neq 0$ (price does affect consumption)
+
+**The test statistic** is calculated exactly like before:
+
+$$t = \frac{\hat{\beta}_1 - 0}{SE(\hat{\beta}_1)} = \frac{-9.84}{1.38} = -7.15$$
+
+**The p-value** of 0.000 means: "If price truly had no effect on consumption, we would almost never see a coefficient this large (in absolute value) due to chance alone."
+
+**Interpretation:** "There is extremely strong evidence that price is associated with beer consumption. For each 1 EUR increase in price, consumption decreases by an estimated 9.84 liters on average."
+
+**The key insight:** Understanding hypothesis testing now makes regression output immediately interpretable!
+
+---
+
+## 4. Statistical vs. Practical Significance
+
+One of the most important lessons in applied statistics: **statistical significance $\neq$ practical importance**
+
+This is especially critical in business contexts where you must make decisions, not just detect effects.
+
+#### The Problem with Large Samples
+
+With very large samples, even tiny, meaningless effects become statistically significant:
+
+**Example:** Website A/B Test
+
+A company tests two website designs with 100,000 users each:
+
+- Design A: 2.01% conversion rate (2,010 conversions)
+- Design B: 2.03% conversion rate (2,030 conversions)  
+- Difference: 0.02 percentage points (20 additional conversions)
+
+```{r}
+#| echo: true
+
+# Two-proportion test
+prop.test(x = c(2010, 2030), n = c(100000, 100000))
+```
+
+**Result:** $p < 0.001$ (highly statistically significant!)
+
+**But ask yourself:**
+
+- Does a 0.02% improvement justify redesign costs?
+- Implementation time?
+- Risk of unforeseen issues?
+- Employee retraining?
+
+If redesign costs are 50,000 EUR and each conversion generates 10 EUR profit:
+
+- Additional profit: 20 conversions × 10 EUR = 200 EUR per 100,000 users
+- This is tiny compared to implementation costs!
+
+**Conclusion:** Statistically significant but practically worthless.
+
+#### The Problem with Small Samples
+
+Conversely, with small samples, even large, important effects may not reach statistical significance:
+
+**Example:** New Training Program
+
+A company pilots a productivity training program with 10 employees:
+
+- Before training: 75 units/day (average)
+- After training: 90 units/day (average)
+- Improvement: 15 units/day (20% increase!)
+
+```{r}
+#| echo: true
+
+# Simulate small sample
+set.seed(789)
+before <- rnorm(10, mean = 75, sd = 20)
+after <- before + rnorm(10, mean = 15, sd = 10)  # each person improves
+
+# Paired t-test
+t.test(after, before, paired = TRUE)
+```
+
+**Result:** $p = 0.09$ (not statistically significant at $\alpha = 0.05$)
+
+**But the effect is huge!** 20% productivity improvement would be extremely valuable company-wide.
+
+**What went wrong?** Small sample ($n = 10$) + high variability = low power to detect effects
+
+**Business decision:** Don't abandon the program! Instead:
+
+- Expand the pilot to get more data
+- Calculate ROI: if training costs 500 EUR/person and generates 5,000 EUR in productivity gains, it's worth it regardless of $p$-value
+- Focus on effect size and confidence interval, not just significance
+
+There are tools to standardize effect sizes to make them easier comparable, such as Cohen's d. 
+We will learn more about these tools in the lecture on analyzing experimental data!
+
+
+## 5. Common Pitfalls and Best Practices
+
+### 5.1. Common pitfalls
+
+#### Pitfall 1: "$p = 0.05$ is a magical threshold"
+
+**Wrong thinking:** 
+- $p = 0.049 \rightarrow$ "Significant! The effect exists!"
+- $p = 0.051 \rightarrow$ "Not significant! No effect!"
+
+**Better thinking:**
+- Both results show similar evidence
+- The threshold $\alpha = 0.05$ is arbitrary
+- Focus on effect sizes and confidence intervals
+- Consider the entire body of evidence
+
+**Example:** 
+Two studies test same intervention:
+
+- Study 1: $p = 0.048$, effect = +5 units
+- Study 2: $p = 0.052$, effect = +5.2 units
+
+These findings are essentially identical! Don't overinterpret the threshold.
+
+#### Pitfall 2: "Non-significant means no effect"
+
+**Wrong thinking:**
+"We found $p = 0.23$, so there's no relationship between X and Y."
+
+**Better thinking:**
+"We found insufficient evidence to reject the null hypothesis. This could mean:
+- No effect exists (true negative)
+- An effect exists but our sample was too small to detect it (false negative)
+- Our measurement was too noisy"
+
+**How to improve:**
+- Report the confidence interval: "The effect could range from -2 to +8"
+- Consider practical equivalence testing
+
+#### Pitfall 3: "p-value measures importance"
+
+**Wrong thinking:**
+- $p = 0.001$ is "highly significant" $\rightarrow$ effect must be important
+- $p = 0.04$ is "barely significant" $\rightarrow$ effect is probably not important
+
+**Better thinking:**
+
+- $p$-value = f(effect size, sample size, variability)
+- Can have $p < 0.001$ with tiny, meaningless effect (large $n$)
+- Can have $p = 0.10$ with large, important effect (small $n$)
+- Always report effect size separately!
+
+#### Pitfall 4: Confusing confidence interval interpretation
+
+**Wrong:** "There's a 95% probability that $\mu$ is in [50, 60]"
+
+**Right:** "We're 95% confident that $\mu$ is in [50, 60]"
+
+**Even better:** "If we repeated this study many times, 95% of our confidence intervals would contain the true population mean"
+
+### 5.2 When NOT to Use Hypothesis Testing
+
+Hypothesis testing is not always the right tool. Here are situations where alternatives are better:
+
+#### Situation 1: You Have the Full Population
+
+**Example:** Analyzing all transactions from your company database
+
+- No sampling uncertainty → no need for inferential statistics
+- Descriptive statistics (means, proportions) are exact
+- Focus on practical importance, not statistical significance
+
+**What to do instead:** Report actual differences, visualize patterns, calculate business metrics (ROI, etc.)
+
+#### Situation 2: The Decision Doesn't Depend on Statistical Evidence
+
+**Example:** Choosing between two supplier bids
+
+- Bid A: 100,000 EUR
+- Bid B: 120,000 EUR
+
+You don't need a hypothesis test to know B costs more! The decision depends on:
+
+- Quality considerations
+- Reliability
+- Relationship factors
+- Risk assessment
+
+**What to do instead:** Multi-criteria decision analysis, cost-benefit analysis
+
+#### Situation 3: Effect Sizes Matter More Than Existence
+
+**Example:** Comparing two marketing strategies
+
+Even if Strategy B is "significantly better" ($p < 0.05$), you need to know:
+
+- **How much better?** (Effect size)
+- **What's the range of plausible values?** (Confidence interval)
+- **What's the business impact?** (Revenue, costs, ROI)
+
+**What to do instead:** Focus on estimation and confidence intervals rather than testing
+
+#### Situation 4: Data Quality is Poor
+
+**Example:** Survey with 10% response rate and clear selection bias
+
+No amount of statistical testing fixes:
+
+- Non-representative samples
+- Measurement error
+- Missing data
+- Biased data collection
+
+**What to do instead:** 
+
+- Acknowledge limitations
+- Use sensitivity analysis
+- Triangulate with other data sources
+- Focus on improving data quality
+
+#### Situation 5: Exploratory Data Analysis
+
+**Example:** Initial investigation of customer behavior patterns
+
+When you're:
+
+- Generating hypotheses (not testing them)
+- Looking for patterns and insights
+- Building understanding of your data
+
+**What to do instead:**
+
+- Descriptive statistics and visualization
+- Data mining / pattern detection
+- Use findings to design proper confirmatory studies
+
+---
+
+## 7. Summary and Key Takeaways
+
+### Core Concepts Recap
+
+**Confidence Intervals:**
+
+- Provide a range of plausible values for a parameter
+- 95% confidence means the procedure works 95% of the time
+- Width depends on: sample size, variability, confidence level
+- More informative than point estimates alone
+
+**Hypothesis Testing:**
+
+- Formal framework for evaluating claims about populations
+- Uses sampling distributions to quantify evidence
+- P-values measure compatibility with $H_0$, not probability of $H_0$
+- Two types of errors: Type I ($\alpha$) and Type II ($\beta$)
+
+**The Connection:**
+
+- Both use sampling distributions and standard errors
+- A 95% CI contains all values that wouldn't be rejected at $\alpha = 0.05$
+- Together they provide comprehensive picture of inference
+
+### Critical Thinking Points
+
+**1. Statistical significance ≠ Practical importance**
+
+- Large samples make tiny effects significant
+- Small samples may miss important effects
+- Always consider effect size and business impact
+
+**2. P-values are easily misinterpreted**
+
+- Not the probability $H_0$ is true
+- Not the probability of a mistake
+- Not a measure of effect size
+- Continuous measure of evidence, not binary threshold
+
+**3. Context matters enormously**
+
+- Which error (Type I or II) is more serious?
+- What's the cost of being wrong?
+- What's the minimum meaningful effect size?
+
+**4. Not every question needs a hypothesis test**
+
+- Sometimes estimation (CI) is more useful
+- Sometimes descriptive statistics suffice
+- Sometimes business judgment trumps statistics
+
+---
+
+## 8. Practice Questions
+
+Test your understanding with these questions. Think carefully about each one before looking at answers.
+
+### Conceptual Questions
+
+**1. Sample-Population Connection**
+
+You survey 200 customers and find average satisfaction of 7.8/10 with a 95% CI of [7.5, 8.1]. Your colleague says: "Great! We know that 95% of all customers have satisfaction between 7.5 and 8.1."
+
+What's wrong with this interpretation? What should they say instead?
+
+::: {.callout-tip collapse="true"}
+## Answer
+
+**What's wrong:**
+The colleague is confusing the confidence interval for the *population mean* with the range where *individual data points* fall. The CI [7.5, 8.1] is about where we expect the *average* satisfaction to be, not where individual customer scores fall.
+
+**Correct interpretation:**
+"We are 95% confident (using a procedure with a 95% success rate) that the true *average* satisfaction across all customers is between 7.5 and 8.1."
+
+**Additional clarification:**
+If they want to know where 95% of individual customers' scores fall, they would need to calculate something like $\bar{x} \pm 2s$ (approximately), which would be much wider than the confidence interval for the mean.
+:::
+
+**2. P-value Interpretation**
+
+A marketing test yields $p = 0.08$ at $\alpha = 0.05$. Your manager says: "The test failed. There's no effect."
+
+What's problematic about this conclusion? What would be a better interpretation?
+
+::: {.callout-tip collapse="true"}
+## Answer
+
+**Problems with the manager's statement:**
+
+1. "The test failed" - The test didn't fail; it worked properly. We just didn't find sufficient evidence to reject $H_0$ at the predetermined threshold.
+2. "There's no effect" - Absence of statistical significance doesn't mean absence of an effect. It could mean:
+   - There truly is no effect (but we can't conclude this)
+   - There is an effect but our sample was too small to detect it (low power)
+   - There is an effect but it's smaller than we can reliably detect with this sample size
+
+**Better interpretation:**
+
+"At the conventional $\alpha = 0.05$ level, we don't have sufficient statistical evidence to conclude there's an effect. However, with $p = 0.08$, we're borderline. This suggests we should:
+1. Consider the effect size and confidence interval (not just the p-value)
+2. Look at the practical significance of any observed difference
+3. Consider collecting more data if the decision is important
+4. Not definitively conclude there's *no* effect"
+
+**Additional considerations:**
+
+- The $p = 0.08$ vs. $p = 0.05$ distinction is somewhat arbitrary
+- If the effect size is meaningful in business terms, it might still be worth acting on
+- Should report: "We observed [describe effect], but this didn't reach conventional statistical significance ($p = 0.08$)"
+:::
+
+
+**3. Statistical vs. Practical**
+
+Study A: $n = 50$, effect = 15%, $p = 0.08$
+Study B: $n = 50,000$, effect = 0.5%, $p = 0.001$
+
+Which finding is more likely to be useful in business? Why?
+
+::: {.callout-tip collapse="true"}
+## Answer
+
+**Study A is more likely to be useful** despite not being "statistically significant."
+
+**Reasoning:**
+
+- **Study A:** 15% effect is substantial and practically meaningful. The $p = 0.08$ suggests marginal statistical evidence, likely due to small sample size ($n = 50$). The large effect size suggests this could have real business impact.
+  
+- **Study B:** 0.5% effect is tiny and likely not worth implementing even though it's "highly significant" ($p = 0.001$). The tiny p-value is due to the massive sample size ($n = 50,000$), which can detect even trivial differences.
+
+**Business decision framework:**
+
+1. **For Study A:** The 15% improvement could be worth investigating further with a larger sample to confirm. Even if true effect is smaller (say 10%), it might be valuable.
+   
+2. **For Study B:** Even if we're certain the effect exists (which $p = 0.001$ suggests), a 0.5% improvement rarely justifies implementation costs, training, and change management.
+
+**Key lesson:** Large samples make small effects significant; small samples might miss large effects. Always consider effect size and practical significance alongside $p$-values.
+:::
+
+
+**5. Type I vs. Type II**
+
+Your company is testing a new quality control procedure:
+- $H_0$: Product quality meets standards
+- $H_1$: Product quality below standards
+
+Which type of error is more serious for:
+
+a) A medical device manufacturer?
+b) A toy company?
+c) A car manufacturer?
+
+Explain your reasoning.
+
+::: {.callout-tip collapse="true"}
+## Answer
+
+**a) Medical device manufacturer:**
+
+**Type II error is more serious** (failing to detect a quality problem when one exists)
+
+- **Type I error (false positive):** Stopping production or recalling devices unnecessarily → Costly but safe
+- **Type II error (false negative):** Missing a defect that could harm patients → Potentially fatal, huge liability, regulatory issues
+
+**Decision:** Use higher $\alpha$ (e.g., 0.10) to reduce Type II error rate. Better to be overly cautious.
+
+**b) Toy company:**
+
+**Type II error is more serious** (but less critical than medical devices)
+
+- **Type I error:** Unnecessary recalls/production stops → Costly
+- **Type II error:** Defective toys reach children → Safety risk, liability, reputation damage, potential regulatory action
+
+**Decision:** Use standard or slightly higher $\alpha$ (0.05-0.10). Safety-critical but consequences less severe than medical devices.
+
+**c) Car manufacturer:**
+
+**Type II error is more serious** (missing safety-critical defects)
+
+- **Type I error:** Unnecessary production halts → Very expensive but safer
+- **Type II error:** Safety defects in vehicles → Potential accidents, deaths, massive recalls, legal liability, brand damage
+
+**Decision:** Use higher $\alpha$ (0.10) for safety-critical components. Cost of false positives is preferable to risk of defective vehicles.
+
+**General principle:** When safety is at stake, minimize Type II errors (false negatives) even if it means more false positives. When only money is at risk, can balance both error types more evenly based on relative costs.
+:::
+
+### Practical Questions
+
+**6. Computing Confidence Intervals**
+
+A sample of 64 employees shows:
+
+- Mean productivity: 85 units/day
+- Standard deviation: 16 units/day
+
+Calculate and interpret:
+
+a) Standard error
+b) 95% confidence interval for the mean
+
+::: {.callout-tip collapse="true"}
+## Answer
+
+**a) Standard error:**
+$$SE = \frac{s}{\sqrt{n}} = \frac{16}{\sqrt{64}} = \frac{16}{8} = 2 \text{ units/day}$$
+
+**b) 95% confidence interval:**
+
+First, find critical value: $t_{63, 0.975} \approx 2.00$ (with $df = 63$)
+
+Margin of error: $ME = t^* \times SE = 2.00 \times 2 = 4$ units/day
+
+Confidence interval: $85 \pm 4 = [81, 89]$ units/day
+
+**Interpretation:**
+"Using a procedure that works 95% of the time, we estimate that the true average productivity for all employees is between 81 and 89 units per day. The margin of error is ±4 units/day."
+
+**Practical meaning:**
+If company targets are based on 80 units/day, we can be quite confident (since even the lower bound is 81) that average productivity exceeds this target.
+:::
+
+**7. Hypothesis Test**
+
+A coffee shop claims average service time is 3 minutes. You observe 36 customers:
+
+- Sample mean: 3.5 minutes
+- Sample SD: 1.2 minutes
+
+a) State appropriate hypotheses (two-sided)
+b) Calculate the test statistic
+c) Would you reject $H_0$ at $\alpha = 0.05$? (Critical value: $t_{35} = 2.03$)
+d) What's your business conclusion?
+
+::: {.callout-tip collapse="true"}
+## Answer
+
+**a) Hypotheses:**
+- $H_0: \mu = 3$ (claimed service time is correct)
+- $H_1: \mu \neq 3$ (actual service time differs from claim)
+
+**b) Test statistic:**
+$$t = \frac{\bar{x} - \mu_0}{s/\sqrt{n}} = \frac{3.5 - 3.0}{1.2/\sqrt{36}} = \frac{0.5}{0.2} = 2.5$$
+
+**c) Decision:**
+$|t| = 2.5 > 2.03$ (critical value), so **reject $H_0$**
+
+Alternatively, for two-sided test: $p$-value $= 2 \times P(T > 2.5) \approx 0.017 < 0.05$
+
+**d) Business conclusion:**
+"There is statistically significant evidence ($p \approx 0.017$) that actual service times differ from the claimed 3 minutes. The sample suggests service times average 3.5 minutes—about 30 seconds longer than claimed. 
+
+**Recommendation:** The coffee shop should either:
+
+1. Update their claim to reflect reality (3.5 minutes)
+2. Investigate why service takes longer than expected
+3. Implement changes to reduce service time to meet the 3-minute target
+
+A 95% CI would be approximately [3.1, 3.9] minutes, suggesting the true average is at least 3.1 minutes—still notably above the claim."
+:::
+
+**8. Two-Sample Comparison**
+
+
+You compare two training methods:
+
+- Method A: $n = 40$, mean = 78, SD = 12
+- Method B: $n = 40$, mean = 82, SD = 12
+
+The 95% CI for the difference (B - A) is [-1, 9].
+
+a) What does this interval tell you about statistical significance?
+b) If training costs are similar, which method should you use?
+c) What additional information would help your decision?
+
+::: {.callout-tip collapse="true"}
+## Answer
+
+**a) Statistical significance:**
+The confidence interval [-1, 9] **includes zero**, which means the difference is **not statistically significant** at $\alpha = 0.05$ level. We cannot confidently say Method B is better than Method A based on this data alone.
+
+**Interpretation:** The true difference could plausibly be anywhere from -1 (Method A slightly better) to +9 (Method B notably better). Zero difference is within this range.
+
+**b) Which method to use:**
+Given similar costs, there are two reasonable approaches:
+
+1. **Conservative approach:** Use Method A (current standard) since we haven't proven B is better. Don't change without clear evidence.
+
+2. **Optimistic approach:** Use Method B since the point estimate suggests it's 4 points better, and the worst plausible scenario (lower CI bound = -1) shows minimal downside risk.
+
+**Practical recommendation:** Since the confidence interval is mostly positive [only extends slightly negative], and point estimate favors B, Method B is reasonable to try—especially given similar costs and limited downside risk.
+
+**c) Additional helpful information:**
+
+1. **Sample size justification:** Can we collect more data? With $n = 40$ per group, power might be too low to detect meaningful differences
+2. **Effect size context:** Is a 4-point improvement meaningful for business outcomes? What do these scores represent?
+3. **Cost details:** Are there hidden costs (time, implementation, disruption)?
+4. **Practical constraints:** Implementation difficulty, scalability, employee preferences
+5. **Secondary outcomes:** Do methods differ on other important metrics (retention, engagement, long-term learning)?
+6. **Variance in effects:** Do some employee subgroups benefit more from one method?
+
+**Power consideration:** With SD = 12 and $n = 40$ per group, this study may have had only ~40% power to detect a 4-point difference. More data could clarify the picture.
+:::
+
+---
+
+
+::: {.callout-note icon=false}
+## Your Feedback Matters
+
+This recap session is designed to be maximally useful for your learning. If you find sections confusing, would like more examples on specific topics, or have suggestions for improvement, please share your feedback. The goal is to make these concepts accessible and practical for your work in management and business.
+:::

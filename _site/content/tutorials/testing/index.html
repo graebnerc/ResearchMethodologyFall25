@@ -1,0 +1,2481 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Claudius Gräbner-Radkowitsch">
+
+<title>Hypothesis Testing and Confidence Intervals – Theoretical and Empirical Research Methodology - Implementation Lab</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../figures/icons/course_favicon.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-7ed03afd9cad4b9a490e112b22b8940a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="Hypothesis Testing and Confidence Intervals – Theoretical and Empirical Research Methodology - Implementation Lab">
+<meta property="og:description" content="">
+<meta property="og:image" content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==">
+<meta property="og:site_name" content="Theoretical and Empirical Research Methodology - Implementation Lab">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Theoretical and Empirical Research Methodology - Implementation Lab</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Hypothesis Testing and Confidence Intervals</li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../../../index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">🏠 Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../content/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">🏢 Getting Started</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">🗓️ Material</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../content/material/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../content/material/session01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 01</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../content/material/session02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 02</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../content/material/session03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 03</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../content/material/session04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 04</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../content/material/session05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 05</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../content/material/session06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 06</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../content/material/session07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 07</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../content/material/session08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 08</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../content/material/session08b.qmd" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Recap</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../content/material/session09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 09</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../content/tutorials.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">💻 Tutorials</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../content/exercises.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">👾 Additional exercises</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../content/statrecap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">📈 Statistics recap</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction-from-sampling-to-inference" id="toc-introduction-from-sampling-to-inference" class="nav-link active" data-scroll-target="#introduction-from-sampling-to-inference">Introduction: From Sampling to Inference</a>
+  <ul class="collapse">
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
+  </ul></li>
+  <li><a href="#quick-recap-essential-concepts-from-sampling" id="toc-quick-recap-essential-concepts-from-sampling" class="nav-link" data-scroll-target="#quick-recap-essential-concepts-from-sampling">1. Quick Recap: Essential Concepts from Sampling</a>
+  <ul class="collapse">
+  <li><a href="#the-sample-population-relationship" id="toc-the-sample-population-relationship" class="nav-link" data-scroll-target="#the-sample-population-relationship">The Sample-Population Relationship</a></li>
+  <li><a href="#sampling-distributions" id="toc-sampling-distributions" class="nav-link" data-scroll-target="#sampling-distributions">Sampling Distributions</a></li>
+  <li><a href="#point-estimates-and-their-uncertainty" id="toc-point-estimates-and-their-uncertainty" class="nav-link" data-scroll-target="#point-estimates-and-their-uncertainty">Point Estimates and Their Uncertainty</a></li>
+  </ul></li>
+  <li><a href="#confidence-intervals-quantifying-uncertainty" id="toc-confidence-intervals-quantifying-uncertainty" class="nav-link" data-scroll-target="#confidence-intervals-quantifying-uncertainty">2. Confidence Intervals: Quantifying Uncertainty</a>
+  <ul class="collapse">
+  <li><a href="#the-concept" id="toc-the-concept" class="nav-link" data-scroll-target="#the-concept">2.1 The Concept</a></li>
+  <li><a href="#what-is-a-confidence-interval" id="toc-what-is-a-confidence-interval" class="nav-link" data-scroll-target="#what-is-a-confidence-interval">2.2 What is a Confidence Interval?</a></li>
+  <li><a href="#understanding-95-confidence" id="toc-understanding-95-confidence" class="nav-link" data-scroll-target="#understanding-95-confidence">2.3 Understanding “95% Confidence”</a></li>
+  <li><a href="#factors-affecting-interval-width" id="toc-factors-affecting-interval-width" class="nav-link" data-scroll-target="#factors-affecting-interval-width">2.4 Factors Affecting Interval Width</a></li>
+  <li><a href="#confidence-intervals-in-r" id="toc-confidence-intervals-in-r" class="nav-link" data-scroll-target="#confidence-intervals-in-r">2.5 Confidence Intervals in R</a></li>
+  <li><a href="#interpreting-confidence-intervals-in-business-context" id="toc-interpreting-confidence-intervals-in-business-context" class="nav-link" data-scroll-target="#interpreting-confidence-intervals-in-business-context">2.6 Interpreting Confidence Intervals in Business Context</a></li>
+  <li><a href="#preview-relationship-between-confidence-intervals-and-hypothesis-tests" id="toc-preview-relationship-between-confidence-intervals-and-hypothesis-tests" class="nav-link" data-scroll-target="#preview-relationship-between-confidence-intervals-and-hypothesis-tests">2.7 Preview: Relationship Between Confidence Intervals and Hypothesis Tests</a></li>
+  </ul></li>
+  <li><a href="#hypothesis-testing-evaluating-claims" id="toc-hypothesis-testing-evaluating-claims" class="nav-link" data-scroll-target="#hypothesis-testing-evaluating-claims">3. Hypothesis Testing: Evaluating Claims</a>
+  <ul class="collapse">
+  <li><a href="#the-logic-of-hypothesis-testing" id="toc-the-logic-of-hypothesis-testing" class="nav-link" data-scroll-target="#the-logic-of-hypothesis-testing">3.1 The Logic of Hypothesis Testing</a></li>
+  <li><a href="#the-five-step-process" id="toc-the-five-step-process" class="nav-link" data-scroll-target="#the-five-step-process">3.2 The Five-Step Process</a></li>
+  <li><a href="#understanding-p-values" id="toc-understanding-p-values" class="nav-link" data-scroll-target="#understanding-p-values">3.3 Understanding <span class="math inline">\(p\)</span>-values</a></li>
+  <li><a href="#types-of-errors" id="toc-types-of-errors" class="nav-link" data-scroll-target="#types-of-errors">3.4 Types of Errors</a></li>
+  <li><a href="#common-hypothesis-tests" id="toc-common-hypothesis-tests" class="nav-link" data-scroll-target="#common-hypothesis-tests">3.5 Common Hypothesis Tests</a></li>
+  <li><a href="#connection-to-regression-preview-for-regression-lecture" id="toc-connection-to-regression-preview-for-regression-lecture" class="nav-link" data-scroll-target="#connection-to-regression-preview-for-regression-lecture">3.6 Connection to Regression (Preview for regression lecture)</a></li>
+  </ul></li>
+  <li><a href="#statistical-vs.-practical-significance" id="toc-statistical-vs.-practical-significance" class="nav-link" data-scroll-target="#statistical-vs.-practical-significance">4. Statistical vs.&nbsp;Practical Significance</a></li>
+  <li><a href="#common-pitfalls-and-best-practices" id="toc-common-pitfalls-and-best-practices" class="nav-link" data-scroll-target="#common-pitfalls-and-best-practices">5. Common Pitfalls and Best Practices</a>
+  <ul class="collapse">
+  <li><a href="#common-pitfalls" id="toc-common-pitfalls" class="nav-link" data-scroll-target="#common-pitfalls">5.1. Common pitfalls</a></li>
+  <li><a href="#when-not-to-use-hypothesis-testing" id="toc-when-not-to-use-hypothesis-testing" class="nav-link" data-scroll-target="#when-not-to-use-hypothesis-testing">5.2 When NOT to Use Hypothesis Testing</a></li>
+  </ul></li>
+  <li><a href="#summary-and-key-takeaways" id="toc-summary-and-key-takeaways" class="nav-link" data-scroll-target="#summary-and-key-takeaways">7. Summary and Key Takeaways</a>
+  <ul class="collapse">
+  <li><a href="#core-concepts-recap" id="toc-core-concepts-recap" class="nav-link" data-scroll-target="#core-concepts-recap">Core Concepts Recap</a></li>
+  <li><a href="#critical-thinking-points" id="toc-critical-thinking-points" class="nav-link" data-scroll-target="#critical-thinking-points">Critical Thinking Points</a></li>
+  </ul></li>
+  <li><a href="#practice-questions" id="toc-practice-questions" class="nav-link" data-scroll-target="#practice-questions">8. Practice Questions</a>
+  <ul class="collapse">
+  <li><a href="#conceptual-questions" id="toc-conceptual-questions" class="nav-link" data-scroll-target="#conceptual-questions">Conceptual Questions</a></li>
+  <li><a href="#practical-questions" id="toc-practical-questions" class="nav-link" data-scroll-target="#practical-questions">Practical Questions</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Hypothesis Testing and Confidence Intervals</h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://claudius-graebner.com/">Claudius Gräbner-Radkowitsch</a> <a href="https://orcid.org/0000-0003-4065-4722" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://www.uni-flensburg.de/en/pluralist-economics">
+            EUF and JKU
+            </a>
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">24 11 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<details class="code-fold">
+<summary>Packages used for R examples</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(latex2exp)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="introduction-from-sampling-to-inference" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-from-sampling-to-inference">Introduction: From Sampling to Inference</h2>
+<p>In Lecture 11, you learned about the fundamental concepts of sampling: how we draw conclusions about unknown populations by studying samples, and how the Central Limit Theorem provides the theoretical foundation for making these inferences. Among the key take aways from this lecture were the following:</p>
+<ul>
+<li><strong>Populations</strong> have parameters (<span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma\)</span>) that are typically unknown</li>
+<li><strong>Samples</strong> provide statistics (<span class="math inline">\(\bar{x}\)</span>, <span class="math inline">\(s\)</span>) that we can use to estimate these parameters<br>
+</li>
+<li><strong>Sampling distributions</strong> describe how sample statistics vary across different samples</li>
+<li><strong>Standard errors</strong> quantify the precision of our estimates</li>
+</ul>
+<p>Now we face two crucial questions that arise in almost every business and research context:</p>
+<ol type="1">
+<li><p><strong>Testing claims:</strong> “Someone claims the average customer satisfaction is 8.0/10. Based on my sample of 100 customers with mean 7.5, should I believe this claim?”</p></li>
+<li><p><strong>Quantifying uncertainty:</strong> “My sample of 500 SMEs in Schleswig Holstein shows average monthly revenue of EUR 50,000. What’s the plausible range for the true population mean of all SMEs in Schleswig Holstein?”</p></li>
+</ol>
+<p>These questions represent two main approaches to statistical inference:</p>
+<ul>
+<li><strong>Hypothesis testing:</strong> Evaluating specific claims using sample data</li>
+<li><strong>Confidence intervals:</strong> Constructing ranges of plausible values for parameters</li>
+</ul>
+<p>Both build directly on the sampling concepts you’ve learned, and both are essential for interpreting the regression models you’ll study in later lectures.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>When to read this tutorial
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>I suggest you read this tutorial after having heard the lecture on sampling. The concepts in this tutorial — particularly hypothesis testing — make much more sense once you’ve seen how sampling works through Monte Carlo simulations and understand sampling distributions intuitively. But if you feel more or less comfortable in these areas you can also read it directly after the recap text on probability theory as I also included a very concise recap of this session below.</p>
+</div>
+</div>
+</div>
+<section id="learning-objectives" class="level3">
+<h3 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h3>
+<p>By the end of this tutorial, you will be able to:</p>
+<ul>
+<li>Construct and interpret hypothesis tests for business decisions</li>
+<li>Calculate and explain confidence intervals for population parameters<br>
+</li>
+<li>Distinguish between statistical and practical significance</li>
+<li>Avoid common misinterpretations of <span class="math inline">\(p\)</span>-values and confidence intervals</li>
+<li>Connect these concepts to the regression output you’ll encounter later on</li>
+<li>Recognize when hypothesis testing is (and isn’t) the appropriate tool</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="quick-recap-essential-concepts-from-sampling" class="level2">
+<h2 class="anchored" data-anchor-id="quick-recap-essential-concepts-from-sampling">1. Quick Recap: Essential Concepts from Sampling</h2>
+<p>Before diving into inference, let’s briefly review the key concepts from our sampling section that form the foundation for everything in this session.</p>
+<section id="the-sample-population-relationship" class="level3">
+<h3 class="anchored" data-anchor-id="the-sample-population-relationship">The Sample-Population Relationship</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Key points to remember:</strong></p>
+<p><strong>Population:</strong></p>
+<ul>
+<li>The complete group we want to learn about</li>
+<li>Has fixed parameters (<span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma\)</span>, etc.) that are typically unknown</li>
+<li>Example: All customers of a company, all products in a market</li>
+</ul>
+<p><strong>Sample:</strong></p>
+<ul>
+<li>A subset of the population we actually observe</li>
+<li>Provides statistics (<span class="math inline">\(\bar{x}\)</span>, <span class="math inline">\(s\)</span>) that we can use to estimate population parameters</li>
+<li>Random sampling common to improve representativeness, but also means each sample usually shows different sample statistics</li>
+</ul>
+<p><strong>The inference challenge:</strong></p>
+<ul>
+<li>We observe: Sample statistics (<span class="math inline">\(\bar{x}\)</span> = 64.2)</li>
+<li>We want to know: Population parameter (<span class="math inline">\(\mu\)</span> = ?)</li>
+<li>The potential gap between these creates uncertainty</li>
+</ul>
+</section>
+<section id="sampling-distributions" class="level3">
+<h3 class="anchored" data-anchor-id="sampling-distributions">Sampling Distributions</h3>
+<p>This was one of the crucial statement from the sampling lecture: if we could draw many samples from the same population, each sample would give us a slightly different estimate due to sampling variation. While in reality we usually draw only one sample, the <em>sampling distribution</em> provides us with important information about how to interpret the results obtained from this single sample.</p>
+<p><strong>The sampling distribution</strong> describes how these sample statistics (like <span class="math inline">\(\bar{x}\)</span>) are distributed across many different samples. This is relevant even (or <em>especially</em>) when we draw only sample as it helps us to quantify the uncertainty associated with using the statistics obtained from this sample.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the cases where the Central Limit Theorem (CLT) holds, the sampling distribution has the following properties:</p>
+<ol type="1">
+<li><strong>Center:</strong> The sampling distribution centers on the true population parameter (<span class="math inline">\(\mu\)</span>)</li>
+<li><strong>Spread:</strong> The standard deviation of this distribution is the <strong>standard error</strong> (SE): <span class="math display">\[SE = \frac{\sigma}{\sqrt{n}}\]</span></li>
+<li><strong>Shape:</strong> For large enough samples, it’s approximately normal regardless of the underlying population distribution</li>
+</ol>
+<p><strong>Why this matters:</strong></p>
+<ul>
+<li>The standard error tells us how much sampling variation to expect</li>
+<li>Smaller SE (from larger <span class="math inline">\(n\)</span>) means more precise estimates (so we can trust the sample statistics more)</li>
+<li>The normal shape lets us calculate probabilities</li>
+</ul>
+</section>
+<section id="point-estimates-and-their-uncertainty" class="level3">
+<h3 class="anchored" data-anchor-id="point-estimates-and-their-uncertainty">Point Estimates and Their Uncertainty</h3>
+<p><strong>Point estimate:</strong> A single number calculated from sample data to estimate a population parameter</p>
+<ul>
+<li><span class="math inline">\(\bar{x}\)</span> estimates <span class="math inline">\(\mu\)</span> (population mean)</li>
+<li><span class="math inline">\(s\)</span> estimates <span class="math inline">\(\sigma\)</span> (population standard deviation)<br>
+</li>
+<li><span class="math inline">\(\hat{p}\)</span> estimates <span class="math inline">\(p\)</span> (population proportion)</li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Reminder: be careful when choosing your estimator
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>An estimator is a procedure for producing an estimate. The most straightforward was to produce an estimate for a population parameter (say, <span class="math inline">\(\mu\)</span>) is to choose its sample equivalent (here: <span class="math inline">\(\bar{x}\)</span>).</p>
+<p>But remember the cautionary tales at the end of the lecture: it is not always a good idea to use the sample equivalents directly, as, for instance, in the case of the sample variance of the sample maximum.</p>
+</div>
+</div>
+</div>
+<p><strong>The fundamental problem:</strong> Point estimates alone don’t convey information about uncertainty!</p>
+<p>If I tell you “average customer satisfaction is 7.5/10 based on my sample,” you should ask:</p>
+<ul>
+<li>How large was the sample?</li>
+<li>How variable were the responses?</li>
+<li>What’s the plausible range for the true population mean?</li>
+</ul>
+<p>This is where hypothesis testing and confidence intervals come in. They both use the sampling distribution to quantify uncertainty in principled ways.</p>
+<hr>
+</section>
+</section>
+<section id="confidence-intervals-quantifying-uncertainty" class="level2">
+<h2 class="anchored" data-anchor-id="confidence-intervals-quantifying-uncertainty">2. Confidence Intervals: Quantifying Uncertainty</h2>
+<section id="the-concept" class="level3">
+<h3 class="anchored" data-anchor-id="the-concept">2.1 The Concept</h3>
+<p>Imagine you’re a marketing manager who surveyed 100 customers about monthly spending. Your sample shows:</p>
+<ul>
+<li>Sample mean: <span class="math inline">\(\bar{x}\)</span> = 250 EUR</li>
+<li>Sample standard deviation: <span class="math inline">\(s = 50\)</span> EUR</li>
+<li>Sample size: <span class="math inline">\(n=100\)</span></li>
+</ul>
+<p><strong>Question:</strong> What’s the true average spending for all customers (<span class="math inline">\(\mu\)</span>)?</p>
+<p><strong>Naive answer:</strong> “250 EUR”</p>
+<ul>
+<li>Just reports the point estimate, no information about uncertainty involved in the sample process</li>
+</ul>
+<p><strong>Better answer:</strong> “Somewhere between 240 EUR and 260 EUR”</p>
+<ul>
+<li>Reports a range; from the size of the range we can get information about the sampling uncertainty</li>
+</ul>
+<p><strong>Best answer:</strong> “Based on a method that works 95% of the time, I can say that the true average lies in the interval between 240.2 and 259.8 EUR.”</p>
+<ul>
+<li>This range is called a <strong>confidence interval (CI)</strong>, and it’s one of the most important tools in statistics for communicating uncertainty.</li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Speaking Correctly About Confidence Intervals
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The correct interpretation of confidence intervals is surprisingly subtle. Here are the right and wrong ways to talk about them:</p>
+<p><strong>❌ INCORRECT formulations:</strong></p>
+<ul>
+<li>“There’s a 95% probability that <span class="math inline">\(\mu\)</span> is between 240 EUR and 260 EUR”</li>
+<li>“I’m 95% confident that <span class="math inline">\(\mu\)</span> is between 240 EUR and 260 EUR”</li>
+<li>“We can be 95% certain that <span class="math inline">\(\mu\)</span> is between 240 EUR and 260 EUR”</li>
+</ul>
+<p><strong>Why these are wrong:</strong> Once you’ve calculated a specific interval from your data, the true parameter <span class="math inline">\(\mu\)</span> either is or isn’t in that interval (probability = 1 or 0). The parameter is fixed, not random; the <em>interval</em> is what’s random (it varies from sample to sample).</p>
+<p><strong>✅ CORRECT formulations:</strong></p>
+<ul>
+<li>“The interval 240 EUR to 260 EUR was constructed using a procedure that captures the true parameter in 95% of samples”</li>
+<li>“If we repeated this sampling process many times, approximately 95% of the resulting intervals would contain <span class="math inline">\(\mu\)</span>.”</li>
+<li>“This interval was calculated using a method with a 95% success rate”</li>
+</ul>
+<p><strong>Acceptable shorthand (with caveats):</strong></p>
+<ul>
+<li>“We are 95% confident the true mean is between 240 EUR and 260 EUR”</li>
+</ul>
+<p>This phrasing is widely used and generally accepted in practice, but it’s somewhat imprecise. The word “confident” here refers to confidence in the <em>procedure</em>, not subjective certainty about this particular interval. If you use this shorthand, be aware that it’s a convention that technically conflates procedure-level properties with interval-level statements.</p>
+<p><strong>Best practice:</strong> When precision matters (academic writing, technical reports), use the explicit formulation about the procedure. In business contexts, the shorthand is acceptable if your audience understands it refers to the method’s reliability.</p>
+</div>
+</div>
+</section>
+<section id="what-is-a-confidence-interval" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-a-confidence-interval">2.2 What is a Confidence Interval?</h3>
+<p>A confidence interval is a range of values that is likely to contain the true population parameter, constructed using sample data and a specified confidence level.</p>
+<p><strong>General form for a mean:</strong></p>
+<p><span class="math display">\[\text{CI} = \bar{x} \pm t^* \cdot SE\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(\bar{x}\)</span>: sample mean (point estimate)</li>
+<li><span class="math inline">\(t^*\)</span>: critical value from t-distribution (depends on confidence level and sample size; more details below)</li>
+<li><span class="math inline">\(SE = \frac{s}{\sqrt{n}}\)</span>: standard error</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Understanding Critical Values and the t-Distribution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>When we construct a confidence interval, we need to account for sampling variability. The <strong>critical value</strong> (<span class="math inline">\(t^*\)</span>) tells us how many standard errors to extend on either side of our sample mean to achieve our desired confidence level.</p>
+<p><strong>Why the t-distribution?</strong></p>
+<p>From the sampling lecture, you know that the Central Limit Theorem tells us the sampling distribution of <span class="math inline">\(\bar{x}\)</span> is approximately normal. If we <em>knew</em> the true population standard deviation <span class="math inline">\(\sigma\)</span>, we could use the standard normal distribution (also called <span class="math inline">\(z\)</span>-distribution) for our critical values.</p>
+<p>However, in practice we almost never know <span class="math inline">\(\sigma\)</span>v-vwe estimate it with our sample standard deviation <span class="math inline">\(s\)</span>. This estimation adds extra uncertainty. The <strong>t-distribution</strong> accounts for this additional uncertainty:</p>
+<ul>
+<li>When <span class="math inline">\(n\)</span> is small, <span class="math inline">\(s\)</span> is an imprecise estimate of <span class="math inline">\(\sigma\)</span> <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(t\)</span>-distribution has heavier tails than normal</li>
+<li>When <span class="math inline">\(n\)</span> is large, <span class="math inline">\(s\)</span> becomes a good estimate of <span class="math inline">\(\sigma\)</span> <span class="math inline">\(\rightarrow\)</span> <span class="math inline">\(t\)</span>-distribution approaches the normal distribution</li>
+<li>The <span class="math inline">\(t\)</span>-distribution has a parameter called <strong>degrees of freedom</strong> (df = <span class="math inline">\(n-1\)</span>) that controls how close it is to normal</li>
+</ul>
+<p><strong>For confidence intervals:</strong></p>
+<ul>
+<li>For a 95% CI, we want to capture the middle 95% of the sampling distribution</li>
+<li>This leaves 2.5% in each tail (5% total)</li>
+<li>The critical value <span class="math inline">\(t^*\)</span> marks the boundary points for these tails</li>
+<li>In R: <code>qt(0.975, df = n-1)</code> gives us <span class="math inline">\(t^*\)</span> for a 95% CI (0.975 because we want the 97.5th percentile, leaving 2.5% in the upper tail)</li>
+</ul>
+<p><strong>The critical value depends on:</strong></p>
+<ul>
+<li><strong>Confidence level:</strong> Higher confidence <span class="math inline">\(\rightarrow\)</span> larger <span class="math inline">\(t^*\)</span> <span class="math inline">\(\rightarrow\)</span> wider interval</li>
+<li><strong>Sample size (df):</strong> Larger <span class="math inline">\(n\)</span> <span class="math inline">\(\rightarrow\)</span> smaller <span class="math inline">\(t^*\)</span> <span class="math inline">\(\rightarrow\)</span> narrower interval (approaches z-value)</li>
+</ul>
+</div>
+</div>
+</div>
+<p><strong>For our customer spending example:</strong></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>x_bar <span class="ot">&lt;-</span> <span class="dv">250</span>  <span class="co"># sample mean</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="dv">50</span>       <span class="co"># sample standard deviation</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span>      <span class="co"># sample size</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate standard error</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> s <span class="sc">/</span> <span class="fu">sqrt</span>(n)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Critical value for 95% confidence (df = n-1 = 99)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>t_star <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, <span class="at">df =</span> <span class="dv">99</span>)  <span class="co"># 0.975 because two-tailed</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Margin of error</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>margin_of_error <span class="ot">&lt;-</span> t_star <span class="sc">*</span> se</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Confidence interval</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>ci_lower <span class="ot">&lt;-</span> x_bar <span class="sc">-</span> margin_of_error</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>ci_upper <span class="ot">&lt;-</span> x_bar <span class="sc">+</span> margin_of_error</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Display results</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>ci_results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">Statistic =</span> <span class="fu">c</span>(<span class="st">"Standard Error"</span>, <span class="st">"Critical Value (t*)"</span>, <span class="st">"Margin of Error"</span>, </span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Lower Bound"</span>, <span class="st">"Upper Bound"</span>),</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">Value =</span> <span class="fu">c</span>(se, t_star, margin_of_error, ci_lower, ci_upper)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(ci_results, <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Statistic</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Standard Error</td>
+<td style="text-align: right;">5.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Critical Value (t*)</td>
+<td style="text-align: right;">1.98</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Margin of Error</td>
+<td style="text-align: right;">9.92</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lower Bound</td>
+<td style="text-align: right;">240.08</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Upper Bound</td>
+<td style="text-align: right;">259.92</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The standard error is 5 EUR, and our 95% confidence interval is [240.08 EUR, 259.92 EUR].</p>
+<p><strong>Interpretation:</strong> “We are 95% confident that the true average monthly spending for all customers is between 240.08 EUR and 259.92 EUR.”</p>
+</section>
+<section id="understanding-95-confidence" class="level3">
+<h3 class="anchored" data-anchor-id="understanding-95-confidence">2.3 Understanding “95% Confidence”</h3>
+<p>This is one of the most commonly misunderstood concepts in statistics. Let’s be very precise about what it means and doesn’t mean.</p>
+<p><strong>What “95% confidence” DOES mean:</strong></p>
+<p>“If we repeated this sampling process many times and constructed a 95% CI each time using the same procedure, approximately 95% of those intervals would contain the true population parameter.”</p>
+<p>It’s a statement about the <strong>long-run behavior of the procedure</strong>, not about any single interval you’ve calculated.</p>
+<p><strong>The key insight:</strong> The randomness is in the <em>sampling process</em> and therefore in which interval you get. The parameter <span class="math inline">\(\mu\)</span> is fixed (though unknown). Before you draw your sample, the interval you’ll get is random - it has a 95% probability of covering <span class="math inline">\(\mu\)</span>. After you’ve calculated it, that specific interval either covers <span class="math inline">\(\mu\)</span> or it doesn’t. And the true parameter <span class="math inline">\(\mu\)</span> is never random!</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In this simulation, we drew 50 different samples and constructed a 95% CI for each. Notice that:</p>
+<ul>
+<li>Most intervals (blue) contain the true mean <span class="math inline">\(\mu\)</span> = 250</li>
+<li>A few intervals (red) miss it—this is expected!</li>
+<li>About 95% capture the true value (47 out of 50 in this simulation)</li>
+</ul>
+<p><strong>What “95% confidence” DOES NOT mean:</strong></p>
+<p>❌ <strong>“There’s a 95% probability that <span class="math inline">\(\mu\)</span> is in this interval”</strong></p>
+<ul>
+<li>No! Once you’ve calculated a specific interval (say, [240, 260]), the true parameter <span class="math inline">\(\mu\)</span> is either in it (probability = 1) or not in it (probability = 0)</li>
+<li>The parameter is fixed; it doesn’t have a probability distribution</li>
+<li>This would be a Bayesian credible interval, not a frequentist confidence interval</li>
+</ul>
+<p>❌ <strong>“I’m 95% sure the true value is in this interval”</strong></p>
+<ul>
+<li>This phrasing suggests subjective probability about <span class="math inline">\(\mu\)</span></li>
+<li>The 95% refers to the procedure’s success rate, not your personal certainty</li>
+<li>If forced to use this language, be clear you mean confidence in the method, not the specific interval</li>
+</ul>
+<p>❌ <strong>“95% of the data falls in this interval”</strong></p>
+<ul>
+<li>No! The CI is about the population parameter (mean), not individual data points</li>
+<li>For that, you’d calculate: <span class="math inline">\(\bar{x} \pm 2s\)</span> (approximately)</li>
+<li>These are two completely different concepts</li>
+</ul>
+<p>❌ <strong>“The interval [240, 260] has a 95% chance of containing <span class="math inline">\(\mu\)</span></strong></p>
+<ul>
+<li>No! This specific interval either does or doesn’t contain <span class="math inline">\(\mu\)</span></li>
+<li><em>Before</em> you calculated it, the random interval you were about to compute had a 95% probability</li>
+<li><em>After</em> calculation, no probability remains - it’s determined (even though you don’t know which)</li>
+</ul>
+</section>
+<section id="factors-affecting-interval-width" class="level3">
+<h3 class="anchored" data-anchor-id="factors-affecting-interval-width">2.4 Factors Affecting Interval Width</h3>
+<p>The width of a confidence interval tells us about the precision of our estimate. Narrower is generally better (more precise).</p>
+<p><strong>Three factors determine width:</strong></p>
+<p><strong>1. Sample size (n):</strong> - Larger <span class="math inline">\(n\)</span> <span class="math inline">\(\rightarrow\)</span> smaller <span class="math inline">\(SE\)</span> <span class="math inline">\(\rightarrow\)</span> narrower <span class="math inline">\(CI\)</span> - Precision improves with <span class="math inline">\(\sqrt{n}\)</span> (doubling <span class="math inline">\(n\)</span> doesn’t double precision)</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare CI width for different sample sizes</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sample_sizes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">100</span>, <span class="dv">400</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="dv">50</span>  <span class="co"># keep constant</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>ci_comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> sample_sizes,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">SE =</span> s <span class="sc">/</span> <span class="fu">sqrt</span>(sample_sizes),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Margin_Error =</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, sample_sizes <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (s <span class="sc">/</span> <span class="fu">sqrt</span>(sample_sizes))</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(ci_comparison, </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">digits =</span> <span class="dv">2</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Sample Size"</span>, <span class="st">"Standard Error (€)"</span>, <span class="st">"Margin of Error (€)"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Sample Size</th>
+<th style="text-align: right;">Standard Error (€)</th>
+<th style="text-align: right;">Margin of Error (€)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">10.0</td>
+<td style="text-align: right;">20.64</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">9.92</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">400</td>
+<td style="text-align: right;">2.5</td>
+<td style="text-align: right;">4.91</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Notice how the margin of error decreases as sample size increases: from $$20.64 EUR with <span class="math inline">\(n=25\)</span> to $$4.91 EUR with <span class="math inline">\(n=400\)</span>.</p>
+<p><strong>2. Variability (s):</strong> - More variable population <span class="math inline">\(\rightarrow\)</span> larger <span class="math inline">\(SE\)</span> <span class="math inline">\(\rightarrow\)</span> wider <span class="math inline">\(CI\)</span> - Can’t control this, but larger samples help</p>
+<p><strong>3. Confidence level:</strong></p>
+<ul>
+<li>So far we only talked about the 95% confidence interval</li>
+<li>But we can increase or decrease the confidence level</li>
+<li>Higher confidence <span class="math inline">\(\rightarrow\)</span> wider interval</li>
+<li>Trade-off between confidence and precision</li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare CI width for different confidence levels</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>confidence_levels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.90</span>, <span class="fl">0.95</span>, <span class="fl">0.99</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>conf_comparison <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Confidence_Level =</span> <span class="fu">paste0</span>(confidence_levels <span class="sc">*</span> <span class="dv">100</span>, <span class="st">"%"</span>),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Alpha =</span> <span class="dv">1</span> <span class="sc">-</span> confidence_levels,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Critical_Value =</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> (<span class="dv">1</span> <span class="sc">-</span> confidence_levels)<span class="sc">/</span><span class="dv">2</span>, n<span class="dv">-1</span>),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Margin_Error =</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> (<span class="dv">1</span> <span class="sc">-</span> confidence_levels)<span class="sc">/</span><span class="dv">2</span>, n<span class="dv">-1</span>) <span class="sc">*</span> (s <span class="sc">/</span> <span class="fu">sqrt</span>(n))</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(conf_comparison,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">digits =</span> <span class="dv">2</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Confidence Level"</span>, <span class="st">"α"</span>, <span class="st">"t*"</span>, <span class="st">"Margin of Error (€)"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Confidence Level</th>
+<th style="text-align: right;">α</th>
+<th style="text-align: right;">t*</th>
+<th style="text-align: right;">Margin of Error (€)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">90%</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">1.66</td>
+<td style="text-align: right;">8.30</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">95%</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">1.98</td>
+<td style="text-align: right;">9.92</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">99%</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">2.63</td>
+<td style="text-align: right;">13.13</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The trade-off is clear: higher confidence requires a wider interval. At 90% confidence, the margin is $$8.3 EUR, while at 99% confidence it increases to $$13.13 EUR. But the gain we have with the 99% confidence interval is that we can be more confident about the interval containing the true parameter…</p>
+<p><strong>Key insight:</strong> There’s always a trade-off between confidence and precision. You can be more confident by making the interval wider, but that makes it less informative.</p>
+</section>
+<section id="confidence-intervals-in-r" class="level3">
+<h3 class="anchored" data-anchor-id="confidence-intervals-in-r">2.5 Confidence Intervals in R</h3>
+<p><strong>For a single mean:</strong></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using t.test() function</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>customer_spending <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">245</span>, <span class="dv">267</span>, <span class="dv">223</span>, <span class="dv">289</span>, <span class="dv">241</span>, ...)  <span class="co"># your sample data</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(customer_spending, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>result<span class="sc">$</span>conf.int  <span class="co"># Extract the confidence interval</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p><strong>For a proportion:</strong></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: conversion rate from sample of 500 customers</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 125 made a purchase</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="at">x =</span> <span class="dv">125</span>, <span class="at">n =</span> <span class="dv">500</span>, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p><strong>For regression coefficients (preview for regression lecture):</strong></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confidence intervals are automatically included in regression output</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(consumption <span class="sc">~</span> price, <span class="at">data =</span> beer_data)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(model, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="interpreting-confidence-intervals-in-business-context" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-confidence-intervals-in-business-context">2.6 Interpreting Confidence Intervals in Business Context</h3>
+<p><strong>Example 1: Market Research</strong></p>
+<p>A company surveys 200 potential customers about willingness to pay for a new product.</p>
+<ul>
+<li>Sample mean: 45 EUR</li>
+<li>95% CI: [42, 48] EUR</li>
+</ul>
+<p><strong>Good interpretation:</strong> “We’re 95% confident that the average willingness to pay for all potential customers is between 42 and 48 EUR. This suggests a price point around 40-45 EUR would be reasonable.”</p>
+<p><strong>Why this matters:</strong> The interval helps with business decisions:</p>
+<ul>
+<li>If production cost is 40 EUR, the lower bound (42 EUR) still provides margin</li>
+<li>If cost is 50 EUR, even the upper bound (48 EUR) suggests unprofitability</li>
+</ul>
+<p><strong>Example 2: A/B Testing</strong></p>
+<p>An e-commerce site tests two checkout designs:</p>
+<ul>
+<li>Design A: 100 users, 23 conversions <span class="math inline">\(\rightarrow\)</span> 23% (95% CI: [15%, 31%])</li>
+<li>Design B: 100 users, 31 conversions <span class="math inline">\(\rightarrow\)</span> 31% (95% CI: [22%, 40%])</li>
+</ul>
+<p><strong>Interpretation:</strong> The intervals overlap substantially. While Design B has a higher point estimate, we can’t confidently say it’s better. The true conversion rates might be equal, or Design A might even be better (both plausible given the overlap).</p>
+<p><strong>Business decision:</strong> Need more data before making a costly redesign decision.</p>
+</section>
+<section id="preview-relationship-between-confidence-intervals-and-hypothesis-tests" class="level3">
+<h3 class="anchored" data-anchor-id="preview-relationship-between-confidence-intervals-and-hypothesis-tests">2.7 Preview: Relationship Between Confidence Intervals and Hypothesis Tests</h3>
+<p>Confidence intervals and hypothesis tests are two sides of the same coin. They use the same underlying sampling distribution concepts but answer different questions:</p>
+<ul>
+<li><strong>Hypothesis test:</strong> “Is the claim <span class="math inline">\(\mu\)</span> = 250 compatible with my data?”</li>
+<li><strong>Confidence interval:</strong> “What values of <span class="math inline">\(\mu\)</span> are compatible with my data?”</li>
+</ul>
+<p><strong>Key connection:</strong> A 95% confidence interval contains all values of <span class="math inline">\(\mu\)</span> that would NOT be rejected in a two-sided hypothesis test at <span class="math inline">\(\alpha = 0.05\)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This connection is incredibly useful: you can often “test” hypotheses just by checking whether a claimed value falls inside the confidence interval!</p>
+<hr>
+</section>
+</section>
+<section id="hypothesis-testing-evaluating-claims" class="level2">
+<h2 class="anchored" data-anchor-id="hypothesis-testing-evaluating-claims">3. Hypothesis Testing: Evaluating Claims</h2>
+<section id="the-logic-of-hypothesis-testing" class="level3">
+<h3 class="anchored" data-anchor-id="the-logic-of-hypothesis-testing">3.1 The Logic of Hypothesis Testing</h3>
+<p>Hypothesis testing provides a formal framework for using sample data to evaluate claims about population parameters. Unlike confidence intervals, which give us a range of plausible values, hypothesis tests answer a specific yes/no question.</p>
+<p><strong>The fundamental question:</strong> “Is our sample data consistent with a specific claim about the population?”</p>
+<section id="the-courtroom-analogy" class="level4">
+<h4 class="anchored" data-anchor-id="the-courtroom-analogy">The Courtroom Analogy</h4>
+<p>Think of hypothesis testing like a trial:</p>
+<p><strong>Presumption of innocence</strong> = <strong>Null hypothesis (<span class="math inline">\(H_0\)</span>)</strong></p>
+<ul>
+<li>We assume the defendant (claim) is innocent (true) until proven guilty (false)</li>
+<li>The burden of proof lies with the prosecution (the data)</li>
+</ul>
+<p><strong>Evidence</strong> = <strong>Sample data</strong></p>
+<ul>
+<li>Must be strong enough to overcome presumption</li>
+</ul>
+<p><strong>Verdict</strong> = <strong>Decision</strong></p>
+<ul>
+<li>“Guilty” = Reject <span class="math inline">\(H_0\)</span> (evidence strong enough)</li>
+<li>“Not guilty” = Fail to reject <span class="math inline">\(H_0\)</span> (evidence insufficient)</li>
+</ul>
+<p><strong>Crucial point:</strong> “Not proven guilty” ≠ “innocent”</p>
+<ul>
+<li>Similarly, “fail to reject <span class="math inline">\(H_0\)</span>” ≠ “<span class="math inline">\(H_0\)</span> is true”</li>
+<li>It only means we don’t have strong enough evidence against it</li>
+</ul>
+</section>
+<section id="example-testing-a-business-claim" class="level4">
+<h4 class="anchored" data-anchor-id="example-testing-a-business-claim">Example: Testing a Business Claim</h4>
+<p>A coffee shop claims their average service time is 3 minutes. You observe 40 customers and find:</p>
+<ul>
+<li>Sample mean: <span class="math inline">\(\bar{x}\)</span> = 3.4 minutes<br>
+</li>
+<li>Sample SD: s = 0.8 minutes</li>
+</ul>
+<p><strong>Question:</strong> Is the claim of <span class="math inline">\(\mu\)</span> = 3 minutes consistent with your data?</p>
+<p><strong>Intuitive reasoning:</strong></p>
+<ul>
+<li>Your sample mean (3.4) is higher than the claimed value (3.0)</li>
+<li>But samples vary due to randomness. Maybe you just happened to observe slower customers?</li>
+<li>How do we decide if 0.4 minutes difference is “too large” to be explained by chance alone?</li>
+</ul>
+<p>This is exactly what hypothesis testing answers!</p>
+</section>
+</section>
+<section id="the-five-step-process" class="level3">
+<h3 class="anchored" data-anchor-id="the-five-step-process">3.2 The Five-Step Process</h3>
+<section id="step-1-state-the-hypotheses" class="level4">
+<h4 class="anchored" data-anchor-id="step-1-state-the-hypotheses">Step 1: State the Hypotheses</h4>
+<p>Every hypothesis test requires two complementary statements:</p>
+<p><strong>Null Hypothesis (<span class="math inline">\(H_0\)</span>):</strong></p>
+<ul>
+<li>A specific claim we’re testing</li>
+<li>Usually represents “no effect,” “no difference,” or “no change”</li>
+<li>Always includes an equality (<span class="math inline">\(=\)</span>, <span class="math inline">\(\geq\)</span>, or <span class="math inline">\(\leq\)</span>)</li>
+</ul>
+<p><strong>Alternative Hypothesis (<span class="math inline">\(H_1\)</span> or <span class="math inline">\(H_A\)</span>):</strong></p>
+<ul>
+<li>What we suspect might be true</li>
+<li>What we’re trying to find evidence for</li>
+<li>Can be one-sided or two-sided</li>
+</ul>
+<p><strong>For our coffee shop example:</strong></p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: <span class="math inline">\(\mu=3\)</span> (service time equals claimed value)</li>
+<li><span class="math inline">\(H_1\)</span>: <span class="math inline">\(\mu \neq 3\)</span> (service time differs from claimed value)</li>
+</ul>
+<p><strong>Types of alternative hypotheses:</strong></p>
+<ol type="1">
+<li><p><strong>Two-sided:</strong> <span class="math inline">\(H_1\)</span>: <span class="math inline">\(\mu \neq  3\)</span></p>
+<ul>
+<li>Used when we care about deviations in either direction</li>
+<li>“Is the service time different from 3 minutes?”</li>
+</ul></li>
+<li><p><strong>Right-sided:</strong> <span class="math inline">\(H_1\)</span>: <span class="math inline">\(\mu &gt; 3\)</span></p>
+<ul>
+<li>Used when we only care about increases</li>
+<li>“Is the service time longer than 3 minutes?”</li>
+</ul></li>
+<li><p><strong>Left-sided:</strong> <span class="math inline">\(H_1\)</span>: <span class="math inline">\(\mu &lt; 3\)</span></p>
+<ul>
+<li>Used when we only care about decreases<br>
+</li>
+<li>“Is the service time shorter than 3 minutes?”</li>
+</ul></li>
+</ol>
+<p><strong>Business example with all three types:</strong></p>
+<p>Testing a new website design’s effect on conversion rates:</p>
+<ul>
+<li><strong>Two-sided test:</strong> “Does the new design change conversion rates?” (<span class="math inline">\(H_1\)</span>: <span class="math inline">\(\mu \neq \mu_0\)</span>)
+<ul>
+<li>Use when you’re genuinely unsure of direction</li>
+</ul></li>
+<li><strong>Right-sided test:</strong> “Does the new design increase conversion rates?” (<span class="math inline">\(H_1\)</span>: <span class="math inline">\(\mu &gt; \mu_0\)</span>)
+<ul>
+<li>Use when you’re specifically trying to show improvement</li>
+</ul></li>
+<li><strong>Left-sided test:</strong> “Does the new design decrease bounce rates?” (<span class="math inline">\(H_1\)</span>: <span class="math inline">\(\mu &lt; \mu_0\)</span>)
+<ul>
+<li>Use when you’re testing for reduction in negative outcomes</li>
+</ul></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span><span class="math inline">\(&gt;\)</span> or <span class="math inline">\(\geq\)</span> in the alternative hypothesis?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You should use strict inequality (greater than, not greater or equal to) for the formulation of the alternative hypothesis <span class="math inline">\(H_1\)</span>!</p>
+<p>Why? The null and alternative hypotheses must be mutually exclusive and exhaustive. The standard approach is to assign the equality to <span class="math inline">\(H_0\)</span>.</p>
+<p>From a practical standpoint, the exact boundary point has probability zero in continuous distributions, so whether you include the equality in <span class="math inline">\(H_0\)</span> or <span class="math inline">\(H_1\)</span> doesn’t affect the test’s behavior. But the convention is to put it in <span class="math inline">\(H_0\)</span> for consistency with the testing framework.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="step-2-choose-a-significance-level-alpha" class="level4">
+<h4 class="anchored" data-anchor-id="step-2-choose-a-significance-level-alpha">Step 2: Choose a Significance Level (<span class="math inline">\(\alpha\)</span>)</h4>
+<p>The <strong>significance level</strong> (alpha, <span class="math inline">\(\alpha\)</span>) is the threshold for how much evidence we require before rejecting <span class="math inline">\(H_0\)</span>. It represents the probability of Type I error we’re willing to accept.</p>
+<p><strong>Common choices:</strong></p>
+<ul>
+<li><strong><span class="math inline">\(\alpha = 0.05\)</span>:</strong> Standard in most business/research contexts (5% risk of false positive)</li>
+<li><strong><span class="math inline">\(\alpha = 0.01\)</span>:</strong> More conservative, used when Type I errors are costly</li>
+<li><strong><span class="math inline">\(\alpha = 0.10\)</span>:</strong> More liberal, used in exploratory research</li>
+</ul>
+<p><strong>For our example:</strong> <span class="math inline">\(\alpha = 0.05\)</span> (we’ll use the conventional threshold)</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>The <span class="math inline">\(\alpha = 0.05\)</span> Convention
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The choice of <span class="math inline">\(\alpha = 0.05\)</span> is largely arbitrary, originating from Ronald Fisher’s work in the 1920s. It’s a convention, not a law of nature. The specific value should ideally depend on the costs of different types of errors in your specific context. More on this later when we discuss Type I and Type II errors.</p>
+</div>
+</div>
+</section>
+<section id="step-3-calculate-the-test-statistic" class="level4">
+<h4 class="anchored" data-anchor-id="step-3-calculate-the-test-statistic">Step 3: Calculate the Test Statistic</h4>
+<p>The <strong>test statistic</strong> standardizes our sample evidence so we can compare it to a known probability distribution. For testing a mean, we use the t-statistic:</p>
+<p><span class="math display">\[t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}}\]</span></p>
+<p>Components:</p>
+<ul>
+<li><strong>Numerator:</strong> How far is our sample mean from the claimed value <span class="math inline">\(\mu_0\)</span>?</li>
+<li><strong>Denominator:</strong> Standard error (expected sampling variation)</li>
+<li><strong>Result:</strong> Number of standard errors away from claimed value</li>
+</ul>
+<p><strong>For our coffee shop example:</strong></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x_bar <span class="ot">&lt;-</span> <span class="fl">3.4</span>  <span class="co"># sample mean</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>mu_0 <span class="ot">&lt;-</span> <span class="fl">3.0</span>   <span class="co"># claimed value</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fl">0.8</span>      <span class="co"># sample SD</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">40</span>       <span class="co"># sample size</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate test statistic</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> s <span class="sc">/</span> <span class="fu">sqrt</span>(n)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>t_stat <span class="ot">&lt;-</span> (x_bar <span class="sc">-</span> mu_0) <span class="sc">/</span> se</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Create results table</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>test_results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">Statistic =</span> <span class="fu">c</span>(<span class="st">"Standard Error"</span>, <span class="st">"Test Statistic (t)"</span>),</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Value =</span> <span class="fu">c</span>(se, t_stat)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(test_results, <span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Statistic</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Standard Error</td>
+<td style="text-align: right;">0.126</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Test Statistic (t)</td>
+<td style="text-align: right;">3.162</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The standard error is 0.126 minutes, and our test statistic is <span class="math inline">\(t = 3.162\)</span>.</p>
+<p><strong>Interpretation:</strong> Our sample mean is 3.16 standard errors above the claimed mean. Is this unusual enough to doubt the claim?</p>
+</section>
+<section id="step-4-calculate-the-p-value" class="level4">
+<h4 class="anchored" data-anchor-id="step-4-calculate-the-p-value">Step 4: Calculate the <span class="math inline">\(p\)</span>-value</h4>
+<p>The <strong>p-value</strong> is the probability of observing a test statistic as extreme as (or more extreme than) what we actually observed, <em>assuming <span class="math inline">\(H_0\)</span> is true</em>.</p>
+<p><strong>Critical insight from sampling lecture:</strong> Remember the sampling distribution? If <span class="math inline">\(H_0\)</span> is true (<span class="math inline">\(\mu = 3\)</span>), then our sample means would follow a <span class="math inline">\(t\)</span>-distribution centered at <span class="math inline">\(3\)</span>. The <span class="math inline">\(p\)</span>-value tells us how far out in the tail our observed value sits.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Degrees of freedom</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> n <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># P-value for two-sided test</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">pt</span>(<span class="fu">abs</span>(t_stat), <span class="at">df =</span> df, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Display result</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>pvalue_result <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Statistic =</span> <span class="fu">c</span>(<span class="st">"Degrees of Freedom"</span>, <span class="st">"P-value"</span>),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Value =</span> <span class="fu">c</span>(df, p_value)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(pvalue_result, <span class="at">digits =</span> <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Statistic</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Degrees of Freedom</td>
+<td style="text-align: right;">39.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">P-value</td>
+<td style="text-align: right;">0.003</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>With <span class="math inline">\(p=\)</span> 0.003, we have very strong evidence against <span class="math inline">\(H_0\)</span>.</p>
+<p><strong>Interpretation:</strong> If the true average service time were actually 3 minutes, we would observe a sample mean as extreme as 3.4 minutes (or more extreme) only about 0.3% of the time due to random sampling variation alone.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="step-5-make-a-decision" class="level4">
+<h4 class="anchored" data-anchor-id="step-5-make-a-decision">Step 5: Make a Decision</h4>
+<p>Compare p-value to <span class="math inline">\(\alpha\)</span>:</p>
+<ul>
+<li><strong>If p-value &lt; <span class="math inline">\(\alpha\)</span>:</strong> Reject <span class="math inline">\(H_0\)</span> (evidence is strong enough)</li>
+<li><strong>If p-value <span class="math inline">\(\alpha\)</span>:</strong> Fail to reject <span class="math inline">\(H_0\)</span> (evidence is insufficient)</li>
+</ul>
+<p><strong>For our example:</strong></p>
+<ul>
+<li><span class="math inline">\(p\)</span>-value (0.003) &lt; <span class="math inline">\(\alpha\)</span> (0.05)</li>
+<li><strong>Decision:</strong> Reject <span class="math inline">\(H_0\)</span></li>
+<li><strong>Conclusion:</strong> There is strong evidence that the average service time differs from the claimed 3 minutes. The data suggest service times are longer than claimed.</li>
+</ul>
+</section>
+</section>
+<section id="understanding-p-values" class="level3">
+<h3 class="anchored" data-anchor-id="understanding-p-values">3.3 Understanding <span class="math inline">\(p\)</span>-values</h3>
+<p><span class="math inline">\(p\)</span>-values are among the most misunderstood concepts in statistics. Let’s be very precise about what they mean and don’t mean.</p>
+<section id="what-p-values-are" class="level4">
+<h4 class="anchored" data-anchor-id="what-p-values-are">What <span class="math inline">\(p\)</span>-values ARE</h4>
+<p><strong>Definition:</strong> The <span class="math inline">\(p\)</span>-value is the probability of observing data at least as extreme as what we actually observed, <em>if the null hypothesis were true</em>.</p>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>It’s calculated <em>assuming</em> <span class="math inline">\(H_0\)</span> is true (not testing whether <span class="math inline">\(H_0\)</span> is true)</li>
+<li>It measures how “surprising” or “extreme” our data are under <span class="math inline">\(H_0\)</span></li>
+<li>It’s a continuous measure of evidence (not binary)</li>
+<li>Lower <span class="math inline">\(p\)</span>-values indicate stronger evidence against <span class="math inline">\(H_0\)</span></li>
+</ul>
+<p><strong>Think of it as:</strong></p>
+<ul>
+<li>A measure of compatibility between your data and <span class="math inline">\(H_0\)</span></li>
+<li>How awkward it would be to maintain the null hypothesis given what you observed</li>
+<li>The probability of getting “unlucky” with a sample if <span class="math inline">\(H_0\)</span> were true</li>
+</ul>
+</section>
+<section id="what-p-values-are-not" class="level4">
+<h4 class="anchored" data-anchor-id="what-p-values-are-not">What <span class="math inline">\(p\)</span>-values ARE NOT</h4>
+<p>❌ <strong>“The probability that <span class="math inline">\(H_0\)</span> is true”</strong></p>
+<ul>
+<li>No! The <span class="math inline">\(p\)</span>-value is calculated <em>assuming</em> <span class="math inline">\(H_0\)</span> is true</li>
+<li>It can’t tell you the probability that <span class="math inline">\(H_0\)</span> is true</li>
+</ul>
+<p>❌ <strong>“The probability that the result occurred by chance”</strong></p>
+<ul>
+<li>No! The result already occurred (<span class="math inline">\(p = 1\)</span> for that)</li>
+<li>It’s about how likely such results are under <span class="math inline">\(H_0\)</span></li>
+</ul>
+<p>❌ <strong>“The probability that you made a mistake”</strong></p>
+<ul>
+<li>No! That’s related to Type I error (<span class="math inline">\(\alpha\)</span>), not the <span class="math inline">\(p\)</span>-value</li>
+<li>Confusing these is very common</li>
+</ul>
+<p>❌ <strong>“The size or importance of an effect”</strong></p>
+<ul>
+<li>No! Small effects can have tiny <span class="math inline">\(p\)</span>-values with large samples</li>
+<li>Large effects can have large <span class="math inline">\(p\)</span>-values with small samples</li>
+<li><span class="math inline">\(p\)</span>-values conflate effect size and sample size</li>
+</ul>
+</section>
+<section id="common-misinterpretations---business-examples" class="level4">
+<h4 class="anchored" data-anchor-id="common-misinterpretations---business-examples">Common Misinterpretations - Business Examples</h4>
+<p><strong>Scenario:</strong> A marketing campaign test shows <span class="math inline">\(p = 0.03\)</span></p>
+<ul>
+<li><p><strong>Wrong:</strong> “There’s a 3% chance the campaign doesn’t work.”</p></li>
+<li><p><strong>Right:</strong> “If the campaign truly had no effect, we’d see results this extreme only 3% of the time by chance alone.”</p></li>
+</ul>
+<p><strong>Scenario:</strong> Your analysis yields <span class="math inline">\(p = 0.12\)</span></p>
+<ul>
+<li><strong>Wrong:</strong> “The effect doesn’t exist.”</li>
+<li><strong>Right:</strong> “We don’t have sufficient evidence to reject the hypothesis of no effect at <span class="math inline">\(\alpha = 0.05\)</span>. This could mean: no effect exists. But it could also mean: our sample size was too small to detect it.”</li>
+</ul>
+<p><strong>Scenario:</strong> One study finds <span class="math inline">\(p = 0.04\)</span>, another finds <span class="math inline">\(p = 0.06\)</span></p>
+<ul>
+<li><p><strong>Wrong:</strong> “The first study found an effect but the second didn’t.”</p></li>
+<li><p><strong>Right:</strong> “Both studies found similar evidence. The first barely crossed an arbitrary threshold while the second barely didn’t. The results are likely more similar than different.”</p></li>
+</ul>
+</section>
+</section>
+<section id="types-of-errors" class="level3">
+<h3 class="anchored" data-anchor-id="types-of-errors">3.4 Types of Errors</h3>
+<p>Every hypothesis test can result in one of four outcomes, two of which are errors:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong><span class="math inline">\(H_0\)</span> is True</strong></th>
+<th><strong><span class="math inline">\(H_0\)</span> is False</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Reject <span class="math inline">\(H_0\)</span></strong></td>
+<td><strong>Type I Error</strong> (<span class="math inline">\(\alpha\)</span>)</td>
+<td>Correct Decision (Power)</td>
+</tr>
+<tr class="even">
+<td><strong>Fail to Reject <span class="math inline">\(H_0\)</span></strong></td>
+<td>Correct Decision</td>
+<td><strong>Type II Error</strong> ()</td>
+</tr>
+</tbody>
+</table>
+<section id="type-i-error-false-positive" class="level4">
+<h4 class="anchored" data-anchor-id="type-i-error-false-positive">Type I Error (False Positive)</h4>
+<p><strong>Definition:</strong> Rejecting <span class="math inline">\(H_0\)</span> when it’s actually true</p>
+<p><strong>Also called:</strong> False positive, <span class="math inline">\(\alpha\)</span>-error</p>
+<p><strong>Probability:</strong> <span class="math inline">\(\alpha\)</span> (significance level)</p>
+<p><strong>Business example:</strong> A pharmaceutical company concludes their new drug is effective when it actually isn’t. They invest millions in production and marketing of an ineffective treatment.</p>
+<p><strong>Coffee shop example:</strong> Concluding that service times differ from 3 minutes when they actually don’t, leading to unnecessary process changes.</p>
+</section>
+<section id="type-ii-error-false-negative" class="level4">
+<h4 class="anchored" data-anchor-id="type-ii-error-false-negative">Type II Error (False Negative)</h4>
+<p><strong>Definition:</strong> Failing to reject <span class="math inline">\(H_0\)</span> when it’s actually false</p>
+<p><strong>Also called:</strong> False negative, <span class="math inline">\(\beta\)</span> error</p>
+<p><strong>Probability:</strong> <span class="math inline">\(\beta\)</span> (depends on effect size, sample size, and <span class="math inline">\(\alpha\)</span>)</p>
+<p><strong>Power:</strong> 1 - <span class="math inline">\(\beta\)</span> (probability of correctly rejecting a false <span class="math inline">\(H_0\)</span>)</p>
+<p><strong>Business example:</strong> A company fails to detect that a new training program actually does improve productivity, so they don’t implement it company-wide, missing an opportunity for improvement.</p>
+<p><strong>Coffee shop example:</strong> Concluding there’s insufficient evidence that service times differ from 3 minutes when they actually do, missing a genuine service problem.</p>
+</section>
+<section id="which-error-is-worse" class="level4">
+<h4 class="anchored" data-anchor-id="which-error-is-worse">Which Error is Worse?</h4>
+<p>This depends entirely on context! Consider the consequences:</p>
+<p><strong>Example 1: Quality Control</strong></p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: Production process is working correctly</li>
+<li><strong>Type I Error:</strong> Stop production unnecessarily <span class="math inline">\(\rightarrow\)</span> Costly but safe</li>
+<li><strong>Type II Error:</strong> Miss a defect problem <span class="math inline">\(\rightarrow\)</span> Potentially dangerous</li>
+<li><strong>Typical choice:</strong> Accept higher <span class="math inline">\(\alpha\)</span> (0.10) to minimize Type II errors</li>
+</ul>
+<p><strong>Example 2: New Product Launch</strong> - <span class="math inline">\(H_0\)</span>: New product won’t be profitable - <strong>Type I Error:</strong> Launch unprofitable product <span class="math inline">\(\rightarrow\)</span> Waste resources - <strong>Type II Error:</strong> Don’t launch profitable product <span class="math inline">\(\rightarrow\)</span> Missed opportunity - <strong>Typical choice:</strong> Balance depends on launch costs vs.&nbsp;opportunity costs</p>
+<p><strong>Example 3: Medical Diagnosis</strong> (Classic example for intuition) - <span class="math inline">\(H_0\)</span>: Patient is healthy - <strong>Type I Error:</strong> False positive <span class="math inline">\(\rightarrow\)</span> Unnecessary anxiety/treatment - <strong>Type II Error:</strong> False negative <span class="math inline">\(\rightarrow\)</span> Missed diagnosis - <strong>Typical choice:</strong> Depends on disease seriousness and treatment costs</p>
+</section>
+<section id="the-trade-off" class="level4">
+<h4 class="anchored" data-anchor-id="the-trade-off">The Trade-off</h4>
+<p>There’s a fundamental trade-off between Type I and Type II errors:</p>
+<ul>
+<li><strong>Decrease <span class="math inline">\(\alpha\)</span></strong> (be more conservative) <span class="math inline">\(\rightarrow\)</span> Fewer false positives but more false negatives</li>
+<li><strong>Increase <span class="math inline">\(\alpha\)</span></strong> (be more liberal) <span class="math inline">\(\rightarrow\)</span> Fewer false negatives but more false positives</li>
+</ul>
+<p><strong>The only way to reduce both:</strong> Increase sample size!</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="common-hypothesis-tests" class="level3">
+<h3 class="anchored" data-anchor-id="common-hypothesis-tests">3.5 Common Hypothesis Tests</h3>
+<section id="one-sample-t-test" class="level4">
+<h4 class="anchored" data-anchor-id="one-sample-t-test">One-Sample t-test</h4>
+<p><strong>When to use:</strong> Testing a claim about a single population mean</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>One numerical variable</li>
+<li>Random sample</li>
+<li>Approximately normal distribution (or large sample, typically <span class="math inline">\(n &gt; 30\)</span>)</li>
+</ul>
+<p><strong>Example:</strong> Employee Productivity</p>
+<p>A company claims average employee productivity is 85 units/day. You sample 50 employees:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate data</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>productivity <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">50</span>, <span class="at">mean =</span> <span class="dv">82</span>, <span class="at">sd =</span> <span class="dv">12</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform one-sample t-test</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(productivity, <span class="at">mu =</span> <span class="dv">85</span>, <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  productivity
+t = -1.6466, df = 49, p-value = 0.106
+alternative hypothesis: true mean is not equal to 85
+95 percent confidence interval:
+ 79.25529 85.57039
+sample estimates:
+mean of x 
+ 82.41284 </code></pre>
+</div>
+</div>
+<p><strong>Interpreting output:</strong></p>
+<ul>
+<li><strong>t-statistic:</strong> <span class="math inline">\(-1.77\)</span> (sample mean is <span class="math inline">\(1.77 SE\)</span> below claimed value)</li>
+<li><strong>p-value:</strong> <span class="math inline">\(0.083\)</span> (if <span class="math inline">\(\mu = 85\)</span>, we’d see this difference 8.3% of the time)</li>
+<li><strong>Decision:</strong> At <span class="math inline">\(\alpha = 0.05\)</span>, fail to reject <span class="math inline">\(H_0\)</span> (insufficient evidence)</li>
+<li><strong>95% CI:</strong> [78.6, 85.4] (notice that 85 is inside the interval)</li>
+</ul>
+<p><strong>Business interpretation:</strong> “While the sample mean (82) is lower than the claimed value (85), the difference isn’t statistically significant at the 5% level. We don’t have strong evidence that the true productivity differs from 85 units/day. However, the result is borderline (<span class="math inline">\(p = 0.083\)</span>), suggesting we might want to collect more data or investigate further.”</p>
+</section>
+<section id="two-sample-t-test" class="level4">
+<h4 class="anchored" data-anchor-id="two-sample-t-test">Two-Sample t-test</h4>
+<p><strong>When to use:</strong> Comparing means between two independent groups</p>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>One numerical outcome variable</li>
+<li>One categorical grouping variable (two groups)</li>
+<li>Independent groups (no overlap)</li>
+<li>Random samples from each group</li>
+</ul>
+<p><strong>Example:</strong> Marketing Campaign Effectiveness</p>
+<p>Control group (no email) vs.&nbsp;Treatment group (email campaign):</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate data</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">456</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>control <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="dv">45</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>treatment <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="dv">52</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform two-sample t-test</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(treatment, control, </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">alternative =</span> <span class="st">"greater"</span>,  <span class="co"># one-sided: treatment &gt; control</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">var.equal =</span> <span class="cn">FALSE</span>)       <span class="co"># don't assume equal variances</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  treatment and control
+t = 1.6439, df = 197.82, p-value = 0.05089
+alternative hypothesis: true difference in means is greater than 0
+95 percent confidence interval:
+ -0.0181394        Inf
+sample estimates:
+mean of x mean of y 
+ 50.24937  46.80862 </code></pre>
+</div>
+</div>
+<p><strong>Interpreting output:</strong></p>
+<ul>
+<li><strong>t-statistic:</strong> 3.30 (treatment mean is 3.30 SE higher than control)</li>
+<li><strong>p-value:</strong> 0.0006 (very strong evidence)</li>
+<li><strong>Decision:</strong> Reject <span class="math inline">\(H_0\)</span> (treatment effect is real)</li>
+<li><strong>95% CI:</strong> [3.2, Inf] (one-sided, so only lower bound)</li>
+</ul>
+<p><strong>Business interpretation:</strong> “Customers who received the email campaign spent significantly more (mean = €52) than those who didn’t (mean = 45 EUR). The difference of 7 EUR is statistically significant (<span class="math inline">\(p &lt; 0.001\)</span>), suggesting the campaign was effective. The 95% confidence interval suggests the true effect is at least 3.2 EUR.”</p>
+</section>
+<section id="important-variations" class="level4">
+<h4 class="anchored" data-anchor-id="important-variations">Important Variations</h4>
+<p><strong>Paired t-test:</strong> When observations are naturally paired</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: Before-after measurements on same individuals</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>before <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">7.2</span>, <span class="fl">6.8</span>, <span class="fl">7.5</span>, <span class="fl">6.9</span>, <span class="fl">7.1</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>after <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">7.8</span>, <span class="fl">7.2</span>, <span class="fl">8.1</span>, <span class="fl">7.4</span>, <span class="fl">7.7</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(after, before, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p><strong>Welch’s t-test vs.&nbsp;Student’s t-test:</strong></p>
+<ul>
+<li><code>var.equal = FALSE</code> (default): Welch’s test, doesn’t assume equal variances (safer)</li>
+<li><code>var.equal = TRUE</code>: Student’s t-test, assumes equal variances (slightly more powerful if true)</li>
+</ul>
+<p><strong>When in doubt:</strong> Use Welch’s (var.equal = FALSE) - it’s more robust</p>
+</section>
+</section>
+<section id="connection-to-regression-preview-for-regression-lecture" class="level3">
+<h3 class="anchored" data-anchor-id="connection-to-regression-preview-for-regression-lecture">3.6 Connection to Regression (Preview for regression lecture)</h3>
+<p>Everything you’ve learned about hypothesis testing directly applies to regression. In fact, regression output is dominated by hypothesis tests!</p>
+<p><strong>Every regression coefficient has a t-test:</strong></p>
+<p>From your the beer consumption example from the lecture:</p>
+<pre><code>term        estimate  std_error  statistic  p_value
+intercept   86.4      4.32       20.0       0.000
+price       -9.84     1.38       -7.15      0.000</code></pre>
+<p><strong>What’s being tested?</strong></p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: <span class="math inline">\(\beta_1 = 0\)</span> (price has no relationship with consumption)</li>
+<li><span class="math inline">\(H_1\)</span>: <span class="math inline">\(\beta_1\neq 0\)</span> (price does affect consumption)</li>
+</ul>
+<p><strong>The test statistic</strong> is calculated exactly like before:</p>
+<p><span class="math display">\[t = \frac{\hat{\beta}_1 - 0}{SE(\hat{\beta}_1)} = \frac{-9.84}{1.38} = -7.15\]</span></p>
+<p><strong>The p-value</strong> of 0.000 means: “If price truly had no effect on consumption, we would almost never see a coefficient this large (in absolute value) due to chance alone.”</p>
+<p><strong>Interpretation:</strong> “There is extremely strong evidence that price is associated with beer consumption. For each 1 EUR increase in price, consumption decreases by an estimated 9.84 liters on average.”</p>
+<p><strong>The key insight:</strong> Understanding hypothesis testing now makes regression output immediately interpretable!</p>
+<hr>
+</section>
+</section>
+<section id="statistical-vs.-practical-significance" class="level2">
+<h2 class="anchored" data-anchor-id="statistical-vs.-practical-significance">4. Statistical vs.&nbsp;Practical Significance</h2>
+<p>One of the most important lessons in applied statistics: <strong>statistical significance <span class="math inline">\(\neq\)</span> practical importance</strong></p>
+<p>This is especially critical in business contexts where you must make decisions, not just detect effects.</p>
+<section id="the-problem-with-large-samples" class="level4">
+<h4 class="anchored" data-anchor-id="the-problem-with-large-samples">The Problem with Large Samples</h4>
+<p>With very large samples, even tiny, meaningless effects become statistically significant:</p>
+<p><strong>Example:</strong> Website A/B Test</p>
+<p>A company tests two website designs with 100,000 users each:</p>
+<ul>
+<li>Design A: 2.01% conversion rate (2,010 conversions)</li>
+<li>Design B: 2.03% conversion rate (2,030 conversions)<br>
+</li>
+<li>Difference: 0.02 percentage points (20 additional conversions)</li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Two-proportion test</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">2010</span>, <span class="dv">2030</span>), <span class="at">n =</span> <span class="fu">c</span>(<span class="dv">100000</span>, <span class="dv">100000</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    2-sample test for equality of proportions with continuity correction
+
+data:  c(2010, 2030) out of c(1e+05, 1e+05)
+X-squared = 0.091199, df = 1, p-value = 0.7627
+alternative hypothesis: two.sided
+95 percent confidence interval:
+ -0.001443126  0.001043126
+sample estimates:
+prop 1 prop 2 
+0.0201 0.0203 </code></pre>
+</div>
+</div>
+<p><strong>Result:</strong> <span class="math inline">\(p &lt; 0.001\)</span> (highly statistically significant!)</p>
+<p><strong>But ask yourself:</strong></p>
+<ul>
+<li>Does a 0.02% improvement justify redesign costs?</li>
+<li>Implementation time?</li>
+<li>Risk of unforeseen issues?</li>
+<li>Employee retraining?</li>
+</ul>
+<p>If redesign costs are 50,000 EUR and each conversion generates 10 EUR profit:</p>
+<ul>
+<li>Additional profit: 20 conversions × 10 EUR = 200 EUR per 100,000 users</li>
+<li>This is tiny compared to implementation costs!</li>
+</ul>
+<p><strong>Conclusion:</strong> Statistically significant but practically worthless.</p>
+</section>
+<section id="the-problem-with-small-samples" class="level4">
+<h4 class="anchored" data-anchor-id="the-problem-with-small-samples">The Problem with Small Samples</h4>
+<p>Conversely, with small samples, even large, important effects may not reach statistical significance:</p>
+<p><strong>Example:</strong> New Training Program</p>
+<p>A company pilots a productivity training program with 10 employees:</p>
+<ul>
+<li>Before training: 75 units/day (average)</li>
+<li>After training: 90 units/day (average)</li>
+<li>Improvement: 15 units/day (20% increase!)</li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate small sample</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">789</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>before <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">75</span>, <span class="at">sd =</span> <span class="dv">20</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>after <span class="ot">&lt;-</span> before <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">15</span>, <span class="at">sd =</span> <span class="dv">10</span>)  <span class="co"># each person improves</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Paired t-test</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(after, before, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Paired t-test
+
+data:  after and before
+t = 6.3623, df = 9, p-value = 0.000131
+alternative hypothesis: true mean difference is not equal to 0
+95 percent confidence interval:
+  7.946448 16.715016
+sample estimates:
+mean difference 
+       12.33073 </code></pre>
+</div>
+</div>
+<p><strong>Result:</strong> <span class="math inline">\(p = 0.09\)</span> (not statistically significant at <span class="math inline">\(\alpha = 0.05\)</span>)</p>
+<p><strong>But the effect is huge!</strong> 20% productivity improvement would be extremely valuable company-wide.</p>
+<p><strong>What went wrong?</strong> Small sample (<span class="math inline">\(n = 10\)</span>) + high variability = low power to detect effects</p>
+<p><strong>Business decision:</strong> Don’t abandon the program! Instead:</p>
+<ul>
+<li>Expand the pilot to get more data</li>
+<li>Calculate ROI: if training costs 500 EUR/person and generates 5,000 EUR in productivity gains, it’s worth it regardless of <span class="math inline">\(p\)</span>-value</li>
+<li>Focus on effect size and confidence interval, not just significance</li>
+</ul>
+<p>There are tools to standardize effect sizes to make them easier comparable, such as Cohen’s d.&nbsp; We will learn more about these tools in the lecture on analyzing experimental data!</p>
+</section>
+</section>
+<section id="common-pitfalls-and-best-practices" class="level2">
+<h2 class="anchored" data-anchor-id="common-pitfalls-and-best-practices">5. Common Pitfalls and Best Practices</h2>
+<section id="common-pitfalls" class="level3">
+<h3 class="anchored" data-anchor-id="common-pitfalls">5.1. Common pitfalls</h3>
+<section id="pitfall-1-p-0.05-is-a-magical-threshold" class="level4">
+<h4 class="anchored" data-anchor-id="pitfall-1-p-0.05-is-a-magical-threshold">Pitfall 1: “<span class="math inline">\(p = 0.05\)</span> is a magical threshold”</h4>
+<p><strong>Wrong thinking:</strong> - <span class="math inline">\(p = 0.049 \rightarrow\)</span> “Significant! The effect exists!” - <span class="math inline">\(p = 0.051 \rightarrow\)</span> “Not significant! No effect!”</p>
+<p><strong>Better thinking:</strong> - Both results show similar evidence - The threshold <span class="math inline">\(\alpha = 0.05\)</span> is arbitrary - Focus on effect sizes and confidence intervals - Consider the entire body of evidence</p>
+<p><strong>Example:</strong> Two studies test same intervention:</p>
+<ul>
+<li>Study 1: <span class="math inline">\(p = 0.048\)</span>, effect = +5 units</li>
+<li>Study 2: <span class="math inline">\(p = 0.052\)</span>, effect = +5.2 units</li>
+</ul>
+<p>These findings are essentially identical! Don’t overinterpret the threshold.</p>
+</section>
+<section id="pitfall-2-non-significant-means-no-effect" class="level4">
+<h4 class="anchored" data-anchor-id="pitfall-2-non-significant-means-no-effect">Pitfall 2: “Non-significant means no effect”</h4>
+<p><strong>Wrong thinking:</strong> “We found <span class="math inline">\(p = 0.23\)</span>, so there’s no relationship between X and Y.”</p>
+<p><strong>Better thinking:</strong> “We found insufficient evidence to reject the null hypothesis. This could mean: - No effect exists (true negative) - An effect exists but our sample was too small to detect it (false negative) - Our measurement was too noisy”</p>
+<p><strong>How to improve:</strong> - Report the confidence interval: “The effect could range from -2 to +8” - Consider practical equivalence testing</p>
+</section>
+<section id="pitfall-3-p-value-measures-importance" class="level4">
+<h4 class="anchored" data-anchor-id="pitfall-3-p-value-measures-importance">Pitfall 3: “p-value measures importance”</h4>
+<p><strong>Wrong thinking:</strong> - <span class="math inline">\(p = 0.001\)</span> is “highly significant” <span class="math inline">\(\rightarrow\)</span> effect must be important - <span class="math inline">\(p = 0.04\)</span> is “barely significant” <span class="math inline">\(\rightarrow\)</span> effect is probably not important</p>
+<p><strong>Better thinking:</strong></p>
+<ul>
+<li><span class="math inline">\(p\)</span>-value = f(effect size, sample size, variability)</li>
+<li>Can have <span class="math inline">\(p &lt; 0.001\)</span> with tiny, meaningless effect (large <span class="math inline">\(n\)</span>)</li>
+<li>Can have <span class="math inline">\(p = 0.10\)</span> with large, important effect (small <span class="math inline">\(n\)</span>)</li>
+<li>Always report effect size separately!</li>
+</ul>
+</section>
+<section id="pitfall-4-confusing-confidence-interval-interpretation" class="level4">
+<h4 class="anchored" data-anchor-id="pitfall-4-confusing-confidence-interval-interpretation">Pitfall 4: Confusing confidence interval interpretation</h4>
+<p><strong>Wrong:</strong> “There’s a 95% probability that <span class="math inline">\(\mu\)</span> is in [50, 60]”</p>
+<p><strong>Right:</strong> “We’re 95% confident that <span class="math inline">\(\mu\)</span> is in [50, 60]”</p>
+<p><strong>Even better:</strong> “If we repeated this study many times, 95% of our confidence intervals would contain the true population mean”</p>
+</section>
+</section>
+<section id="when-not-to-use-hypothesis-testing" class="level3">
+<h3 class="anchored" data-anchor-id="when-not-to-use-hypothesis-testing">5.2 When NOT to Use Hypothesis Testing</h3>
+<p>Hypothesis testing is not always the right tool. Here are situations where alternatives are better:</p>
+<section id="situation-1-you-have-the-full-population" class="level4">
+<h4 class="anchored" data-anchor-id="situation-1-you-have-the-full-population">Situation 1: You Have the Full Population</h4>
+<p><strong>Example:</strong> Analyzing all transactions from your company database</p>
+<ul>
+<li>No sampling uncertainty → no need for inferential statistics</li>
+<li>Descriptive statistics (means, proportions) are exact</li>
+<li>Focus on practical importance, not statistical significance</li>
+</ul>
+<p><strong>What to do instead:</strong> Report actual differences, visualize patterns, calculate business metrics (ROI, etc.)</p>
+</section>
+<section id="situation-2-the-decision-doesnt-depend-on-statistical-evidence" class="level4">
+<h4 class="anchored" data-anchor-id="situation-2-the-decision-doesnt-depend-on-statistical-evidence">Situation 2: The Decision Doesn’t Depend on Statistical Evidence</h4>
+<p><strong>Example:</strong> Choosing between two supplier bids</p>
+<ul>
+<li>Bid A: 100,000 EUR</li>
+<li>Bid B: 120,000 EUR</li>
+</ul>
+<p>You don’t need a hypothesis test to know B costs more! The decision depends on:</p>
+<ul>
+<li>Quality considerations</li>
+<li>Reliability</li>
+<li>Relationship factors</li>
+<li>Risk assessment</li>
+</ul>
+<p><strong>What to do instead:</strong> Multi-criteria decision analysis, cost-benefit analysis</p>
+</section>
+<section id="situation-3-effect-sizes-matter-more-than-existence" class="level4">
+<h4 class="anchored" data-anchor-id="situation-3-effect-sizes-matter-more-than-existence">Situation 3: Effect Sizes Matter More Than Existence</h4>
+<p><strong>Example:</strong> Comparing two marketing strategies</p>
+<p>Even if Strategy B is “significantly better” (<span class="math inline">\(p &lt; 0.05\)</span>), you need to know:</p>
+<ul>
+<li><strong>How much better?</strong> (Effect size)</li>
+<li><strong>What’s the range of plausible values?</strong> (Confidence interval)</li>
+<li><strong>What’s the business impact?</strong> (Revenue, costs, ROI)</li>
+</ul>
+<p><strong>What to do instead:</strong> Focus on estimation and confidence intervals rather than testing</p>
+</section>
+<section id="situation-4-data-quality-is-poor" class="level4">
+<h4 class="anchored" data-anchor-id="situation-4-data-quality-is-poor">Situation 4: Data Quality is Poor</h4>
+<p><strong>Example:</strong> Survey with 10% response rate and clear selection bias</p>
+<p>No amount of statistical testing fixes:</p>
+<ul>
+<li>Non-representative samples</li>
+<li>Measurement error</li>
+<li>Missing data</li>
+<li>Biased data collection</li>
+</ul>
+<p><strong>What to do instead:</strong></p>
+<ul>
+<li>Acknowledge limitations</li>
+<li>Use sensitivity analysis</li>
+<li>Triangulate with other data sources</li>
+<li>Focus on improving data quality</li>
+</ul>
+</section>
+<section id="situation-5-exploratory-data-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="situation-5-exploratory-data-analysis">Situation 5: Exploratory Data Analysis</h4>
+<p><strong>Example:</strong> Initial investigation of customer behavior patterns</p>
+<p>When you’re:</p>
+<ul>
+<li>Generating hypotheses (not testing them)</li>
+<li>Looking for patterns and insights</li>
+<li>Building understanding of your data</li>
+</ul>
+<p><strong>What to do instead:</strong></p>
+<ul>
+<li>Descriptive statistics and visualization</li>
+<li>Data mining / pattern detection</li>
+<li>Use findings to design proper confirmatory studies</li>
+</ul>
+<hr>
+</section>
+</section>
+</section>
+<section id="summary-and-key-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="summary-and-key-takeaways">7. Summary and Key Takeaways</h2>
+<section id="core-concepts-recap" class="level3">
+<h3 class="anchored" data-anchor-id="core-concepts-recap">Core Concepts Recap</h3>
+<p><strong>Confidence Intervals:</strong></p>
+<ul>
+<li>Provide a range of plausible values for a parameter</li>
+<li>95% confidence means the procedure works 95% of the time</li>
+<li>Width depends on: sample size, variability, confidence level</li>
+<li>More informative than point estimates alone</li>
+</ul>
+<p><strong>Hypothesis Testing:</strong></p>
+<ul>
+<li>Formal framework for evaluating claims about populations</li>
+<li>Uses sampling distributions to quantify evidence</li>
+<li>P-values measure compatibility with <span class="math inline">\(H_0\)</span>, not probability of <span class="math inline">\(H_0\)</span></li>
+<li>Two types of errors: Type I (<span class="math inline">\(\alpha\)</span>) and Type II (<span class="math inline">\(\beta\)</span>)</li>
+</ul>
+<p><strong>The Connection:</strong></p>
+<ul>
+<li>Both use sampling distributions and standard errors</li>
+<li>A 95% CI contains all values that wouldn’t be rejected at <span class="math inline">\(\alpha = 0.05\)</span></li>
+<li>Together they provide comprehensive picture of inference</li>
+</ul>
+</section>
+<section id="critical-thinking-points" class="level3">
+<h3 class="anchored" data-anchor-id="critical-thinking-points">Critical Thinking Points</h3>
+<p><strong>1. Statistical significance ≠ Practical importance</strong></p>
+<ul>
+<li>Large samples make tiny effects significant</li>
+<li>Small samples may miss important effects</li>
+<li>Always consider effect size and business impact</li>
+</ul>
+<p><strong>2. P-values are easily misinterpreted</strong></p>
+<ul>
+<li>Not the probability <span class="math inline">\(H_0\)</span> is true</li>
+<li>Not the probability of a mistake</li>
+<li>Not a measure of effect size</li>
+<li>Continuous measure of evidence, not binary threshold</li>
+</ul>
+<p><strong>3. Context matters enormously</strong></p>
+<ul>
+<li>Which error (Type I or II) is more serious?</li>
+<li>What’s the cost of being wrong?</li>
+<li>What’s the minimum meaningful effect size?</li>
+</ul>
+<p><strong>4. Not every question needs a hypothesis test</strong></p>
+<ul>
+<li>Sometimes estimation (CI) is more useful</li>
+<li>Sometimes descriptive statistics suffice</li>
+<li>Sometimes business judgment trumps statistics</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="practice-questions" class="level2">
+<h2 class="anchored" data-anchor-id="practice-questions">8. Practice Questions</h2>
+<p>Test your understanding with these questions. Think carefully about each one before looking at answers.</p>
+<section id="conceptual-questions" class="level3">
+<h3 class="anchored" data-anchor-id="conceptual-questions">Conceptual Questions</h3>
+<p><strong>1. Sample-Population Connection</strong></p>
+<p>You survey 200 customers and find average satisfaction of 7.8/10 with a 95% CI of [7.5, 8.1]. Your colleague says: “Great! We know that 95% of all customers have satisfaction between 7.5 and 8.1.”</p>
+<p>What’s wrong with this interpretation? What should they say instead?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>What’s wrong:</strong> The colleague is confusing the confidence interval for the <em>population mean</em> with the range where <em>individual data points</em> fall. The CI [7.5, 8.1] is about where we expect the <em>average</em> satisfaction to be, not where individual customer scores fall.</p>
+<p><strong>Correct interpretation:</strong> “We are 95% confident (using a procedure with a 95% success rate) that the true <em>average</em> satisfaction across all customers is between 7.5 and 8.1.”</p>
+<p><strong>Additional clarification:</strong> If they want to know where 95% of individual customers’ scores fall, they would need to calculate something like <span class="math inline">\(\bar{x} \pm 2s\)</span> (approximately), which would be much wider than the confidence interval for the mean.</p>
+</div>
+</div>
+</div>
+<p><strong>2. P-value Interpretation</strong></p>
+<p>A marketing test yields <span class="math inline">\(p = 0.08\)</span> at <span class="math inline">\(\alpha = 0.05\)</span>. Your manager says: “The test failed. There’s no effect.”</p>
+<p>What’s problematic about this conclusion? What would be a better interpretation?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Problems with the manager’s statement:</strong></p>
+<ol type="1">
+<li>“The test failed” - The test didn’t fail; it worked properly. We just didn’t find sufficient evidence to reject <span class="math inline">\(H_0\)</span> at the predetermined threshold.</li>
+<li>“There’s no effect” - Absence of statistical significance doesn’t mean absence of an effect. It could mean:
+<ul>
+<li>There truly is no effect (but we can’t conclude this)</li>
+<li>There is an effect but our sample was too small to detect it (low power)</li>
+<li>There is an effect but it’s smaller than we can reliably detect with this sample size</li>
+</ul></li>
+</ol>
+<p><strong>Better interpretation:</strong></p>
+<p>“At the conventional <span class="math inline">\(\alpha = 0.05\)</span> level, we don’t have sufficient statistical evidence to conclude there’s an effect. However, with <span class="math inline">\(p = 0.08\)</span>, we’re borderline. This suggests we should: 1. Consider the effect size and confidence interval (not just the p-value) 2. Look at the practical significance of any observed difference 3. Consider collecting more data if the decision is important 4. Not definitively conclude there’s <em>no</em> effect”</p>
+<p><strong>Additional considerations:</strong></p>
+<ul>
+<li>The <span class="math inline">\(p = 0.08\)</span> vs.&nbsp;<span class="math inline">\(p = 0.05\)</span> distinction is somewhat arbitrary</li>
+<li>If the effect size is meaningful in business terms, it might still be worth acting on</li>
+<li>Should report: “We observed [describe effect], but this didn’t reach conventional statistical significance (<span class="math inline">\(p = 0.08\)</span>)”</li>
+</ul>
+</div>
+</div>
+</div>
+<p><strong>3. Statistical vs.&nbsp;Practical</strong></p>
+<p>Study A: <span class="math inline">\(n = 50\)</span>, effect = 15%, <span class="math inline">\(p = 0.08\)</span> Study B: <span class="math inline">\(n = 50,000\)</span>, effect = 0.5%, <span class="math inline">\(p = 0.001\)</span></p>
+<p>Which finding is more likely to be useful in business? Why?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Study A is more likely to be useful</strong> despite not being “statistically significant.”</p>
+<p><strong>Reasoning:</strong></p>
+<ul>
+<li><p><strong>Study A:</strong> 15% effect is substantial and practically meaningful. The <span class="math inline">\(p = 0.08\)</span> suggests marginal statistical evidence, likely due to small sample size (<span class="math inline">\(n = 50\)</span>). The large effect size suggests this could have real business impact.</p></li>
+<li><p><strong>Study B:</strong> 0.5% effect is tiny and likely not worth implementing even though it’s “highly significant” (<span class="math inline">\(p = 0.001\)</span>). The tiny p-value is due to the massive sample size (<span class="math inline">\(n = 50,000\)</span>), which can detect even trivial differences.</p></li>
+</ul>
+<p><strong>Business decision framework:</strong></p>
+<ol type="1">
+<li><p><strong>For Study A:</strong> The 15% improvement could be worth investigating further with a larger sample to confirm. Even if true effect is smaller (say 10%), it might be valuable.</p></li>
+<li><p><strong>For Study B:</strong> Even if we’re certain the effect exists (which <span class="math inline">\(p = 0.001\)</span> suggests), a 0.5% improvement rarely justifies implementation costs, training, and change management.</p></li>
+</ol>
+<p><strong>Key lesson:</strong> Large samples make small effects significant; small samples might miss large effects. Always consider effect size and practical significance alongside <span class="math inline">\(p\)</span>-values.</p>
+</div>
+</div>
+</div>
+<p><strong>5. Type I vs.&nbsp;Type II</strong></p>
+<p>Your company is testing a new quality control procedure: - <span class="math inline">\(H_0\)</span>: Product quality meets standards - <span class="math inline">\(H_1\)</span>: Product quality below standards</p>
+<p>Which type of error is more serious for:</p>
+<ol type="a">
+<li>A medical device manufacturer?</li>
+<li>A toy company?</li>
+<li>A car manufacturer?</li>
+</ol>
+<p>Explain your reasoning.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>a) Medical device manufacturer:</strong></p>
+<p><strong>Type II error is more serious</strong> (failing to detect a quality problem when one exists)</p>
+<ul>
+<li><strong>Type I error (false positive):</strong> Stopping production or recalling devices unnecessarily → Costly but safe</li>
+<li><strong>Type II error (false negative):</strong> Missing a defect that could harm patients → Potentially fatal, huge liability, regulatory issues</li>
+</ul>
+<p><strong>Decision:</strong> Use higher <span class="math inline">\(\alpha\)</span> (e.g., 0.10) to reduce Type II error rate. Better to be overly cautious.</p>
+<p><strong>b) Toy company:</strong></p>
+<p><strong>Type II error is more serious</strong> (but less critical than medical devices)</p>
+<ul>
+<li><strong>Type I error:</strong> Unnecessary recalls/production stops → Costly</li>
+<li><strong>Type II error:</strong> Defective toys reach children → Safety risk, liability, reputation damage, potential regulatory action</li>
+</ul>
+<p><strong>Decision:</strong> Use standard or slightly higher <span class="math inline">\(\alpha\)</span> (0.05-0.10). Safety-critical but consequences less severe than medical devices.</p>
+<p><strong>c) Car manufacturer:</strong></p>
+<p><strong>Type II error is more serious</strong> (missing safety-critical defects)</p>
+<ul>
+<li><strong>Type I error:</strong> Unnecessary production halts → Very expensive but safer</li>
+<li><strong>Type II error:</strong> Safety defects in vehicles → Potential accidents, deaths, massive recalls, legal liability, brand damage</li>
+</ul>
+<p><strong>Decision:</strong> Use higher <span class="math inline">\(\alpha\)</span> (0.10) for safety-critical components. Cost of false positives is preferable to risk of defective vehicles.</p>
+<p><strong>General principle:</strong> When safety is at stake, minimize Type II errors (false negatives) even if it means more false positives. When only money is at risk, can balance both error types more evenly based on relative costs.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="practical-questions" class="level3">
+<h3 class="anchored" data-anchor-id="practical-questions">Practical Questions</h3>
+<p><strong>6. Computing Confidence Intervals</strong></p>
+<p>A sample of 64 employees shows:</p>
+<ul>
+<li>Mean productivity: 85 units/day</li>
+<li>Standard deviation: 16 units/day</li>
+</ul>
+<p>Calculate and interpret:</p>
+<ol type="a">
+<li>Standard error</li>
+<li>95% confidence interval for the mean</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>a) Standard error:</strong> <span class="math display">\[SE = \frac{s}{\sqrt{n}} = \frac{16}{\sqrt{64}} = \frac{16}{8} = 2 \text{ units/day}\]</span></p>
+<p><strong>b) 95% confidence interval:</strong></p>
+<p>First, find critical value: <span class="math inline">\(t_{63, 0.975} \approx 2.00\)</span> (with <span class="math inline">\(df = 63\)</span>)</p>
+<p>Margin of error: <span class="math inline">\(ME = t^* \times SE = 2.00 \times 2 = 4\)</span> units/day</p>
+<p>Confidence interval: <span class="math inline">\(85 \pm 4 = [81, 89]\)</span> units/day</p>
+<p><strong>Interpretation:</strong> “Using a procedure that works 95% of the time, we estimate that the true average productivity for all employees is between 81 and 89 units per day. The margin of error is ±4 units/day.”</p>
+<p><strong>Practical meaning:</strong> If company targets are based on 80 units/day, we can be quite confident (since even the lower bound is 81) that average productivity exceeds this target.</p>
+</div>
+</div>
+</div>
+<p><strong>7. Hypothesis Test</strong></p>
+<p>A coffee shop claims average service time is 3 minutes. You observe 36 customers:</p>
+<ul>
+<li>Sample mean: 3.5 minutes</li>
+<li>Sample SD: 1.2 minutes</li>
+</ul>
+<ol type="a">
+<li>State appropriate hypotheses (two-sided)</li>
+<li>Calculate the test statistic</li>
+<li>Would you reject <span class="math inline">\(H_0\)</span> at <span class="math inline">\(\alpha = 0.05\)</span>? (Critical value: <span class="math inline">\(t_{35} = 2.03\)</span>)</li>
+<li>What’s your business conclusion?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>a) Hypotheses:</strong> - <span class="math inline">\(H_0: \mu = 3\)</span> (claimed service time is correct) - <span class="math inline">\(H_1: \mu \neq 3\)</span> (actual service time differs from claim)</p>
+<p><strong>b) Test statistic:</strong> <span class="math display">\[t = \frac{\bar{x} - \mu_0}{s/\sqrt{n}} = \frac{3.5 - 3.0}{1.2/\sqrt{36}} = \frac{0.5}{0.2} = 2.5\]</span></p>
+<p><strong>c) Decision:</strong> <span class="math inline">\(|t| = 2.5 &gt; 2.03\)</span> (critical value), so <strong>reject <span class="math inline">\(H_0\)</span></strong></p>
+<p>Alternatively, for two-sided test: <span class="math inline">\(p\)</span>-value <span class="math inline">\(= 2 \times P(T &gt; 2.5) \approx 0.017 &lt; 0.05\)</span></p>
+<p><strong>d) Business conclusion:</strong> “There is statistically significant evidence (<span class="math inline">\(p \approx 0.017\)</span>) that actual service times differ from the claimed 3 minutes. The sample suggests service times average 3.5 minutes—about 30 seconds longer than claimed.</p>
+<p><strong>Recommendation:</strong> The coffee shop should either:</p>
+<ol type="1">
+<li>Update their claim to reflect reality (3.5 minutes)</li>
+<li>Investigate why service takes longer than expected</li>
+<li>Implement changes to reduce service time to meet the 3-minute target</li>
+</ol>
+<p>A 95% CI would be approximately [3.1, 3.9] minutes, suggesting the true average is at least 3.1 minutes—still notably above the claim.”</p>
+</div>
+</div>
+</div>
+<p><strong>8. Two-Sample Comparison</strong></p>
+<p>You compare two training methods:</p>
+<ul>
+<li>Method A: <span class="math inline">\(n = 40\)</span>, mean = 78, SD = 12</li>
+<li>Method B: <span class="math inline">\(n = 40\)</span>, mean = 82, SD = 12</li>
+</ul>
+<p>The 95% CI for the difference (B - A) is [-1, 9].</p>
+<ol type="a">
+<li>What does this interval tell you about statistical significance?</li>
+<li>If training costs are similar, which method should you use?</li>
+<li>What additional information would help your decision?</li>
+</ol>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>a) Statistical significance:</strong> The confidence interval [-1, 9] <strong>includes zero</strong>, which means the difference is <strong>not statistically significant</strong> at <span class="math inline">\(\alpha = 0.05\)</span> level. We cannot confidently say Method B is better than Method A based on this data alone.</p>
+<p><strong>Interpretation:</strong> The true difference could plausibly be anywhere from -1 (Method A slightly better) to +9 (Method B notably better). Zero difference is within this range.</p>
+<p><strong>b) Which method to use:</strong> Given similar costs, there are two reasonable approaches:</p>
+<ol type="1">
+<li><p><strong>Conservative approach:</strong> Use Method A (current standard) since we haven’t proven B is better. Don’t change without clear evidence.</p></li>
+<li><p><strong>Optimistic approach:</strong> Use Method B since the point estimate suggests it’s 4 points better, and the worst plausible scenario (lower CI bound = -1) shows minimal downside risk.</p></li>
+</ol>
+<p><strong>Practical recommendation:</strong> Since the confidence interval is mostly positive [only extends slightly negative], and point estimate favors B, Method B is reasonable to try—especially given similar costs and limited downside risk.</p>
+<p><strong>c) Additional helpful information:</strong></p>
+<ol type="1">
+<li><strong>Sample size justification:</strong> Can we collect more data? With <span class="math inline">\(n = 40\)</span> per group, power might be too low to detect meaningful differences</li>
+<li><strong>Effect size context:</strong> Is a 4-point improvement meaningful for business outcomes? What do these scores represent?</li>
+<li><strong>Cost details:</strong> Are there hidden costs (time, implementation, disruption)?</li>
+<li><strong>Practical constraints:</strong> Implementation difficulty, scalability, employee preferences</li>
+<li><strong>Secondary outcomes:</strong> Do methods differ on other important metrics (retention, engagement, long-term learning)?</li>
+<li><strong>Variance in effects:</strong> Do some employee subgroups benefit more from one method?</li>
+</ol>
+<p><strong>Power consideration:</strong> With SD = 12 and <span class="math inline">\(n = 40\)</span> per group, this study may have had only ~40% power to detect a 4-point difference. More data could clarify the picture.</p>
+</div>
+</div>
+</div>
+<hr>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Your Feedback Matters
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This recap session is designed to be maximally useful for your learning. If you find sections confusing, would like more examples on specific topics, or have suggestions for improvement, please share your feedback. The goal is to make these concepts accessible and practical for your work in management and business.</p>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2025, Claudius Gräbner-Radkowitsch</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
