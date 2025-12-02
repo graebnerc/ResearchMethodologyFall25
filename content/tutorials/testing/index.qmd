@@ -49,6 +49,8 @@ library(tidyr)
 library(ggplot2)
 library(ggpubr)
 library(latex2exp)
+library(moderndive)
+library(DataScienceExercises)
 library(kableExtra)
 ```
 
@@ -228,7 +230,7 @@ If I tell you "average customer satisfaction is 7.5/10 based on my sample," you 
 - How variable were the responses?
 - What's the plausible range for the true population mean?
 
-This is where hypothesis testing and confidence intervals come in. They both use the sampling distribution to quantify uncertainty in principled ways.
+This is where **hypothesis testing** and **confidence intervals** come in. They both use the sampling distribution to quantify uncertainty in principled ways.
 
 ---
 
@@ -259,27 +261,26 @@ Imagine you're a marketing manager who surveyed 100 customers about monthly spen
 ::: {.callout-important}
 ## Speaking Correctly About Confidence Intervals
 
-The correct interpretation of confidence intervals is surprisingly subtle. Here are the right and wrong ways to talk about them:
-
 **❌ INCORRECT formulations:**
 
 - "There's a 95% probability that $\mu$ is between 240 EUR and 260 EUR"
-- "I'm 95% confident that $\mu$ is between 240 EUR and 260 EUR"
 - "We can be 95% certain that $\mu$ is between 240 EUR and 260 EUR"
 
-**Why these are wrong:** Once you've calculated a specific interval from your data, the true parameter $\mu$ either is or isn't in that interval (probability = 1 or 0). The parameter is fixed, not random; the *interval* is what's random (it varies from sample to sample).
+**Why these are wrong:** Once you've calculated a specific interval from your data, the true parameter $\mu$ either is or isn't in that interval (probability = 1 or 0). The parameter is fixed, not random; the *interval* is what's random (it varies from sample to sample). These phrasings incorrectly suggest we're making probability statements about the parameter itself.
 
 **✅ CORRECT formulations:**
 
-- "The interval 240 EUR to 260 EUR was constructed using a procedure that captures the true parameter in 95% of samples"
-- "If we repeated this sampling process many times, approximately 95% of the resulting intervals would contain $\mu$."
+- "The interval [240 EUR, 260 EUR] was constructed using a procedure that captures the true parameter in 95% of samples"
+- "If we repeated this sampling process many times, approximately 95% of the resulting intervals would contain $\mu$"
 - "This interval was calculated using a method with a 95% success rate"
 
-**Acceptable shorthand (with caveats):**
+**Acceptable shorthand (with important caveats):**
 
 - "We are 95% confident the true mean is between 240 EUR and 260 EUR"
 
-This phrasing is widely used and generally accepted in practice, but it's somewhat imprecise. The word "confident" here refers to confidence in the *procedure*, not subjective certainty about this particular interval. If you use this shorthand, be aware that it's a convention that technically conflates procedure-level properties with interval-level statements.
+This phrasing is widely used and generally accepted in practice, but it's imprecise. The word "confident" here should be understood as shorthand for "confident in the procedure that generated this interval," not as subjective certainty about this particular interval. 
+
+**The subtle but crucial distinction:** This shorthand is acceptable because "confident" (unlike "probability" or "certain") can refer to trust in a method rather than a claim about the parameter. However, it's easily misunderstood, so use it carefully.
 
 **Best practice:** When precision matters (academic writing, technical reports), use the explicit formulation about the procedure. In business contexts, the shorthand is acceptable if your audience understands it refers to the method's reliability.
 :::
@@ -309,11 +310,119 @@ When we construct a confidence interval, we need to account for sampling variabi
 
 From the sampling lecture, you know that the Central Limit Theorem tells us the sampling distribution of $\bar{x}$ is approximately normal. If we *knew* the true population standard deviation $\sigma$, we could use the standard normal distribution (also called $z$-distribution) for our critical values.
 
-However, in practice we almost never know $\sigma$v-vwe estimate it with our sample standard deviation $s$. This estimation adds extra uncertainty. The **t-distribution** accounts for this additional uncertainty:
+However, in practice we almost never know $\sigma$ but we estimate it with our sample standard deviation $s$. This estimation adds extra uncertainty. The **t-distribution** accounts for this additional uncertainty:
 
 - When $n$ is small, $s$ is an imprecise estimate of $\sigma$ $\rightarrow$ $t$-distribution has heavier tails than normal
 - When $n$ is large, $s$ becomes a good estimate of $\sigma$ $\rightarrow$ $t$-distribution approaches the normal distribution
-- The $t$-distribution has a parameter called **degrees of freedom** (df = $n-1$) that controls how close it is to normal
+- The $t$-distribution has a parameter called **degrees of freedom** (df = $n-1$) that controls how close it is to normal:
+
+```{r}
+
+blue_col <- "#00395B"
+red_col <- "#e65032"
+grey_col <- "#6F6F6F"
+
+# Create data for plotting
+x <- seq(-4, 4, length.out = 1000)
+
+# Plot 1: Small n (df = 2)
+df_small <- 2
+data_small <- data.frame(
+  x = x,
+  t_dist = dt(x, df = df_small),
+  normal = dnorm(x)
+)
+
+p1 <- ggplot(data_small, aes(x = x)) +
+  geom_line(aes(y = t_dist, color = "t-distribution"), linewidth = 1) +
+  geom_line(aes(y = normal, color = "Normal"), linewidth = 1, linetype = "dashed") +
+  scale_color_manual(values = c("t-distribution" = red_col, "Normal" = blue_col)) +
+  labs(
+    title = "Small n (df = 2)",
+    subtitle = "Heavy tails: s is imprecise",
+    x = NULL,
+    y = "Density"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    plot.title = element_text(face = "bold", size = 12),
+    plot.subtitle = element_text(size = 10, color = grey_col)
+  ) +
+  ylim(0, 0.45)
+
+# Plot 2: Medium n (df = 10)
+df_medium <- 10
+data_medium <- data.frame(
+  x = x,
+  t_dist = dt(x, df = df_medium),
+  normal = dnorm(x)
+)
+
+p2 <- ggplot(data_medium, aes(x = x)) +
+  geom_line(aes(y = t_dist, color = "t-distribution"), linewidth = 1) +
+  geom_line(aes(y = normal, color = "Normal"), linewidth = 1, linetype = "dashed") +
+  scale_color_manual(values = c("t-distribution" = red_col, "Normal" = blue_col)) +
+  labs(
+    title = "Medium n (df = 10)",
+    subtitle = "Approaching normal",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    plot.title = element_text(face = "bold", size = 12),
+    plot.subtitle = element_text(size = 10, color = grey_col)
+  ) +
+  ylim(0, 0.45)
+
+# Plot 3: Large n (df = 30)
+df_large <- 30
+data_large <- data.frame(
+  x = x,
+  t_dist = dt(x, df = df_large),
+  normal = dnorm(x)
+)
+
+p3 <- ggplot(data_large, aes(x = x)) +
+  geom_line(aes(y = t_dist, color = "t-distribution"), linewidth = 1) +
+  geom_line(aes(y = normal, color = "Normal"), linewidth = 1, linetype = "dashed") +
+  scale_color_manual(values = c("t-distribution" = red_col, "Normal" = blue_col)) +
+  labs(
+    title = "Large n (df = 30)",
+    subtitle = "Nearly identical: s ≈ σ",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    plot.title = element_text(face = "bold", size = 12),
+    plot.subtitle = element_text(size = 10, color = grey_col)
+  ) +
+  ylim(0, 0.45)
+
+# Combine plots
+combined_plot <- ggarrange(p1, p2, p3, 
+                           ncol = 3, 
+                           common.legend = TRUE, 
+                           legend = "bottom")
+
+# Add overall title
+annotated_plot <- annotate_figure(
+  combined_plot,
+  top = text_grob("The t-distribution and the Normal", 
+                  face = "bold", size = 14)
+)
+
+# Display the plot
+print(annotated_plot)
+```
+
 
 **For confidence intervals:**
 
@@ -641,15 +750,15 @@ Think of hypothesis testing like a trial:
 
 **Crucial point:** "Not proven guilty" ≠ "innocent"
 
-- Similarly, "fail to reject $H_0$" ≠ "$H_0$ is true"
+- Similarly, "fail to reject $H_0 \neq H_0$ is true"
 - It only means we don't have strong enough evidence against it
 
 #### Example: Testing a Business Claim
 
 A coffee shop claims their average service time is 3 minutes. You observe 40 customers and find:
 
-- Sample mean: $\bar{x}$ = 3.4 minutes  
-- Sample SD: s = 0.8 minutes
+- Sample mean: $\bar{x} = 3.4$ minutes  
+- Sample SD: $s = 0.8$ minutes
 
 **Question:** Is the claim of $\mu$ = 3 minutes consistent with your data?
 
@@ -1057,12 +1166,12 @@ result
 
 **Interpreting output:**
 
-- **t-statistic:** $-1.77$ (sample mean is $1.77 SE$ below claimed value)
-- **p-value:** $0.083$ (if $\mu = 85$, we'd see this difference 8.3% of the time)
+- **t-statistic:** `r round(result$statistic, 2)` (sample mean is `r round(result$statistic, 2)` $SE$ below claimed value)
+- **p-value:** `r round(result$p.value, 3)` (if $\mu = 85$, we'd see this difference in `r round(result$p.value * 100, 1)`% cases)
 - **Decision:** At $\alpha = 0.05$, fail to reject $H_0$ (insufficient evidence)
-- **95% CI:** [78.6, 85.4] (notice that 85 is inside the interval)
+- **95% CI:** [`r round(result$conf.int[1], 1)`, `r round(result$conf.int[2], 1)`] (notice that 85 is inside the interval)
 
-**Business interpretation:** "While the sample mean (82) is lower than the claimed value (85), the difference isn't statistically significant at the 5% level. We don't have strong evidence that the true productivity differs from 85 units/day. However, the result is borderline ($p = 0.083$), suggesting we might want to collect more data or investigate further."
+**Business interpretation:** "While the sample mean (`r round(mean(productivity), 1)`) is lower than the claimed value (85), the difference isn't statistically significant at the 5% level. We don't have strong evidence that the true productivity differs from 85 units/day. However, the $p$-value is small ($p = $ `r round(result$p.value, 3)`), suggesting we might want to collect more data or investigate further."
 
 #### Two-Sample t-test
 
@@ -1085,7 +1194,7 @@ Control group (no email) vs. Treatment group (email campaign):
 # Simulate data
 set.seed(456)
 control <- rnorm(100, mean = 45, sd = 15)
-treatment <- rnorm(100, mean = 52, sd = 15)
+treatment <- rnorm(100, mean = 55.5, sd = 15)
 
 # Perform two-sample t-test
 result <- t.test(treatment, control, 
@@ -1096,12 +1205,13 @@ result
 
 **Interpreting output:**
 
-- **t-statistic:** 3.30 (treatment mean is 3.30 SE higher than control)
-- **p-value:** 0.0006 (very strong evidence)
+- **t-statistic:** `r round(result$statistic, 2)` (sample mean is `r round(result$statistic, 2)` $SE$ below claimed value)
+- **p-value:** `r round(result$p.value, 3)` (if $\mu = 85$, we'd see this difference in `r round(result$p.value * 100, 1)`% cases)
 - **Decision:** Reject $H_0$ (treatment effect is real)
-- **95% CI:** [3.2, Inf] (one-sided, so only lower bound)
+- **95% CI:** [`r round(result$conf.int[1], 1)`, Inf]  (one-sided, so only lower bound)
 
-**Business interpretation:** "Customers who received the email campaign spent significantly more (mean = €52) than those who didn't (mean = 45 EUR). The difference of 7 EUR is statistically significant ($p < 0.001$), suggesting the campaign was effective. The 95% confidence interval suggests the true effect is at least 3.2 EUR."
+
+**Business interpretation:** "Customers who received the email campaign spent significantly more (mean: `r round(mean(treatment), 1)` EUR) than those who didn't (mean: `r round(mean(control), 1)` EUR)). The difference of `r round(mean(treatment), 1) - round(mean(control), 1)` EUR is statistically significant ($p < 0.001$), suggesting the campaign was effective. The 95% confidence interval suggests the true effect is at least `r round(result$conf.int[1], 2)` EUR."
 
 #### Important Variations
 
@@ -1123,7 +1233,7 @@ t.test(after, before, paired = TRUE)
 - `var.equal = FALSE` (default): Welch's test, doesn't assume equal variances (safer)
 - `var.equal = TRUE`: Student's t-test, assumes equal variances (slightly more powerful if true)
 
-**When in doubt:** Use Welch's (var.equal = FALSE) - it's more robust
+**When in doubt:** Use Welch's (`var.equal = FALSE`) - it's more robust
 
 ### 3.6 Connection to Regression (Preview for regression lecture)
 
@@ -1133,11 +1243,15 @@ Everything you've learned about hypothesis testing directly applies to regressio
 
 From your the beer consumption example from the lecture:
 
+```{r}
+#| echo: false
+beer_data <- DataScienceExercises::beer
+lm_obj <- lm(formula = consumption ~ price, data = beer_data)
+get_regression_table(lm_obj) |> 
+  select(term, estimate, std_error, statistic, p_value) |> 
+  kable()
 ```
-term        estimate  std_error  statistic  p_value
-intercept   86.4      4.32       20.0       0.000
-price       -9.84     1.38       -7.15      0.000
-```
+
 
 **What's being tested?**
 
@@ -1168,72 +1282,99 @@ With very large samples, even tiny, meaningless effects become statistically sig
 
 **Example:** Website A/B Test
 
-A company tests two website designs with 100,000 users each:
+Imagine a large e‑commerce platform selling a popular gadget for 50 EUR.
+Management wants to test increasing the price to 50.10 EUR (a 0.2% increase) and runs an A/B test: half the visitors see 50 EUR, half see 50.10 EUR.​
 
-- Design A: 2.01% conversion rate (2,010 conversions)
-- Design B: 2.03% conversion rate (2,030 conversions)  
-- Difference: 0.02 percentage points (20 additional conversions)
+- Control group (50 EUR): conversion rate = 5.00%
+- Treatment group (50.10 EUR): conversion rate = 4.90%
 
-```{r}
-#| echo: true
+The absolute difference in conversion is only 0.02 percentage points, which is economically negligible: revenue per visitor stays almost identical, and the 10‑cent higher price barely changes total profit once marketing and operating costs are considered.​
 
-# Two-proportion test
-prop.test(x = c(2010, 2030), n = c(100000, 100000))
-```
+Now assume the platform has 5 million visitors in each group during the test.
+With 5,000,000 visitors per variant, the standard error of the difference in proportions becomes extremely small, so a tiny difference in conversion rate is enough to produce a very large z‑statistic and a p‑value far below 0.001:
 
-**Result:** $p < 0.001$ (highly statistically significant!)
+- **Statistically**: the null "no difference in conversion" is rejected with overwhelming significance because, with such huge $n$, even tiny deviations from equality are detected.
 
-**But ask yourself:**
+- **Practically**: the effect size (difference in conversion and impact on profit per visitor) is essentially zero, so changing the price by 0.10 EUR has no meaningful business impact.
 
-- Does a 0.02% improvement justify redesign costs?
-- Implementation time?
-- Risk of unforeseen issues?
-- Employee retraining?
+::: {.callout-note collapse="true"}
+## Simulation example: large $n$
 
-If redesign costs are 50,000 EUR and each conversion generates 10 EUR profit:
-
-- Additional profit: 20 conversions × 10 EUR = 200 EUR per 100,000 users
-- This is tiny compared to implementation costs!
-
-**Conclusion:** Statistically significant but practically worthless.
-
-#### The Problem with Small Samples
-
-Conversely, with small samples, even large, important effects may not reach statistical significance:
-
-**Example:** New Training Program
-
-A company pilots a productivity training program with 10 employees:
-
-- Before training: 75 units/day (average)
-- After training: 90 units/day (average)
-- Improvement: 15 units/day (20% increase!)
 
 ```{r}
-#| echo: true
+set.seed(123)
 
-# Simulate small sample
-set.seed(789)
-before <- rnorm(10, mean = 75, sd = 20)
-after <- before + rnorm(10, mean = 15, sd = 10)  # each person improves
+# Parameters
+p_control   <- 0.0500   # 5.00% conversion
+p_treatment <- 0.0490   # 4.90% conversion
+n_per_group <- 5e6      # 5,000,000 visitors per variant
 
-# Paired t-test
-t.test(after, before, paired = TRUE)
+# Simulate conversions (Bernoulli)
+control_conv   <- rbinom(1, size = n_per_group, prob = p_control)
+treatment_conv <- rbinom(1, size = n_per_group, prob = p_treatment)
+
+# Observed conversion rates
+control_rate   <- control_conv   / n_per_group
+treatment_rate <- treatment_conv / n_per_group
+
+c(control_rate = control_rate,
+  treatment_rate = treatment_rate,
+  diff = treatment_rate - control_rate)
+
+# Two-sample proportion test (approximate z-test)
+test_large <- prop.test(
+  x    = c(control_conv, treatment_conv),
+  n    = c(n_per_group, n_per_group),
+  correct = FALSE
+)
+
+test_large$p.value
+test_large
+
 ```
+:::
 
-**Result:** $p = 0.09$ (not statistically significant at $\alpha = 0.05$)
+::: {.callout-note collapse="true"}
+## Alternative example: small $n$
 
-**But the effect is huge!** 20% productivity improvement would be extremely valuable company-wide.
 
-**What went wrong?** Small sample ($n = 10$) + high variability = low power to detect effects
+```{r}
+set.seed(123)
 
-**Business decision:** Don't abandon the program! Instead:
+# Parameters
+p_control   <- 0.0500   # 5.00% conversion
+p_treatment <- 0.0490   # 4.90% conversion
+n_per_group <- 500      # 500 visitors per variant
 
-- Expand the pilot to get more data
-- Calculate ROI: if training costs 500 EUR/person and generates 5,000 EUR in productivity gains, it's worth it regardless of $p$-value
-- Focus on effect size and confidence interval, not just significance
+# Simulate conversions (Bernoulli)
+control_conv   <- rbinom(1, size = n_per_group, prob = p_control)
+treatment_conv <- rbinom(1, size = n_per_group, prob = p_treatment)
 
-There are tools to standardize effect sizes to make them easier comparable, such as Cohen's d. 
+# Observed conversion rates
+control_rate   <- control_conv   / n_per_group
+treatment_rate <- treatment_conv / n_per_group
+
+c(control_rate = control_rate,
+  treatment_rate = treatment_rate,
+  diff = treatment_rate - control_rate)
+
+# Two-sample proportion test (approximate z-test)
+test_large <- prop.test(
+  x    = c(control_conv, treatment_conv),
+  n    = c(n_per_group, n_per_group),
+  correct = FALSE
+)
+
+test_large$p.value
+test_large
+
+```
+:::
+
+
+Conversely, with small samples, even large, important effects may not reach statistical significance!
+
+> There are tools to standardize effect sizes to make them easier comparable, such as Cohen's d. 
 We will learn more about these tools in the lecture on analyzing experimental data!
 
 
@@ -1530,6 +1671,12 @@ Explain your reasoning.
 
 ::: {.callout-tip collapse="true"}
 ## Answer
+
+**First, let's clarify what each error means in this context:**
+
+With $H_0$: Quality meets standards and $H_1$: Quality below standards:
+- **Type I error:** Concluding quality is below standards when it actually meets them (false alarm)
+- **Type II error:** Concluding quality meets standards when it's actually below them (missed defect)
 
 **a) Medical device manufacturer:**
 
