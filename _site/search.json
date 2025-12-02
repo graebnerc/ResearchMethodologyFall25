@@ -326,7 +326,7 @@
     "href": "content/tutorials/testing/index.html",
     "title": "Hypothesis Testing and Confidence Intervals",
     "section": "",
-    "text": "Packages used for R examples\nlibrary(dplyr)\nlibrary(tidyr)\nlibrary(ggplot2)\nlibrary(ggpubr)\nlibrary(latex2exp)\nlibrary(kableExtra)"
+    "text": "Packages used for R examples\nlibrary(dplyr)\nlibrary(tidyr)\nlibrary(ggplot2)\nlibrary(ggpubr)\nlibrary(latex2exp)\nlibrary(moderndive)\nlibrary(DataScienceExercises)\nlibrary(kableExtra)"
   },
   {
     "objectID": "content/tutorials/testing/index.html#introduction-from-sampling-to-inference",
@@ -347,21 +347,21 @@
     "href": "content/tutorials/testing/index.html#confidence-intervals-quantifying-uncertainty",
     "title": "Hypothesis Testing and Confidence Intervals",
     "section": "2. Confidence Intervals: Quantifying Uncertainty",
-    "text": "2. Confidence Intervals: Quantifying Uncertainty\n\n2.1 The Concept\nImagine you’re a marketing manager who surveyed 100 customers about monthly spending. Your sample shows:\n\nSample mean: \\(\\bar{x}\\) = 250 EUR\nSample standard deviation: \\(s = 50\\) EUR\nSample size: \\(n=100\\)\n\nQuestion: What’s the true average spending for all customers (\\(\\mu\\))?\nNaive answer: “250 EUR”\n\nJust reports the point estimate, no information about uncertainty involved in the sample process\n\nBetter answer: “Somewhere between 240 EUR and 260 EUR”\n\nReports a range; from the size of the range we can get information about the sampling uncertainty\n\nBest answer: “Based on a method that works 95% of the time, I can say that the true average lies in the interval between 240.2 and 259.8 EUR.”\n\nThis range is called a confidence interval (CI), and it’s one of the most important tools in statistics for communicating uncertainty.\n\n\n\n\n\n\n\nImportantSpeaking Correctly About Confidence Intervals\n\n\n\nThe correct interpretation of confidence intervals is surprisingly subtle. Here are the right and wrong ways to talk about them:\n❌ INCORRECT formulations:\n\n“There’s a 95% probability that \\(\\mu\\) is between 240 EUR and 260 EUR”\n“I’m 95% confident that \\(\\mu\\) is between 240 EUR and 260 EUR”\n“We can be 95% certain that \\(\\mu\\) is between 240 EUR and 260 EUR”\n\nWhy these are wrong: Once you’ve calculated a specific interval from your data, the true parameter \\(\\mu\\) either is or isn’t in that interval (probability = 1 or 0). The parameter is fixed, not random; the interval is what’s random (it varies from sample to sample).\n✅ CORRECT formulations:\n\n“The interval 240 EUR to 260 EUR was constructed using a procedure that captures the true parameter in 95% of samples”\n“If we repeated this sampling process many times, approximately 95% of the resulting intervals would contain \\(\\mu\\).”\n“This interval was calculated using a method with a 95% success rate”\n\nAcceptable shorthand (with caveats):\n\n“We are 95% confident the true mean is between 240 EUR and 260 EUR”\n\nThis phrasing is widely used and generally accepted in practice, but it’s somewhat imprecise. The word “confident” here refers to confidence in the procedure, not subjective certainty about this particular interval. If you use this shorthand, be aware that it’s a convention that technically conflates procedure-level properties with interval-level statements.\nBest practice: When precision matters (academic writing, technical reports), use the explicit formulation about the procedure. In business contexts, the shorthand is acceptable if your audience understands it refers to the method’s reliability.\n\n\n\n\n2.2 What is a Confidence Interval?\nA confidence interval is a range of values that is likely to contain the true population parameter, constructed using sample data and a specified confidence level.\nGeneral form for a mean:\n\\[\\text{CI} = \\bar{x} \\pm t^* \\cdot SE\\]\nwhere:\n\n\\(\\bar{x}\\): sample mean (point estimate)\n\\(t^*\\): critical value from t-distribution (depends on confidence level and sample size; more details below)\n\\(SE = \\frac{s}{\\sqrt{n}}\\): standard error\n\n\n\n\n\n\n\nNoteUnderstanding Critical Values and the t-Distribution\n\n\n\n\n\nWhen we construct a confidence interval, we need to account for sampling variability. The critical value (\\(t^*\\)) tells us how many standard errors to extend on either side of our sample mean to achieve our desired confidence level.\nWhy the t-distribution?\nFrom the sampling lecture, you know that the Central Limit Theorem tells us the sampling distribution of \\(\\bar{x}\\) is approximately normal. If we knew the true population standard deviation \\(\\sigma\\), we could use the standard normal distribution (also called \\(z\\)-distribution) for our critical values.\nHowever, in practice we almost never know \\(\\sigma\\)v-vwe estimate it with our sample standard deviation \\(s\\). This estimation adds extra uncertainty. The t-distribution accounts for this additional uncertainty:\n\nWhen \\(n\\) is small, \\(s\\) is an imprecise estimate of \\(\\sigma\\) \\(\\rightarrow\\) \\(t\\)-distribution has heavier tails than normal\nWhen \\(n\\) is large, \\(s\\) becomes a good estimate of \\(\\sigma\\) \\(\\rightarrow\\) \\(t\\)-distribution approaches the normal distribution\nThe \\(t\\)-distribution has a parameter called degrees of freedom (df = \\(n-1\\)) that controls how close it is to normal\n\nFor confidence intervals:\n\nFor a 95% CI, we want to capture the middle 95% of the sampling distribution\nThis leaves 2.5% in each tail (5% total)\nThe critical value \\(t^*\\) marks the boundary points for these tails\nIn R: qt(0.975, df = n-1) gives us \\(t^*\\) for a 95% CI (0.975 because we want the 97.5th percentile, leaving 2.5% in the upper tail)\n\nThe critical value depends on:\n\nConfidence level: Higher confidence \\(\\rightarrow\\) larger \\(t^*\\) \\(\\rightarrow\\) wider interval\nSample size (df): Larger \\(n\\) \\(\\rightarrow\\) smaller \\(t^*\\) \\(\\rightarrow\\) narrower interval (approaches z-value)\n\n\n\n\nFor our customer spending example:\n\n\nShow R code\n# Sample data\nx_bar &lt;- 250  # sample mean\ns &lt;- 50       # sample standard deviation\nn &lt;- 100      # sample size\n\n# Calculate standard error\nse &lt;- s / sqrt(n)\n\n# Critical value for 95% confidence (df = n-1 = 99)\nt_star &lt;- qt(0.975, df = 99)  # 0.975 because two-tailed\n\n# Margin of error\nmargin_of_error &lt;- t_star * se\n\n# Confidence interval\nci_lower &lt;- x_bar - margin_of_error\nci_upper &lt;- x_bar + margin_of_error\n\n# Display results\nci_results &lt;- data.frame(\n  Statistic = c(\"Standard Error\", \"Critical Value (t*)\", \"Margin of Error\", \n                \"Lower Bound\", \"Upper Bound\"),\n  Value = c(se, t_star, margin_of_error, ci_lower, ci_upper)\n)\nknitr::kable(ci_results, digits = 2)\n\n\n\n\n\nStatistic\nValue\n\n\n\n\nStandard Error\n5.00\n\n\nCritical Value (t*)\n1.98\n\n\nMargin of Error\n9.92\n\n\nLower Bound\n240.08\n\n\nUpper Bound\n259.92\n\n\n\n\n\nThe standard error is 5 EUR, and our 95% confidence interval is [240.08 EUR, 259.92 EUR].\nInterpretation: “We are 95% confident that the true average monthly spending for all customers is between 240.08 EUR and 259.92 EUR.”\n\n\n2.3 Understanding “95% Confidence”\nThis is one of the most commonly misunderstood concepts in statistics. Let’s be very precise about what it means and doesn’t mean.\nWhat “95% confidence” DOES mean:\n“If we repeated this sampling process many times and constructed a 95% CI each time using the same procedure, approximately 95% of those intervals would contain the true population parameter.”\nIt’s a statement about the long-run behavior of the procedure, not about any single interval you’ve calculated.\nThe key insight: The randomness is in the sampling process and therefore in which interval you get. The parameter \\(\\mu\\) is fixed (though unknown). Before you draw your sample, the interval you’ll get is random - it has a 95% probability of covering \\(\\mu\\). After you’ve calculated it, that specific interval either covers \\(\\mu\\) or it doesn’t. And the true parameter \\(\\mu\\) is never random!\n\n\n\n\n\n\n\n\n\nIn this simulation, we drew 50 different samples and constructed a 95% CI for each. Notice that:\n\nMost intervals (blue) contain the true mean \\(\\mu\\) = 250\nA few intervals (red) miss it—this is expected!\nAbout 95% capture the true value (47 out of 50 in this simulation)\n\nWhat “95% confidence” DOES NOT mean:\n❌ “There’s a 95% probability that \\(\\mu\\) is in this interval”\n\nNo! Once you’ve calculated a specific interval (say, [240, 260]), the true parameter \\(\\mu\\) is either in it (probability = 1) or not in it (probability = 0)\nThe parameter is fixed; it doesn’t have a probability distribution\nThis would be a Bayesian credible interval, not a frequentist confidence interval\n\n❌ “I’m 95% sure the true value is in this interval”\n\nThis phrasing suggests subjective probability about \\(\\mu\\)\nThe 95% refers to the procedure’s success rate, not your personal certainty\nIf forced to use this language, be clear you mean confidence in the method, not the specific interval\n\n❌ “95% of the data falls in this interval”\n\nNo! The CI is about the population parameter (mean), not individual data points\nFor that, you’d calculate: \\(\\bar{x} \\pm 2s\\) (approximately)\nThese are two completely different concepts\n\n❌ “The interval [240, 260] has a 95% chance of containing \\(\\mu\\)\n\nNo! This specific interval either does or doesn’t contain \\(\\mu\\)\nBefore you calculated it, the random interval you were about to compute had a 95% probability\nAfter calculation, no probability remains - it’s determined (even though you don’t know which)\n\n\n\n2.4 Factors Affecting Interval Width\nThe width of a confidence interval tells us about the precision of our estimate. Narrower is generally better (more precise).\nThree factors determine width:\n1. Sample size (n): - Larger \\(n\\) \\(\\rightarrow\\) smaller \\(SE\\) \\(\\rightarrow\\) narrower \\(CI\\) - Precision improves with \\(\\sqrt{n}\\) (doubling \\(n\\) doesn’t double precision)\n\n\nShow R code\n# Compare CI width for different sample sizes\nsample_sizes &lt;- c(25, 100, 400)\ns &lt;- 50  # keep constant\n\nci_comparison &lt;- data.frame(\n  n = sample_sizes,\n  SE = s / sqrt(sample_sizes),\n  Margin_Error = qt(0.975, sample_sizes - 1) * (s / sqrt(sample_sizes))\n)\n\nknitr::kable(ci_comparison, \n             digits = 2,\n             col.names = c(\"Sample Size\", \"Standard Error (€)\", \"Margin of Error (€)\"))\n\n\n\n\n\nSample Size\nStandard Error (€)\nMargin of Error (€)\n\n\n\n\n25\n10.0\n20.64\n\n\n100\n5.0\n9.92\n\n\n400\n2.5\n4.91\n\n\n\n\n\nNotice how the margin of error decreases as sample size increases: from $$20.64 EUR with \\(n=25\\) to $$4.91 EUR with \\(n=400\\).\n2. Variability (s): - More variable population \\(\\rightarrow\\) larger \\(SE\\) \\(\\rightarrow\\) wider \\(CI\\) - Can’t control this, but larger samples help\n3. Confidence level:\n\nSo far we only talked about the 95% confidence interval\nBut we can increase or decrease the confidence level\nHigher confidence \\(\\rightarrow\\) wider interval\nTrade-off between confidence and precision\n\n\n\nShow R code\n# Compare CI width for different confidence levels\nconfidence_levels &lt;- c(0.90, 0.95, 0.99)\nn &lt;- 100\ns &lt;- 50\n\nconf_comparison &lt;- data.frame(\n  Confidence_Level = paste0(confidence_levels * 100, \"%\"),\n  Alpha = 1 - confidence_levels,\n  Critical_Value = qt(1 - (1 - confidence_levels)/2, n-1),\n  Margin_Error = qt(1 - (1 - confidence_levels)/2, n-1) * (s / sqrt(n))\n)\n\nknitr::kable(conf_comparison,\n             digits = 2,\n             col.names = c(\"Confidence Level\", \"α\", \"t*\", \"Margin of Error (€)\"))\n\n\n\n\n\nConfidence Level\nα\nt*\nMargin of Error (€)\n\n\n\n\n90%\n0.10\n1.66\n8.30\n\n\n95%\n0.05\n1.98\n9.92\n\n\n99%\n0.01\n2.63\n13.13\n\n\n\n\n\nThe trade-off is clear: higher confidence requires a wider interval. At 90% confidence, the margin is $$8.3 EUR, while at 99% confidence it increases to $$13.13 EUR. But the gain we have with the 99% confidence interval is that we can be more confident about the interval containing the true parameter…\nKey insight: There’s always a trade-off between confidence and precision. You can be more confident by making the interval wider, but that makes it less informative.\n\n\n2.5 Confidence Intervals in R\nFor a single mean:\n\n\nShow R code\n# Using t.test() function\ncustomer_spending &lt;- c(245, 267, 223, 289, 241, ...)  # your sample data\n\nresult &lt;- t.test(customer_spending, conf.level = 0.95)\nresult$conf.int  # Extract the confidence interval\n\n\nFor a proportion:\n\n\nShow R code\n# Example: conversion rate from sample of 500 customers\n# 125 made a purchase\nprop.test(x = 125, n = 500, conf.level = 0.95)\n\n\nFor regression coefficients (preview for regression lecture):\n\n\nShow R code\n# Confidence intervals are automatically included in regression output\nmodel &lt;- lm(consumption ~ price, data = beer_data)\nconfint(model, level = 0.95)\n\n\n\n\n2.6 Interpreting Confidence Intervals in Business Context\nExample 1: Market Research\nA company surveys 200 potential customers about willingness to pay for a new product.\n\nSample mean: 45 EUR\n95% CI: [42, 48] EUR\n\nGood interpretation: “We’re 95% confident that the average willingness to pay for all potential customers is between 42 and 48 EUR. This suggests a price point around 40-45 EUR would be reasonable.”\nWhy this matters: The interval helps with business decisions:\n\nIf production cost is 40 EUR, the lower bound (42 EUR) still provides margin\nIf cost is 50 EUR, even the upper bound (48 EUR) suggests unprofitability\n\nExample 2: A/B Testing\nAn e-commerce site tests two checkout designs:\n\nDesign A: 100 users, 23 conversions \\(\\rightarrow\\) 23% (95% CI: [15%, 31%])\nDesign B: 100 users, 31 conversions \\(\\rightarrow\\) 31% (95% CI: [22%, 40%])\n\nInterpretation: The intervals overlap substantially. While Design B has a higher point estimate, we can’t confidently say it’s better. The true conversion rates might be equal, or Design A might even be better (both plausible given the overlap).\nBusiness decision: Need more data before making a costly redesign decision.\n\n\n2.7 Preview: Relationship Between Confidence Intervals and Hypothesis Tests\nConfidence intervals and hypothesis tests are two sides of the same coin. They use the same underlying sampling distribution concepts but answer different questions:\n\nHypothesis test: “Is the claim \\(\\mu\\) = 250 compatible with my data?”\nConfidence interval: “What values of \\(\\mu\\) are compatible with my data?”\n\nKey connection: A 95% confidence interval contains all values of \\(\\mu\\) that would NOT be rejected in a two-sided hypothesis test at \\(\\alpha = 0.05\\).\n\n\n\n\n\n\n\n\n\nThis connection is incredibly useful: you can often “test” hypotheses just by checking whether a claimed value falls inside the confidence interval!"
+    "text": "2. Confidence Intervals: Quantifying Uncertainty\n\n2.1 The Concept\nImagine you’re a marketing manager who surveyed 100 customers about monthly spending. Your sample shows:\n\nSample mean: \\(\\bar{x}\\) = 250 EUR\nSample standard deviation: \\(s = 50\\) EUR\nSample size: \\(n=100\\)\n\nQuestion: What’s the true average spending for all customers (\\(\\mu\\))?\nNaive answer: “250 EUR”\n\nJust reports the point estimate, no information about uncertainty involved in the sample process\n\nBetter answer: “Somewhere between 240 EUR and 260 EUR”\n\nReports a range; from the size of the range we can get information about the sampling uncertainty\n\nBest answer: “Based on a method that works 95% of the time, I can say that the true average lies in the interval between 240.2 and 259.8 EUR.”\n\nThis range is called a confidence interval (CI), and it’s one of the most important tools in statistics for communicating uncertainty.\n\n\n\n\n\n\n\nImportantSpeaking Correctly About Confidence Intervals\n\n\n\n❌ INCORRECT formulations:\n\n“There’s a 95% probability that \\(\\mu\\) is between 240 EUR and 260 EUR”\n“We can be 95% certain that \\(\\mu\\) is between 240 EUR and 260 EUR”\n\nWhy these are wrong: Once you’ve calculated a specific interval from your data, the true parameter \\(\\mu\\) either is or isn’t in that interval (probability = 1 or 0). The parameter is fixed, not random; the interval is what’s random (it varies from sample to sample). These phrasings incorrectly suggest we’re making probability statements about the parameter itself.\n✅ CORRECT formulations:\n\n“The interval [240 EUR, 260 EUR] was constructed using a procedure that captures the true parameter in 95% of samples”\n“If we repeated this sampling process many times, approximately 95% of the resulting intervals would contain \\(\\mu\\)”\n“This interval was calculated using a method with a 95% success rate”\n\nAcceptable shorthand (with important caveats):\n\n“We are 95% confident the true mean is between 240 EUR and 260 EUR”\n\nThis phrasing is widely used and generally accepted in practice, but it’s imprecise. The word “confident” here should be understood as shorthand for “confident in the procedure that generated this interval,” not as subjective certainty about this particular interval.\nThe subtle but crucial distinction: This shorthand is acceptable because “confident” (unlike “probability” or “certain”) can refer to trust in a method rather than a claim about the parameter. However, it’s easily misunderstood, so use it carefully.\nBest practice: When precision matters (academic writing, technical reports), use the explicit formulation about the procedure. In business contexts, the shorthand is acceptable if your audience understands it refers to the method’s reliability.\n\n\n\n\n2.2 What is a Confidence Interval?\nA confidence interval is a range of values that is likely to contain the true population parameter, constructed using sample data and a specified confidence level.\nGeneral form for a mean:\n\\[\\text{CI} = \\bar{x} \\pm t^* \\cdot SE\\]\nwhere:\n\n\\(\\bar{x}\\): sample mean (point estimate)\n\\(t^*\\): critical value from t-distribution (depends on confidence level and sample size; more details below)\n\\(SE = \\frac{s}{\\sqrt{n}}\\): standard error\n\n\n\n\n\n\n\nNoteUnderstanding Critical Values and the t-Distribution\n\n\n\n\n\nWhen we construct a confidence interval, we need to account for sampling variability. The critical value (\\(t^*\\)) tells us how many standard errors to extend on either side of our sample mean to achieve our desired confidence level.\nWhy the t-distribution?\nFrom the sampling lecture, you know that the Central Limit Theorem tells us the sampling distribution of \\(\\bar{x}\\) is approximately normal. If we knew the true population standard deviation \\(\\sigma\\), we could use the standard normal distribution (also called \\(z\\)-distribution) for our critical values.\nHowever, in practice we almost never know \\(\\sigma\\) but we estimate it with our sample standard deviation \\(s\\). This estimation adds extra uncertainty. The t-distribution accounts for this additional uncertainty:\n\nWhen \\(n\\) is small, \\(s\\) is an imprecise estimate of \\(\\sigma\\) \\(\\rightarrow\\) \\(t\\)-distribution has heavier tails than normal\nWhen \\(n\\) is large, \\(s\\) becomes a good estimate of \\(\\sigma\\) \\(\\rightarrow\\) \\(t\\)-distribution approaches the normal distribution\nThe \\(t\\)-distribution has a parameter called degrees of freedom (df = \\(n-1\\)) that controls how close it is to normal:\n\n\n\nShow R code\nblue_col &lt;- \"#00395B\"\nred_col &lt;- \"#e65032\"\ngrey_col &lt;- \"#6F6F6F\"\n\n# Create data for plotting\nx &lt;- seq(-4, 4, length.out = 1000)\n\n# Plot 1: Small n (df = 2)\ndf_small &lt;- 2\ndata_small &lt;- data.frame(\n  x = x,\n  t_dist = dt(x, df = df_small),\n  normal = dnorm(x)\n)\n\np1 &lt;- ggplot(data_small, aes(x = x)) +\n  geom_line(aes(y = t_dist, color = \"t-distribution\"), linewidth = 1) +\n  geom_line(aes(y = normal, color = \"Normal\"), linewidth = 1, linetype = \"dashed\") +\n  scale_color_manual(values = c(\"t-distribution\" = red_col, \"Normal\" = blue_col)) +\n  labs(\n    title = \"Small n (df = 2)\",\n    subtitle = \"Heavy tails: s is imprecise\",\n    x = NULL,\n    y = \"Density\"\n  ) +\n  theme_minimal() +\n  theme(\n    legend.position = \"bottom\",\n    legend.title = element_blank(),\n    plot.title = element_text(face = \"bold\", size = 12),\n    plot.subtitle = element_text(size = 10, color = grey_col)\n  ) +\n  ylim(0, 0.45)\n\n# Plot 2: Medium n (df = 10)\ndf_medium &lt;- 10\ndata_medium &lt;- data.frame(\n  x = x,\n  t_dist = dt(x, df = df_medium),\n  normal = dnorm(x)\n)\n\np2 &lt;- ggplot(data_medium, aes(x = x)) +\n  geom_line(aes(y = t_dist, color = \"t-distribution\"), linewidth = 1) +\n  geom_line(aes(y = normal, color = \"Normal\"), linewidth = 1, linetype = \"dashed\") +\n  scale_color_manual(values = c(\"t-distribution\" = red_col, \"Normal\" = blue_col)) +\n  labs(\n    title = \"Medium n (df = 10)\",\n    subtitle = \"Approaching normal\",\n    x = NULL,\n    y = NULL\n  ) +\n  theme_minimal() +\n  theme(\n    legend.position = \"bottom\",\n    legend.title = element_blank(),\n    plot.title = element_text(face = \"bold\", size = 12),\n    plot.subtitle = element_text(size = 10, color = grey_col)\n  ) +\n  ylim(0, 0.45)\n\n# Plot 3: Large n (df = 30)\ndf_large &lt;- 30\ndata_large &lt;- data.frame(\n  x = x,\n  t_dist = dt(x, df = df_large),\n  normal = dnorm(x)\n)\n\np3 &lt;- ggplot(data_large, aes(x = x)) +\n  geom_line(aes(y = t_dist, color = \"t-distribution\"), linewidth = 1) +\n  geom_line(aes(y = normal, color = \"Normal\"), linewidth = 1, linetype = \"dashed\") +\n  scale_color_manual(values = c(\"t-distribution\" = red_col, \"Normal\" = blue_col)) +\n  labs(\n    title = \"Large n (df = 30)\",\n    subtitle = \"Nearly identical: s ≈ σ\",\n    x = NULL,\n    y = NULL\n  ) +\n  theme_minimal() +\n  theme(\n    legend.position = \"bottom\",\n    legend.title = element_blank(),\n    plot.title = element_text(face = \"bold\", size = 12),\n    plot.subtitle = element_text(size = 10, color = grey_col)\n  ) +\n  ylim(0, 0.45)\n\n# Combine plots\ncombined_plot &lt;- ggarrange(p1, p2, p3, \n                           ncol = 3, \n                           common.legend = TRUE, \n                           legend = \"bottom\")\n\n# Add overall title\nannotated_plot &lt;- annotate_figure(\n  combined_plot,\n  top = text_grob(\"The t-distribution and the Normal\", \n                  face = \"bold\", size = 14)\n)\n\n# Display the plot\nprint(annotated_plot)\n\n\n\n\n\n\n\n\n\nFor confidence intervals:\n\nFor a 95% CI, we want to capture the middle 95% of the sampling distribution\nThis leaves 2.5% in each tail (5% total)\nThe critical value \\(t^*\\) marks the boundary points for these tails\nIn R: qt(0.975, df = n-1) gives us \\(t^*\\) for a 95% CI (0.975 because we want the 97.5th percentile, leaving 2.5% in the upper tail)\n\nThe critical value depends on:\n\nConfidence level: Higher confidence \\(\\rightarrow\\) larger \\(t^*\\) \\(\\rightarrow\\) wider interval\nSample size (df): Larger \\(n\\) \\(\\rightarrow\\) smaller \\(t^*\\) \\(\\rightarrow\\) narrower interval (approaches z-value)\n\n\n\n\nFor our customer spending example:\n\n\nShow R code\n# Sample data\nx_bar &lt;- 250  # sample mean\ns &lt;- 50       # sample standard deviation\nn &lt;- 100      # sample size\n\n# Calculate standard error\nse &lt;- s / sqrt(n)\n\n# Critical value for 95% confidence (df = n-1 = 99)\nt_star &lt;- qt(0.975, df = 99)  # 0.975 because two-tailed\n\n# Margin of error\nmargin_of_error &lt;- t_star * se\n\n# Confidence interval\nci_lower &lt;- x_bar - margin_of_error\nci_upper &lt;- x_bar + margin_of_error\n\n# Display results\nci_results &lt;- data.frame(\n  Statistic = c(\"Standard Error\", \"Critical Value (t*)\", \"Margin of Error\", \n                \"Lower Bound\", \"Upper Bound\"),\n  Value = c(se, t_star, margin_of_error, ci_lower, ci_upper)\n)\nknitr::kable(ci_results, digits = 2)\n\n\n\n\n\nStatistic\nValue\n\n\n\n\nStandard Error\n5.00\n\n\nCritical Value (t*)\n1.98\n\n\nMargin of Error\n9.92\n\n\nLower Bound\n240.08\n\n\nUpper Bound\n259.92\n\n\n\n\n\nThe standard error is 5 EUR, and our 95% confidence interval is [240.08 EUR, 259.92 EUR].\nInterpretation: “We are 95% confident that the true average monthly spending for all customers is between 240.08 EUR and 259.92 EUR.”\n\n\n2.3 Understanding “95% Confidence”\nThis is one of the most commonly misunderstood concepts in statistics. Let’s be very precise about what it means and doesn’t mean.\nWhat “95% confidence” DOES mean:\n“If we repeated this sampling process many times and constructed a 95% CI each time using the same procedure, approximately 95% of those intervals would contain the true population parameter.”\nIt’s a statement about the long-run behavior of the procedure, not about any single interval you’ve calculated.\nThe key insight: The randomness is in the sampling process and therefore in which interval you get. The parameter \\(\\mu\\) is fixed (though unknown). Before you draw your sample, the interval you’ll get is random - it has a 95% probability of covering \\(\\mu\\). After you’ve calculated it, that specific interval either covers \\(\\mu\\) or it doesn’t. And the true parameter \\(\\mu\\) is never random!\n\n\n\n\n\n\n\n\n\nIn this simulation, we drew 50 different samples and constructed a 95% CI for each. Notice that:\n\nMost intervals (blue) contain the true mean \\(\\mu\\) = 250\nA few intervals (red) miss it—this is expected!\nAbout 95% capture the true value (47 out of 50 in this simulation)\n\nWhat “95% confidence” DOES NOT mean:\n❌ “There’s a 95% probability that \\(\\mu\\) is in this interval”\n\nNo! Once you’ve calculated a specific interval (say, [240, 260]), the true parameter \\(\\mu\\) is either in it (probability = 1) or not in it (probability = 0)\nThe parameter is fixed; it doesn’t have a probability distribution\nThis would be a Bayesian credible interval, not a frequentist confidence interval\n\n❌ “I’m 95% sure the true value is in this interval”\n\nThis phrasing suggests subjective probability about \\(\\mu\\)\nThe 95% refers to the procedure’s success rate, not your personal certainty\nIf forced to use this language, be clear you mean confidence in the method, not the specific interval\n\n❌ “95% of the data falls in this interval”\n\nNo! The CI is about the population parameter (mean), not individual data points\nFor that, you’d calculate: \\(\\bar{x} \\pm 2s\\) (approximately)\nThese are two completely different concepts\n\n❌ “The interval [240, 260] has a 95% chance of containing \\(\\mu\\)\n\nNo! This specific interval either does or doesn’t contain \\(\\mu\\)\nBefore you calculated it, the random interval you were about to compute had a 95% probability\nAfter calculation, no probability remains - it’s determined (even though you don’t know which)\n\n\n\n2.4 Factors Affecting Interval Width\nThe width of a confidence interval tells us about the precision of our estimate. Narrower is generally better (more precise).\nThree factors determine width:\n1. Sample size (n): - Larger \\(n\\) \\(\\rightarrow\\) smaller \\(SE\\) \\(\\rightarrow\\) narrower \\(CI\\) - Precision improves with \\(\\sqrt{n}\\) (doubling \\(n\\) doesn’t double precision)\n\n\nShow R code\n# Compare CI width for different sample sizes\nsample_sizes &lt;- c(25, 100, 400)\ns &lt;- 50  # keep constant\n\nci_comparison &lt;- data.frame(\n  n = sample_sizes,\n  SE = s / sqrt(sample_sizes),\n  Margin_Error = qt(0.975, sample_sizes - 1) * (s / sqrt(sample_sizes))\n)\n\nknitr::kable(ci_comparison, \n             digits = 2,\n             col.names = c(\"Sample Size\", \"Standard Error (€)\", \"Margin of Error (€)\"))\n\n\n\n\n\nSample Size\nStandard Error (€)\nMargin of Error (€)\n\n\n\n\n25\n10.0\n20.64\n\n\n100\n5.0\n9.92\n\n\n400\n2.5\n4.91\n\n\n\n\n\nNotice how the margin of error decreases as sample size increases: from $$20.64 EUR with \\(n=25\\) to $$4.91 EUR with \\(n=400\\).\n2. Variability (s): - More variable population \\(\\rightarrow\\) larger \\(SE\\) \\(\\rightarrow\\) wider \\(CI\\) - Can’t control this, but larger samples help\n3. Confidence level:\n\nSo far we only talked about the 95% confidence interval\nBut we can increase or decrease the confidence level\nHigher confidence \\(\\rightarrow\\) wider interval\nTrade-off between confidence and precision\n\n\n\nShow R code\n# Compare CI width for different confidence levels\nconfidence_levels &lt;- c(0.90, 0.95, 0.99)\nn &lt;- 100\ns &lt;- 50\n\nconf_comparison &lt;- data.frame(\n  Confidence_Level = paste0(confidence_levels * 100, \"%\"),\n  Alpha = 1 - confidence_levels,\n  Critical_Value = qt(1 - (1 - confidence_levels)/2, n-1),\n  Margin_Error = qt(1 - (1 - confidence_levels)/2, n-1) * (s / sqrt(n))\n)\n\nknitr::kable(conf_comparison,\n             digits = 2,\n             col.names = c(\"Confidence Level\", \"α\", \"t*\", \"Margin of Error (€)\"))\n\n\n\n\n\nConfidence Level\nα\nt*\nMargin of Error (€)\n\n\n\n\n90%\n0.10\n1.66\n8.30\n\n\n95%\n0.05\n1.98\n9.92\n\n\n99%\n0.01\n2.63\n13.13\n\n\n\n\n\nThe trade-off is clear: higher confidence requires a wider interval. At 90% confidence, the margin is $$8.3 EUR, while at 99% confidence it increases to $$13.13 EUR. But the gain we have with the 99% confidence interval is that we can be more confident about the interval containing the true parameter…\nKey insight: There’s always a trade-off between confidence and precision. You can be more confident by making the interval wider, but that makes it less informative.\n\n\n2.5 Confidence Intervals in R\nFor a single mean:\n\n\nShow R code\n# Using t.test() function\ncustomer_spending &lt;- c(245, 267, 223, 289, 241, ...)  # your sample data\n\nresult &lt;- t.test(customer_spending, conf.level = 0.95)\nresult$conf.int  # Extract the confidence interval\n\n\nFor a proportion:\n\n\nShow R code\n# Example: conversion rate from sample of 500 customers\n# 125 made a purchase\nprop.test(x = 125, n = 500, conf.level = 0.95)\n\n\nFor regression coefficients (preview for regression lecture):\n\n\nShow R code\n# Confidence intervals are automatically included in regression output\nmodel &lt;- lm(consumption ~ price, data = beer_data)\nconfint(model, level = 0.95)\n\n\n\n\n2.6 Interpreting Confidence Intervals in Business Context\nExample 1: Market Research\nA company surveys 200 potential customers about willingness to pay for a new product.\n\nSample mean: 45 EUR\n95% CI: [42, 48] EUR\n\nGood interpretation: “We’re 95% confident that the average willingness to pay for all potential customers is between 42 and 48 EUR. This suggests a price point around 40-45 EUR would be reasonable.”\nWhy this matters: The interval helps with business decisions:\n\nIf production cost is 40 EUR, the lower bound (42 EUR) still provides margin\nIf cost is 50 EUR, even the upper bound (48 EUR) suggests unprofitability\n\nExample 2: A/B Testing\nAn e-commerce site tests two checkout designs:\n\nDesign A: 100 users, 23 conversions \\(\\rightarrow\\) 23% (95% CI: [15%, 31%])\nDesign B: 100 users, 31 conversions \\(\\rightarrow\\) 31% (95% CI: [22%, 40%])\n\nInterpretation: The intervals overlap substantially. While Design B has a higher point estimate, we can’t confidently say it’s better. The true conversion rates might be equal, or Design A might even be better (both plausible given the overlap).\nBusiness decision: Need more data before making a costly redesign decision.\n\n\n2.7 Preview: Relationship Between Confidence Intervals and Hypothesis Tests\nConfidence intervals and hypothesis tests are two sides of the same coin. They use the same underlying sampling distribution concepts but answer different questions:\n\nHypothesis test: “Is the claim \\(\\mu\\) = 250 compatible with my data?”\nConfidence interval: “What values of \\(\\mu\\) are compatible with my data?”\n\nKey connection: A 95% confidence interval contains all values of \\(\\mu\\) that would NOT be rejected in a two-sided hypothesis test at \\(\\alpha = 0.05\\).\n\n\n\n\n\n\n\n\n\nThis connection is incredibly useful: you can often “test” hypotheses just by checking whether a claimed value falls inside the confidence interval!"
   },
   {
     "objectID": "content/tutorials/testing/index.html#hypothesis-testing-evaluating-claims",
     "href": "content/tutorials/testing/index.html#hypothesis-testing-evaluating-claims",
     "title": "Hypothesis Testing and Confidence Intervals",
     "section": "3. Hypothesis Testing: Evaluating Claims",
-    "text": "3. Hypothesis Testing: Evaluating Claims\n\n3.1 The Logic of Hypothesis Testing\nHypothesis testing provides a formal framework for using sample data to evaluate claims about population parameters. Unlike confidence intervals, which give us a range of plausible values, hypothesis tests answer a specific yes/no question.\nThe fundamental question: “Is our sample data consistent with a specific claim about the population?”\n\nThe Courtroom Analogy\nThink of hypothesis testing like a trial:\nPresumption of innocence = Null hypothesis (\\(H_0\\))\n\nWe assume the defendant (claim) is innocent (true) until proven guilty (false)\nThe burden of proof lies with the prosecution (the data)\n\nEvidence = Sample data\n\nMust be strong enough to overcome presumption\n\nVerdict = Decision\n\n“Guilty” = Reject \\(H_0\\) (evidence strong enough)\n“Not guilty” = Fail to reject \\(H_0\\) (evidence insufficient)\n\nCrucial point: “Not proven guilty” ≠ “innocent”\n\nSimilarly, “fail to reject \\(H_0\\)” ≠ “\\(H_0\\) is true”\nIt only means we don’t have strong enough evidence against it\n\n\n\nExample: Testing a Business Claim\nA coffee shop claims their average service time is 3 minutes. You observe 40 customers and find:\n\nSample mean: \\(\\bar{x}\\) = 3.4 minutes\n\nSample SD: s = 0.8 minutes\n\nQuestion: Is the claim of \\(\\mu\\) = 3 minutes consistent with your data?\nIntuitive reasoning:\n\nYour sample mean (3.4) is higher than the claimed value (3.0)\nBut samples vary due to randomness. Maybe you just happened to observe slower customers?\nHow do we decide if 0.4 minutes difference is “too large” to be explained by chance alone?\n\nThis is exactly what hypothesis testing answers!\n\n\n\n3.2 The Five-Step Process\n\nStep 1: State the Hypotheses\nEvery hypothesis test requires two complementary statements:\nNull Hypothesis (\\(H_0\\)):\n\nA specific claim we’re testing\nUsually represents “no effect,” “no difference,” or “no change”\nAlways includes an equality (\\(=\\), \\(\\geq\\), or \\(\\leq\\))\n\nAlternative Hypothesis (\\(H_1\\) or \\(H_A\\)):\n\nWhat we suspect might be true\nWhat we’re trying to find evidence for\nCan be one-sided or two-sided\n\nFor our coffee shop example:\n\n\\(H_0\\): \\(\\mu=3\\) (service time equals claimed value)\n\\(H_1\\): \\(\\mu \\neq 3\\) (service time differs from claimed value)\n\nTypes of alternative hypotheses:\n\nTwo-sided: \\(H_1\\): \\(\\mu \\neq  3\\)\n\nUsed when we care about deviations in either direction\n“Is the service time different from 3 minutes?”\n\nRight-sided: \\(H_1\\): \\(\\mu &gt; 3\\)\n\nUsed when we only care about increases\n“Is the service time longer than 3 minutes?”\n\nLeft-sided: \\(H_1\\): \\(\\mu &lt; 3\\)\n\nUsed when we only care about decreases\n\n“Is the service time shorter than 3 minutes?”\n\n\nBusiness example with all three types:\nTesting a new website design’s effect on conversion rates:\n\nTwo-sided test: “Does the new design change conversion rates?” (\\(H_1\\): \\(\\mu \\neq \\mu_0\\))\n\nUse when you’re genuinely unsure of direction\n\nRight-sided test: “Does the new design increase conversion rates?” (\\(H_1\\): \\(\\mu &gt; \\mu_0\\))\n\nUse when you’re specifically trying to show improvement\n\nLeft-sided test: “Does the new design decrease bounce rates?” (\\(H_1\\): \\(\\mu &lt; \\mu_0\\))\n\nUse when you’re testing for reduction in negative outcomes\n\n\n\n\n\n\n\n\nNote\\(&gt;\\) or \\(\\geq\\) in the alternative hypothesis?\n\n\n\n\n\nYou should use strict inequality (greater than, not greater or equal to) for the formulation of the alternative hypothesis \\(H_1\\)!\nWhy? The null and alternative hypotheses must be mutually exclusive and exhaustive. The standard approach is to assign the equality to \\(H_0\\).\nFrom a practical standpoint, the exact boundary point has probability zero in continuous distributions, so whether you include the equality in \\(H_0\\) or \\(H_1\\) doesn’t affect the test’s behavior. But the convention is to put it in \\(H_0\\) for consistency with the testing framework.\n\n\n\n\n\nStep 2: Choose a Significance Level (\\(\\alpha\\))\nThe significance level (alpha, \\(\\alpha\\)) is the threshold for how much evidence we require before rejecting \\(H_0\\). It represents the probability of Type I error we’re willing to accept.\nCommon choices:\n\n\\(\\alpha = 0.05\\): Standard in most business/research contexts (5% risk of false positive)\n\\(\\alpha = 0.01\\): More conservative, used when Type I errors are costly\n\\(\\alpha = 0.10\\): More liberal, used in exploratory research\n\nFor our example: \\(\\alpha = 0.05\\) (we’ll use the conventional threshold)\n\n\n\n\n\n\nWarningThe \\(\\alpha = 0.05\\) Convention\n\n\n\nThe choice of \\(\\alpha = 0.05\\) is largely arbitrary, originating from Ronald Fisher’s work in the 1920s. It’s a convention, not a law of nature. The specific value should ideally depend on the costs of different types of errors in your specific context. More on this later when we discuss Type I and Type II errors.\n\n\n\n\nStep 3: Calculate the Test Statistic\nThe test statistic standardizes our sample evidence so we can compare it to a known probability distribution. For testing a mean, we use the t-statistic:\n\\[t = \\frac{\\bar{x} - \\mu_0}{s / \\sqrt{n}}\\]\nComponents:\n\nNumerator: How far is our sample mean from the claimed value \\(\\mu_0\\)?\nDenominator: Standard error (expected sampling variation)\nResult: Number of standard errors away from claimed value\n\nFor our coffee shop example:\n\n\nShow R code\nx_bar &lt;- 3.4  # sample mean\nmu_0 &lt;- 3.0   # claimed value\ns &lt;- 0.8      # sample SD\nn &lt;- 40       # sample size\n\n# Calculate test statistic\nse &lt;- s / sqrt(n)\nt_stat &lt;- (x_bar - mu_0) / se\n\n# Create results table\ntest_results &lt;- data.frame(\n  Statistic = c(\"Standard Error\", \"Test Statistic (t)\"),\n  Value = c(se, t_stat)\n)\nknitr::kable(test_results, digits = 3)\n\n\n\n\n\nStatistic\nValue\n\n\n\n\nStandard Error\n0.126\n\n\nTest Statistic (t)\n3.162\n\n\n\n\n\nThe standard error is 0.126 minutes, and our test statistic is \\(t = 3.162\\).\nInterpretation: Our sample mean is 3.16 standard errors above the claimed mean. Is this unusual enough to doubt the claim?\n\n\nStep 4: Calculate the \\(p\\)-value\nThe p-value is the probability of observing a test statistic as extreme as (or more extreme than) what we actually observed, assuming \\(H_0\\) is true.\nCritical insight from sampling lecture: Remember the sampling distribution? If \\(H_0\\) is true (\\(\\mu = 3\\)), then our sample means would follow a \\(t\\)-distribution centered at \\(3\\). The \\(p\\)-value tells us how far out in the tail our observed value sits.\n\n\nShow R code\n# Degrees of freedom\ndf &lt;- n - 1\n\n# P-value for two-sided test\np_value &lt;- 2 * pt(abs(t_stat), df = df, lower.tail = FALSE)\n\n# Display result\npvalue_result &lt;- data.frame(\n  Statistic = c(\"Degrees of Freedom\", \"P-value\"),\n  Value = c(df, p_value)\n)\nknitr::kable(pvalue_result, digits = 4)\n\n\n\n\n\nStatistic\nValue\n\n\n\n\nDegrees of Freedom\n39.000\n\n\nP-value\n0.003\n\n\n\n\n\nWith \\(p=\\) 0.003, we have very strong evidence against \\(H_0\\).\nInterpretation: If the true average service time were actually 3 minutes, we would observe a sample mean as extreme as 3.4 minutes (or more extreme) only about 0.3% of the time due to random sampling variation alone.\n\n\n\n\n\n\n\n\n\n\n\nStep 5: Make a Decision\nCompare p-value to \\(\\alpha\\):\n\nIf p-value &lt; \\(\\alpha\\): Reject \\(H_0\\) (evidence is strong enough)\nIf p-value \\(\\alpha\\): Fail to reject \\(H_0\\) (evidence is insufficient)\n\nFor our example:\n\n\\(p\\)-value (0.003) &lt; \\(\\alpha\\) (0.05)\nDecision: Reject \\(H_0\\)\nConclusion: There is strong evidence that the average service time differs from the claimed 3 minutes. The data suggest service times are longer than claimed.\n\n\n\n\n3.3 Understanding \\(p\\)-values\n\\(p\\)-values are among the most misunderstood concepts in statistics. Let’s be very precise about what they mean and don’t mean.\n\nWhat \\(p\\)-values ARE\nDefinition: The \\(p\\)-value is the probability of observing data at least as extreme as what we actually observed, if the null hypothesis were true.\nKey points:\n\nIt’s calculated assuming \\(H_0\\) is true (not testing whether \\(H_0\\) is true)\nIt measures how “surprising” or “extreme” our data are under \\(H_0\\)\nIt’s a continuous measure of evidence (not binary)\nLower \\(p\\)-values indicate stronger evidence against \\(H_0\\)\n\nThink of it as:\n\nA measure of compatibility between your data and \\(H_0\\)\nHow awkward it would be to maintain the null hypothesis given what you observed\nThe probability of getting “unlucky” with a sample if \\(H_0\\) were true\n\n\n\nWhat \\(p\\)-values ARE NOT\n❌ “The probability that \\(H_0\\) is true”\n\nNo! The \\(p\\)-value is calculated assuming \\(H_0\\) is true\nIt can’t tell you the probability that \\(H_0\\) is true\n\n❌ “The probability that the result occurred by chance”\n\nNo! The result already occurred (\\(p = 1\\) for that)\nIt’s about how likely such results are under \\(H_0\\)\n\n❌ “The probability that you made a mistake”\n\nNo! That’s related to Type I error (\\(\\alpha\\)), not the \\(p\\)-value\nConfusing these is very common\n\n❌ “The size or importance of an effect”\n\nNo! Small effects can have tiny \\(p\\)-values with large samples\nLarge effects can have large \\(p\\)-values with small samples\n\\(p\\)-values conflate effect size and sample size\n\n\n\nCommon Misinterpretations - Business Examples\nScenario: A marketing campaign test shows \\(p = 0.03\\)\n\nWrong: “There’s a 3% chance the campaign doesn’t work.”\nRight: “If the campaign truly had no effect, we’d see results this extreme only 3% of the time by chance alone.”\n\nScenario: Your analysis yields \\(p = 0.12\\)\n\nWrong: “The effect doesn’t exist.”\nRight: “We don’t have sufficient evidence to reject the hypothesis of no effect at \\(\\alpha = 0.05\\). This could mean: no effect exists. But it could also mean: our sample size was too small to detect it.”\n\nScenario: One study finds \\(p = 0.04\\), another finds \\(p = 0.06\\)\n\nWrong: “The first study found an effect but the second didn’t.”\nRight: “Both studies found similar evidence. The first barely crossed an arbitrary threshold while the second barely didn’t. The results are likely more similar than different.”\n\n\n\n\n3.4 Types of Errors\nEvery hypothesis test can result in one of four outcomes, two of which are errors:\n\n\n\n\n\n\n\n\n\n\\(H_0\\) is True\n\\(H_0\\) is False\n\n\n\n\nReject \\(H_0\\)\nType I Error (\\(\\alpha\\))\nCorrect Decision (Power)\n\n\nFail to Reject \\(H_0\\)\nCorrect Decision\nType II Error ()\n\n\n\n\nType I Error (False Positive)\nDefinition: Rejecting \\(H_0\\) when it’s actually true\nAlso called: False positive, \\(\\alpha\\)-error\nProbability: \\(\\alpha\\) (significance level)\nBusiness example: A pharmaceutical company concludes their new drug is effective when it actually isn’t. They invest millions in production and marketing of an ineffective treatment.\nCoffee shop example: Concluding that service times differ from 3 minutes when they actually don’t, leading to unnecessary process changes.\n\n\nType II Error (False Negative)\nDefinition: Failing to reject \\(H_0\\) when it’s actually false\nAlso called: False negative, \\(\\beta\\) error\nProbability: \\(\\beta\\) (depends on effect size, sample size, and \\(\\alpha\\))\nPower: 1 - \\(\\beta\\) (probability of correctly rejecting a false \\(H_0\\))\nBusiness example: A company fails to detect that a new training program actually does improve productivity, so they don’t implement it company-wide, missing an opportunity for improvement.\nCoffee shop example: Concluding there’s insufficient evidence that service times differ from 3 minutes when they actually do, missing a genuine service problem.\n\n\nWhich Error is Worse?\nThis depends entirely on context! Consider the consequences:\nExample 1: Quality Control\n\n\\(H_0\\): Production process is working correctly\nType I Error: Stop production unnecessarily \\(\\rightarrow\\) Costly but safe\nType II Error: Miss a defect problem \\(\\rightarrow\\) Potentially dangerous\nTypical choice: Accept higher \\(\\alpha\\) (0.10) to minimize Type II errors\n\nExample 2: New Product Launch - \\(H_0\\): New product won’t be profitable - Type I Error: Launch unprofitable product \\(\\rightarrow\\) Waste resources - Type II Error: Don’t launch profitable product \\(\\rightarrow\\) Missed opportunity - Typical choice: Balance depends on launch costs vs. opportunity costs\nExample 3: Medical Diagnosis (Classic example for intuition) - \\(H_0\\): Patient is healthy - Type I Error: False positive \\(\\rightarrow\\) Unnecessary anxiety/treatment - Type II Error: False negative \\(\\rightarrow\\) Missed diagnosis - Typical choice: Depends on disease seriousness and treatment costs\n\n\nThe Trade-off\nThere’s a fundamental trade-off between Type I and Type II errors:\n\nDecrease \\(\\alpha\\) (be more conservative) \\(\\rightarrow\\) Fewer false positives but more false negatives\nIncrease \\(\\alpha\\) (be more liberal) \\(\\rightarrow\\) Fewer false negatives but more false positives\n\nThe only way to reduce both: Increase sample size!\n\n\n\n\n\n\n\n\n\n\n\n\n3.5 Common Hypothesis Tests\n\nOne-Sample t-test\nWhen to use: Testing a claim about a single population mean\nRequirements:\n\nOne numerical variable\nRandom sample\nApproximately normal distribution (or large sample, typically \\(n &gt; 30\\))\n\nExample: Employee Productivity\nA company claims average employee productivity is 85 units/day. You sample 50 employees:\n\n\nShow R code\n# Simulate data\nset.seed(123)\nproductivity &lt;- rnorm(50, mean = 82, sd = 12)\n\n# Perform one-sample t-test\nresult &lt;- t.test(productivity, mu = 85, alternative = \"two.sided\")\nresult\n\n\n\n    One Sample t-test\n\ndata:  productivity\nt = -1.6466, df = 49, p-value = 0.106\nalternative hypothesis: true mean is not equal to 85\n95 percent confidence interval:\n 79.25529 85.57039\nsample estimates:\nmean of x \n 82.41284 \n\n\nInterpreting output:\n\nt-statistic: \\(-1.77\\) (sample mean is \\(1.77 SE\\) below claimed value)\np-value: \\(0.083\\) (if \\(\\mu = 85\\), we’d see this difference 8.3% of the time)\nDecision: At \\(\\alpha = 0.05\\), fail to reject \\(H_0\\) (insufficient evidence)\n95% CI: [78.6, 85.4] (notice that 85 is inside the interval)\n\nBusiness interpretation: “While the sample mean (82) is lower than the claimed value (85), the difference isn’t statistically significant at the 5% level. We don’t have strong evidence that the true productivity differs from 85 units/day. However, the result is borderline (\\(p = 0.083\\)), suggesting we might want to collect more data or investigate further.”\n\n\nTwo-Sample t-test\nWhen to use: Comparing means between two independent groups\nRequirements:\n\nOne numerical outcome variable\nOne categorical grouping variable (two groups)\nIndependent groups (no overlap)\nRandom samples from each group\n\nExample: Marketing Campaign Effectiveness\nControl group (no email) vs. Treatment group (email campaign):\n\n\nShow R code\n# Simulate data\nset.seed(456)\ncontrol &lt;- rnorm(100, mean = 45, sd = 15)\ntreatment &lt;- rnorm(100, mean = 52, sd = 15)\n\n# Perform two-sample t-test\nresult &lt;- t.test(treatment, control, \n                 alternative = \"greater\",  # one-sided: treatment &gt; control\n                 var.equal = FALSE)       # don't assume equal variances\nresult\n\n\n\n    Welch Two Sample t-test\n\ndata:  treatment and control\nt = 1.6439, df = 197.82, p-value = 0.05089\nalternative hypothesis: true difference in means is greater than 0\n95 percent confidence interval:\n -0.0181394        Inf\nsample estimates:\nmean of x mean of y \n 50.24937  46.80862 \n\n\nInterpreting output:\n\nt-statistic: 3.30 (treatment mean is 3.30 SE higher than control)\np-value: 0.0006 (very strong evidence)\nDecision: Reject \\(H_0\\) (treatment effect is real)\n95% CI: [3.2, Inf] (one-sided, so only lower bound)\n\nBusiness interpretation: “Customers who received the email campaign spent significantly more (mean = €52) than those who didn’t (mean = 45 EUR). The difference of 7 EUR is statistically significant (\\(p &lt; 0.001\\)), suggesting the campaign was effective. The 95% confidence interval suggests the true effect is at least 3.2 EUR.”\n\n\nImportant Variations\nPaired t-test: When observations are naturally paired\n\n\nShow R code\n# Example: Before-after measurements on same individuals\nbefore &lt;- c(7.2, 6.8, 7.5, 6.9, 7.1)\nafter &lt;- c(7.8, 7.2, 8.1, 7.4, 7.7)\n\nt.test(after, before, paired = TRUE)\n\n\nWelch’s t-test vs. Student’s t-test:\n\nvar.equal = FALSE (default): Welch’s test, doesn’t assume equal variances (safer)\nvar.equal = TRUE: Student’s t-test, assumes equal variances (slightly more powerful if true)\n\nWhen in doubt: Use Welch’s (var.equal = FALSE) - it’s more robust\n\n\n\n3.6 Connection to Regression (Preview for regression lecture)\nEverything you’ve learned about hypothesis testing directly applies to regression. In fact, regression output is dominated by hypothesis tests!\nEvery regression coefficient has a t-test:\nFrom your the beer consumption example from the lecture:\nterm        estimate  std_error  statistic  p_value\nintercept   86.4      4.32       20.0       0.000\nprice       -9.84     1.38       -7.15      0.000\nWhat’s being tested?\n\n\\(H_0\\): \\(\\beta_1 = 0\\) (price has no relationship with consumption)\n\\(H_1\\): \\(\\beta_1\\neq 0\\) (price does affect consumption)\n\nThe test statistic is calculated exactly like before:\n\\[t = \\frac{\\hat{\\beta}_1 - 0}{SE(\\hat{\\beta}_1)} = \\frac{-9.84}{1.38} = -7.15\\]\nThe p-value of 0.000 means: “If price truly had no effect on consumption, we would almost never see a coefficient this large (in absolute value) due to chance alone.”\nInterpretation: “There is extremely strong evidence that price is associated with beer consumption. For each 1 EUR increase in price, consumption decreases by an estimated 9.84 liters on average.”\nThe key insight: Understanding hypothesis testing now makes regression output immediately interpretable!"
+    "text": "3. Hypothesis Testing: Evaluating Claims\n\n3.1 The Logic of Hypothesis Testing\nHypothesis testing provides a formal framework for using sample data to evaluate claims about population parameters. Unlike confidence intervals, which give us a range of plausible values, hypothesis tests answer a specific yes/no question.\nThe fundamental question: “Is our sample data consistent with a specific claim about the population?”\n\nThe Courtroom Analogy\nThink of hypothesis testing like a trial:\nPresumption of innocence = Null hypothesis (\\(H_0\\))\n\nWe assume the defendant (claim) is innocent (true) until proven guilty (false)\nThe burden of proof lies with the prosecution (the data)\n\nEvidence = Sample data\n\nMust be strong enough to overcome presumption\n\nVerdict = Decision\n\n“Guilty” = Reject \\(H_0\\) (evidence strong enough)\n“Not guilty” = Fail to reject \\(H_0\\) (evidence insufficient)\n\nCrucial point: “Not proven guilty” ≠ “innocent”\n\nSimilarly, “fail to reject \\(H_0 \\neq H_0\\) is true”\nIt only means we don’t have strong enough evidence against it\n\n\n\nExample: Testing a Business Claim\nA coffee shop claims their average service time is 3 minutes. You observe 40 customers and find:\n\nSample mean: \\(\\bar{x} = 3.4\\) minutes\n\nSample SD: \\(s = 0.8\\) minutes\n\nQuestion: Is the claim of \\(\\mu\\) = 3 minutes consistent with your data?\nIntuitive reasoning:\n\nYour sample mean (3.4) is higher than the claimed value (3.0)\nBut samples vary due to randomness. Maybe you just happened to observe slower customers?\nHow do we decide if 0.4 minutes difference is “too large” to be explained by chance alone?\n\nThis is exactly what hypothesis testing answers!\n\n\n\n3.2 The Five-Step Process\n\nStep 1: State the Hypotheses\nEvery hypothesis test requires two complementary statements:\nNull Hypothesis (\\(H_0\\)):\n\nA specific claim we’re testing\nUsually represents “no effect,” “no difference,” or “no change”\nAlways includes an equality (\\(=\\), \\(\\geq\\), or \\(\\leq\\))\n\nAlternative Hypothesis (\\(H_1\\) or \\(H_A\\)):\n\nWhat we suspect might be true\nWhat we’re trying to find evidence for\nCan be one-sided or two-sided\n\nFor our coffee shop example:\n\n\\(H_0\\): \\(\\mu=3\\) (service time equals claimed value)\n\\(H_1\\): \\(\\mu \\neq 3\\) (service time differs from claimed value)\n\nTypes of alternative hypotheses:\n\nTwo-sided: \\(H_1\\): \\(\\mu \\neq  3\\)\n\nUsed when we care about deviations in either direction\n“Is the service time different from 3 minutes?”\n\nRight-sided: \\(H_1\\): \\(\\mu &gt; 3\\)\n\nUsed when we only care about increases\n“Is the service time longer than 3 minutes?”\n\nLeft-sided: \\(H_1\\): \\(\\mu &lt; 3\\)\n\nUsed when we only care about decreases\n\n“Is the service time shorter than 3 minutes?”\n\n\nBusiness example with all three types:\nTesting a new website design’s effect on conversion rates:\n\nTwo-sided test: “Does the new design change conversion rates?” (\\(H_1\\): \\(\\mu \\neq \\mu_0\\))\n\nUse when you’re genuinely unsure of direction\n\nRight-sided test: “Does the new design increase conversion rates?” (\\(H_1\\): \\(\\mu &gt; \\mu_0\\))\n\nUse when you’re specifically trying to show improvement\n\nLeft-sided test: “Does the new design decrease bounce rates?” (\\(H_1\\): \\(\\mu &lt; \\mu_0\\))\n\nUse when you’re testing for reduction in negative outcomes\n\n\n\n\n\n\n\n\nNote\\(&gt;\\) or \\(\\geq\\) in the alternative hypothesis?\n\n\n\n\n\nYou should use strict inequality (greater than, not greater or equal to) for the formulation of the alternative hypothesis \\(H_1\\)!\nWhy? The null and alternative hypotheses must be mutually exclusive and exhaustive. The standard approach is to assign the equality to \\(H_0\\).\nFrom a practical standpoint, the exact boundary point has probability zero in continuous distributions, so whether you include the equality in \\(H_0\\) or \\(H_1\\) doesn’t affect the test’s behavior. But the convention is to put it in \\(H_0\\) for consistency with the testing framework.\n\n\n\n\n\nStep 2: Choose a Significance Level (\\(\\alpha\\))\nThe significance level (alpha, \\(\\alpha\\)) is the threshold for how much evidence we require before rejecting \\(H_0\\). It represents the probability of Type I error we’re willing to accept.\nCommon choices:\n\n\\(\\alpha = 0.05\\): Standard in most business/research contexts (5% risk of false positive)\n\\(\\alpha = 0.01\\): More conservative, used when Type I errors are costly\n\\(\\alpha = 0.10\\): More liberal, used in exploratory research\n\nFor our example: \\(\\alpha = 0.05\\) (we’ll use the conventional threshold)\n\n\n\n\n\n\nWarningThe \\(\\alpha = 0.05\\) Convention\n\n\n\nThe choice of \\(\\alpha = 0.05\\) is largely arbitrary, originating from Ronald Fisher’s work in the 1920s. It’s a convention, not a law of nature. The specific value should ideally depend on the costs of different types of errors in your specific context. More on this later when we discuss Type I and Type II errors.\n\n\n\n\nStep 3: Calculate the Test Statistic\nThe test statistic standardizes our sample evidence so we can compare it to a known probability distribution. For testing a mean, we use the t-statistic:\n\\[t = \\frac{\\bar{x} - \\mu_0}{s / \\sqrt{n}}\\]\nComponents:\n\nNumerator: How far is our sample mean from the claimed value \\(\\mu_0\\)?\nDenominator: Standard error (expected sampling variation)\nResult: Number of standard errors away from claimed value\n\nFor our coffee shop example:\n\n\nShow R code\nx_bar &lt;- 3.4  # sample mean\nmu_0 &lt;- 3.0   # claimed value\ns &lt;- 0.8      # sample SD\nn &lt;- 40       # sample size\n\n# Calculate test statistic\nse &lt;- s / sqrt(n)\nt_stat &lt;- (x_bar - mu_0) / se\n\n# Create results table\ntest_results &lt;- data.frame(\n  Statistic = c(\"Standard Error\", \"Test Statistic (t)\"),\n  Value = c(se, t_stat)\n)\nknitr::kable(test_results, digits = 3)\n\n\n\n\n\nStatistic\nValue\n\n\n\n\nStandard Error\n0.126\n\n\nTest Statistic (t)\n3.162\n\n\n\n\n\nThe standard error is 0.126 minutes, and our test statistic is \\(t = 3.162\\).\nInterpretation: Our sample mean is 3.16 standard errors above the claimed mean. Is this unusual enough to doubt the claim?\n\n\nStep 4: Calculate the \\(p\\)-value\nThe p-value is the probability of observing a test statistic as extreme as (or more extreme than) what we actually observed, assuming \\(H_0\\) is true.\nCritical insight from sampling lecture: Remember the sampling distribution? If \\(H_0\\) is true (\\(\\mu = 3\\)), then our sample means would follow a \\(t\\)-distribution centered at \\(3\\). The \\(p\\)-value tells us how far out in the tail our observed value sits.\n\n\nShow R code\n# Degrees of freedom\ndf &lt;- n - 1\n\n# P-value for two-sided test\np_value &lt;- 2 * pt(abs(t_stat), df = df, lower.tail = FALSE)\n\n# Display result\npvalue_result &lt;- data.frame(\n  Statistic = c(\"Degrees of Freedom\", \"P-value\"),\n  Value = c(df, p_value)\n)\nknitr::kable(pvalue_result, digits = 4)\n\n\n\n\n\nStatistic\nValue\n\n\n\n\nDegrees of Freedom\n39.000\n\n\nP-value\n0.003\n\n\n\n\n\nWith \\(p=\\) 0.003, we have very strong evidence against \\(H_0\\).\nInterpretation: If the true average service time were actually 3 minutes, we would observe a sample mean as extreme as 3.4 minutes (or more extreme) only about 0.3% of the time due to random sampling variation alone.\n\n\n\n\n\n\n\n\n\n\n\nStep 5: Make a Decision\nCompare p-value to \\(\\alpha\\):\n\nIf p-value &lt; \\(\\alpha\\): Reject \\(H_0\\) (evidence is strong enough)\nIf p-value \\(\\alpha\\): Fail to reject \\(H_0\\) (evidence is insufficient)\n\nFor our example:\n\n\\(p\\)-value (0.003) &lt; \\(\\alpha\\) (0.05)\nDecision: Reject \\(H_0\\)\nConclusion: There is strong evidence that the average service time differs from the claimed 3 minutes. The data suggest service times are longer than claimed.\n\n\n\n\n3.3 Understanding \\(p\\)-values\n\\(p\\)-values are among the most misunderstood concepts in statistics. Let’s be very precise about what they mean and don’t mean.\n\nWhat \\(p\\)-values ARE\nDefinition: The \\(p\\)-value is the probability of observing data at least as extreme as what we actually observed, if the null hypothesis were true.\nKey points:\n\nIt’s calculated assuming \\(H_0\\) is true (not testing whether \\(H_0\\) is true)\nIt measures how “surprising” or “extreme” our data are under \\(H_0\\)\nIt’s a continuous measure of evidence (not binary)\nLower \\(p\\)-values indicate stronger evidence against \\(H_0\\)\n\nThink of it as:\n\nA measure of compatibility between your data and \\(H_0\\)\nHow awkward it would be to maintain the null hypothesis given what you observed\nThe probability of getting “unlucky” with a sample if \\(H_0\\) were true\n\n\n\nWhat \\(p\\)-values ARE NOT\n❌ “The probability that \\(H_0\\) is true”\n\nNo! The \\(p\\)-value is calculated assuming \\(H_0\\) is true\nIt can’t tell you the probability that \\(H_0\\) is true\n\n❌ “The probability that the result occurred by chance”\n\nNo! The result already occurred (\\(p = 1\\) for that)\nIt’s about how likely such results are under \\(H_0\\)\n\n❌ “The probability that you made a mistake”\n\nNo! That’s related to Type I error (\\(\\alpha\\)), not the \\(p\\)-value\nConfusing these is very common\n\n❌ “The size or importance of an effect”\n\nNo! Small effects can have tiny \\(p\\)-values with large samples\nLarge effects can have large \\(p\\)-values with small samples\n\\(p\\)-values conflate effect size and sample size\n\n\n\nCommon Misinterpretations - Business Examples\nScenario: A marketing campaign test shows \\(p = 0.03\\)\n\nWrong: “There’s a 3% chance the campaign doesn’t work.”\nRight: “If the campaign truly had no effect, we’d see results this extreme only 3% of the time by chance alone.”\n\nScenario: Your analysis yields \\(p = 0.12\\)\n\nWrong: “The effect doesn’t exist.”\nRight: “We don’t have sufficient evidence to reject the hypothesis of no effect at \\(\\alpha = 0.05\\). This could mean: no effect exists. But it could also mean: our sample size was too small to detect it.”\n\nScenario: One study finds \\(p = 0.04\\), another finds \\(p = 0.06\\)\n\nWrong: “The first study found an effect but the second didn’t.”\nRight: “Both studies found similar evidence. The first barely crossed an arbitrary threshold while the second barely didn’t. The results are likely more similar than different.”\n\n\n\n\n3.4 Types of Errors\nEvery hypothesis test can result in one of four outcomes, two of which are errors:\n\n\n\n\n\n\n\n\n\n\\(H_0\\) is True\n\\(H_0\\) is False\n\n\n\n\nReject \\(H_0\\)\nType I Error (\\(\\alpha\\))\nCorrect Decision (Power)\n\n\nFail to Reject \\(H_0\\)\nCorrect Decision\nType II Error ()\n\n\n\n\nType I Error (False Positive)\nDefinition: Rejecting \\(H_0\\) when it’s actually true\nAlso called: False positive, \\(\\alpha\\)-error\nProbability: \\(\\alpha\\) (significance level)\nBusiness example: A pharmaceutical company concludes their new drug is effective when it actually isn’t. They invest millions in production and marketing of an ineffective treatment.\nCoffee shop example: Concluding that service times differ from 3 minutes when they actually don’t, leading to unnecessary process changes.\n\n\nType II Error (False Negative)\nDefinition: Failing to reject \\(H_0\\) when it’s actually false\nAlso called: False negative, \\(\\beta\\) error\nProbability: \\(\\beta\\) (depends on effect size, sample size, and \\(\\alpha\\))\nPower: 1 - \\(\\beta\\) (probability of correctly rejecting a false \\(H_0\\))\nBusiness example: A company fails to detect that a new training program actually does improve productivity, so they don’t implement it company-wide, missing an opportunity for improvement.\nCoffee shop example: Concluding there’s insufficient evidence that service times differ from 3 minutes when they actually do, missing a genuine service problem.\n\n\nWhich Error is Worse?\nThis depends entirely on context! Consider the consequences:\nExample 1: Quality Control\n\n\\(H_0\\): Production process is working correctly\nType I Error: Stop production unnecessarily \\(\\rightarrow\\) Costly but safe\nType II Error: Miss a defect problem \\(\\rightarrow\\) Potentially dangerous\nTypical choice: Accept higher \\(\\alpha\\) (0.10) to minimize Type II errors\n\nExample 2: New Product Launch - \\(H_0\\): New product won’t be profitable - Type I Error: Launch unprofitable product \\(\\rightarrow\\) Waste resources - Type II Error: Don’t launch profitable product \\(\\rightarrow\\) Missed opportunity - Typical choice: Balance depends on launch costs vs. opportunity costs\nExample 3: Medical Diagnosis (Classic example for intuition) - \\(H_0\\): Patient is healthy - Type I Error: False positive \\(\\rightarrow\\) Unnecessary anxiety/treatment - Type II Error: False negative \\(\\rightarrow\\) Missed diagnosis - Typical choice: Depends on disease seriousness and treatment costs\n\n\nThe Trade-off\nThere’s a fundamental trade-off between Type I and Type II errors:\n\nDecrease \\(\\alpha\\) (be more conservative) \\(\\rightarrow\\) Fewer false positives but more false negatives\nIncrease \\(\\alpha\\) (be more liberal) \\(\\rightarrow\\) Fewer false negatives but more false positives\n\nThe only way to reduce both: Increase sample size!\n\n\n\n\n\n\n\n\n\n\n\n\n3.5 Common Hypothesis Tests\n\nOne-Sample t-test\nWhen to use: Testing a claim about a single population mean\nRequirements:\n\nOne numerical variable\nRandom sample\nApproximately normal distribution (or large sample, typically \\(n &gt; 30\\))\n\nExample: Employee Productivity\nA company claims average employee productivity is 85 units/day. You sample 50 employees:\n\n\nShow R code\n# Simulate data\nset.seed(123)\nproductivity &lt;- rnorm(50, mean = 82, sd = 12)\n\n# Perform one-sample t-test\nresult &lt;- t.test(productivity, mu = 85, alternative = \"two.sided\")\nresult\n\n\n\n    One Sample t-test\n\ndata:  productivity\nt = -1.6466, df = 49, p-value = 0.106\nalternative hypothesis: true mean is not equal to 85\n95 percent confidence interval:\n 79.25529 85.57039\nsample estimates:\nmean of x \n 82.41284 \n\n\nInterpreting output:\n\nt-statistic: -1.65 (sample mean is -1.65 \\(SE\\) below claimed value)\np-value: 0.106 (if \\(\\mu = 85\\), we’d see this difference in 10.6% cases)\nDecision: At \\(\\alpha = 0.05\\), fail to reject \\(H_0\\) (insufficient evidence)\n95% CI: [79.3, 85.6] (notice that 85 is inside the interval)\n\nBusiness interpretation: “While the sample mean (82.4) is lower than the claimed value (85), the difference isn’t statistically significant at the 5% level. We don’t have strong evidence that the true productivity differs from 85 units/day. However, the \\(p\\)-value is small ($p = $ 0.106), suggesting we might want to collect more data or investigate further.”\n\n\nTwo-Sample t-test\nWhen to use: Comparing means between two independent groups\nRequirements:\n\nOne numerical outcome variable\nOne categorical grouping variable (two groups)\nIndependent groups (no overlap)\nRandom samples from each group\n\nExample: Marketing Campaign Effectiveness\nControl group (no email) vs. Treatment group (email campaign):\n\n\nShow R code\n# Simulate data\nset.seed(456)\ncontrol &lt;- rnorm(100, mean = 45, sd = 15)\ntreatment &lt;- rnorm(100, mean = 55.5, sd = 15)\n\n# Perform two-sample t-test\nresult &lt;- t.test(treatment, control, \n                 alternative = \"greater\",  # one-sided: treatment &gt; control\n                 var.equal = FALSE)       # don't assume equal variances\nresult\n\n\n\n    Welch Two Sample t-test\n\ndata:  treatment and control\nt = 3.3162, df = 197.82, p-value = 0.0005429\nalternative hypothesis: true difference in means is greater than 0\n95 percent confidence interval:\n 3.481861      Inf\nsample estimates:\nmean of x mean of y \n 53.74937  46.80862 \n\n\nInterpreting output:\n\nt-statistic: 3.32 (sample mean is 3.32 \\(SE\\) below claimed value)\np-value: 0.001 (if \\(\\mu = 85\\), we’d see this difference in 0.1% cases)\nDecision: Reject \\(H_0\\) (treatment effect is real)\n95% CI: [3.5, Inf] (one-sided, so only lower bound)\n\nBusiness interpretation: “Customers who received the email campaign spent significantly more (mean: 53.7 EUR) than those who didn’t (mean: 46.8 EUR)). The difference of 6.9 EUR is statistically significant (\\(p &lt; 0.001\\)), suggesting the campaign was effective. The 95% confidence interval suggests the true effect is at least 3.48 EUR.”\n\n\nImportant Variations\nPaired t-test: When observations are naturally paired\n\n\nShow R code\n# Example: Before-after measurements on same individuals\nbefore &lt;- c(7.2, 6.8, 7.5, 6.9, 7.1)\nafter &lt;- c(7.8, 7.2, 8.1, 7.4, 7.7)\n\nt.test(after, before, paired = TRUE)\n\n\nWelch’s t-test vs. Student’s t-test:\n\nvar.equal = FALSE (default): Welch’s test, doesn’t assume equal variances (safer)\nvar.equal = TRUE: Student’s t-test, assumes equal variances (slightly more powerful if true)\n\nWhen in doubt: Use Welch’s (var.equal = FALSE) - it’s more robust\n\n\n\n3.6 Connection to Regression (Preview for regression lecture)\nEverything you’ve learned about hypothesis testing directly applies to regression. In fact, regression output is dominated by hypothesis tests!\nEvery regression coefficient has a t-test:\nFrom your the beer consumption example from the lecture:\n\n\n\n\n\nterm\nestimate\nstd_error\nstatistic\np_value\n\n\n\n\nintercept\n86.406\n4.324\n19.982\n0\n\n\nprice\n-9.835\n1.375\n-7.151\n0\n\n\n\n\n\nWhat’s being tested?\n\n\\(H_0\\): \\(\\beta_1 = 0\\) (price has no relationship with consumption)\n\\(H_1\\): \\(\\beta_1\\neq 0\\) (price does affect consumption)\n\nThe test statistic is calculated exactly like before:\n\\[t = \\frac{\\hat{\\beta}_1 - 0}{SE(\\hat{\\beta}_1)} = \\frac{-9.84}{1.38} = -7.15\\]\nThe p-value of 0.000 means: “If price truly had no effect on consumption, we would almost never see a coefficient this large (in absolute value) due to chance alone.”\nInterpretation: “There is extremely strong evidence that price is associated with beer consumption. For each 1 EUR increase in price, consumption decreases by an estimated 9.84 liters on average.”\nThe key insight: Understanding hypothesis testing now makes regression output immediately interpretable!"
   },
   {
     "objectID": "content/tutorials/testing/index.html#statistical-vs.-practical-significance",
     "href": "content/tutorials/testing/index.html#statistical-vs.-practical-significance",
     "title": "Hypothesis Testing and Confidence Intervals",
     "section": "4. Statistical vs. Practical Significance",
-    "text": "4. Statistical vs. Practical Significance\nOne of the most important lessons in applied statistics: statistical significance \\(\\neq\\) practical importance\nThis is especially critical in business contexts where you must make decisions, not just detect effects.\n\nThe Problem with Large Samples\nWith very large samples, even tiny, meaningless effects become statistically significant:\nExample: Website A/B Test\nA company tests two website designs with 100,000 users each:\n\nDesign A: 2.01% conversion rate (2,010 conversions)\nDesign B: 2.03% conversion rate (2,030 conversions)\n\nDifference: 0.02 percentage points (20 additional conversions)\n\n\n\nShow R code\n# Two-proportion test\nprop.test(x = c(2010, 2030), n = c(100000, 100000))\n\n\n\n    2-sample test for equality of proportions with continuity correction\n\ndata:  c(2010, 2030) out of c(1e+05, 1e+05)\nX-squared = 0.091199, df = 1, p-value = 0.7627\nalternative hypothesis: two.sided\n95 percent confidence interval:\n -0.001443126  0.001043126\nsample estimates:\nprop 1 prop 2 \n0.0201 0.0203 \n\n\nResult: \\(p &lt; 0.001\\) (highly statistically significant!)\nBut ask yourself:\n\nDoes a 0.02% improvement justify redesign costs?\nImplementation time?\nRisk of unforeseen issues?\nEmployee retraining?\n\nIf redesign costs are 50,000 EUR and each conversion generates 10 EUR profit:\n\nAdditional profit: 20 conversions × 10 EUR = 200 EUR per 100,000 users\nThis is tiny compared to implementation costs!\n\nConclusion: Statistically significant but practically worthless.\n\n\nThe Problem with Small Samples\nConversely, with small samples, even large, important effects may not reach statistical significance:\nExample: New Training Program\nA company pilots a productivity training program with 10 employees:\n\nBefore training: 75 units/day (average)\nAfter training: 90 units/day (average)\nImprovement: 15 units/day (20% increase!)\n\n\n\nShow R code\n# Simulate small sample\nset.seed(789)\nbefore &lt;- rnorm(10, mean = 75, sd = 20)\nafter &lt;- before + rnorm(10, mean = 15, sd = 10)  # each person improves\n\n# Paired t-test\nt.test(after, before, paired = TRUE)\n\n\n\n    Paired t-test\n\ndata:  after and before\nt = 6.3623, df = 9, p-value = 0.000131\nalternative hypothesis: true mean difference is not equal to 0\n95 percent confidence interval:\n  7.946448 16.715016\nsample estimates:\nmean difference \n       12.33073 \n\n\nResult: \\(p = 0.09\\) (not statistically significant at \\(\\alpha = 0.05\\))\nBut the effect is huge! 20% productivity improvement would be extremely valuable company-wide.\nWhat went wrong? Small sample (\\(n = 10\\)) + high variability = low power to detect effects\nBusiness decision: Don’t abandon the program! Instead:\n\nExpand the pilot to get more data\nCalculate ROI: if training costs 500 EUR/person and generates 5,000 EUR in productivity gains, it’s worth it regardless of \\(p\\)-value\nFocus on effect size and confidence interval, not just significance\n\nThere are tools to standardize effect sizes to make them easier comparable, such as Cohen’s d.  We will learn more about these tools in the lecture on analyzing experimental data!"
+    "text": "4. Statistical vs. Practical Significance\nOne of the most important lessons in applied statistics: statistical significance \\(\\neq\\) practical importance\nThis is especially critical in business contexts where you must make decisions, not just detect effects.\n\nThe Problem with Large Samples\nWith very large samples, even tiny, meaningless effects become statistically significant:\nExample: Website A/B Test\nImagine a large e‑commerce platform selling a popular gadget for 50 EUR. Management wants to test increasing the price to 50.10 EUR (a 0.2% increase) and runs an A/B test: half the visitors see 50 EUR, half see 50.10 EUR.​\n\nControl group (50 EUR): conversion rate = 5.00%\nTreatment group (50.10 EUR): conversion rate = 4.90%\n\nThe absolute difference in conversion is only 0.02 percentage points, which is economically negligible: revenue per visitor stays almost identical, and the 10‑cent higher price barely changes total profit once marketing and operating costs are considered.​\nNow assume the platform has 5 million visitors in each group during the test. With 5,000,000 visitors per variant, the standard error of the difference in proportions becomes extremely small, so a tiny difference in conversion rate is enough to produce a very large z‑statistic and a p‑value far below 0.001:\n\nStatistically: the null “no difference in conversion” is rejected with overwhelming significance because, with such huge \\(n\\), even tiny deviations from equality are detected.\nPractically: the effect size (difference in conversion and impact on profit per visitor) is essentially zero, so changing the price by 0.10 EUR has no meaningful business impact.\n\n\n\n\n\n\n\nNoteSimulation example: large \\(n\\)\n\n\n\n\n\n\n\nShow R code\nset.seed(123)\n\n# Parameters\np_control   &lt;- 0.0500   # 5.00% conversion\np_treatment &lt;- 0.0490   # 4.90% conversion\nn_per_group &lt;- 5e6      # 5,000,000 visitors per variant\n\n# Simulate conversions (Bernoulli)\ncontrol_conv   &lt;- rbinom(1, size = n_per_group, prob = p_control)\ntreatment_conv &lt;- rbinom(1, size = n_per_group, prob = p_treatment)\n\n# Observed conversion rates\ncontrol_rate   &lt;- control_conv   / n_per_group\ntreatment_rate &lt;- treatment_conv / n_per_group\n\nc(control_rate = control_rate,\n  treatment_rate = treatment_rate,\n  diff = treatment_rate - control_rate)\n\n\n  control_rate treatment_rate           diff \n     0.0499132      0.0489280     -0.0009852 \n\n\nShow R code\n# Two-sample proportion test (approximate z-test)\ntest_large &lt;- prop.test(\n  x    = c(control_conv, treatment_conv),\n  n    = c(n_per_group, n_per_group),\n  correct = FALSE\n)\n\ntest_large$p.value\n\n\n[1] 6.624199e-13\n\n\nShow R code\ntest_large\n\n\n\n    2-sample test for equality of proportions without continuity correction\n\ndata:  c(control_conv, treatment_conv) out of c(n_per_group, n_per_group)\nX-squared = 51.653, df = 1, p-value = 6.624e-13\nalternative hypothesis: two.sided\n95 percent confidence interval:\n 0.0007165263 0.0012538737\nsample estimates:\n   prop 1    prop 2 \n0.0499132 0.0489280 \n\n\n\n\n\n\n\n\n\n\n\nNoteAlternative example: small \\(n\\)\n\n\n\n\n\n\n\nShow R code\nset.seed(123)\n\n# Parameters\np_control   &lt;- 0.0500   # 5.00% conversion\np_treatment &lt;- 0.0490   # 4.90% conversion\nn_per_group &lt;- 500      # 500 visitors per variant\n\n# Simulate conversions (Bernoulli)\ncontrol_conv   &lt;- rbinom(1, size = n_per_group, prob = p_control)\ntreatment_conv &lt;- rbinom(1, size = n_per_group, prob = p_treatment)\n\n# Observed conversion rates\ncontrol_rate   &lt;- control_conv   / n_per_group\ntreatment_rate &lt;- treatment_conv / n_per_group\n\nc(control_rate = control_rate,\n  treatment_rate = treatment_rate,\n  diff = treatment_rate - control_rate)\n\n\n  control_rate treatment_rate           diff \n         0.044          0.056          0.012 \n\n\nShow R code\n# Two-sample proportion test (approximate z-test)\ntest_large &lt;- prop.test(\n  x    = c(control_conv, treatment_conv),\n  n    = c(n_per_group, n_per_group),\n  correct = FALSE\n)\n\ntest_large$p.value\n\n\n[1] 0.3839882\n\n\nShow R code\ntest_large\n\n\n\n    2-sample test for equality of proportions without continuity correction\n\ndata:  c(control_conv, treatment_conv) out of c(n_per_group, n_per_group)\nX-squared = 0.75789, df = 1, p-value = 0.384\nalternative hypothesis: two.sided\n95 percent confidence interval:\n -0.039006  0.015006\nsample estimates:\nprop 1 prop 2 \n 0.044  0.056 \n\n\n\n\n\nConversely, with small samples, even large, important effects may not reach statistical significance!\n\nThere are tools to standardize effect sizes to make them easier comparable, such as Cohen’s d.  We will learn more about these tools in the lecture on analyzing experimental data!"
   },
   {
     "objectID": "content/tutorials/testing/index.html#common-pitfalls-and-best-practices",
@@ -382,7 +382,7 @@
     "href": "content/tutorials/testing/index.html#practice-questions",
     "title": "Hypothesis Testing and Confidence Intervals",
     "section": "8. Practice Questions",
-    "text": "8. Practice Questions\nTest your understanding with these questions. Think carefully about each one before looking at answers.\n\nConceptual Questions\n1. Sample-Population Connection\nYou survey 200 customers and find average satisfaction of 7.8/10 with a 95% CI of [7.5, 8.1]. Your colleague says: “Great! We know that 95% of all customers have satisfaction between 7.5 and 8.1.”\nWhat’s wrong with this interpretation? What should they say instead?\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\nWhat’s wrong: The colleague is confusing the confidence interval for the population mean with the range where individual data points fall. The CI [7.5, 8.1] is about where we expect the average satisfaction to be, not where individual customer scores fall.\nCorrect interpretation: “We are 95% confident (using a procedure with a 95% success rate) that the true average satisfaction across all customers is between 7.5 and 8.1.”\nAdditional clarification: If they want to know where 95% of individual customers’ scores fall, they would need to calculate something like \\(\\bar{x} \\pm 2s\\) (approximately), which would be much wider than the confidence interval for the mean.\n\n\n\n2. P-value Interpretation\nA marketing test yields \\(p = 0.08\\) at \\(\\alpha = 0.05\\). Your manager says: “The test failed. There’s no effect.”\nWhat’s problematic about this conclusion? What would be a better interpretation?\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\nProblems with the manager’s statement:\n\n“The test failed” - The test didn’t fail; it worked properly. We just didn’t find sufficient evidence to reject \\(H_0\\) at the predetermined threshold.\n“There’s no effect” - Absence of statistical significance doesn’t mean absence of an effect. It could mean:\n\nThere truly is no effect (but we can’t conclude this)\nThere is an effect but our sample was too small to detect it (low power)\nThere is an effect but it’s smaller than we can reliably detect with this sample size\n\n\nBetter interpretation:\n“At the conventional \\(\\alpha = 0.05\\) level, we don’t have sufficient statistical evidence to conclude there’s an effect. However, with \\(p = 0.08\\), we’re borderline. This suggests we should: 1. Consider the effect size and confidence interval (not just the p-value) 2. Look at the practical significance of any observed difference 3. Consider collecting more data if the decision is important 4. Not definitively conclude there’s no effect”\nAdditional considerations:\n\nThe \\(p = 0.08\\) vs. \\(p = 0.05\\) distinction is somewhat arbitrary\nIf the effect size is meaningful in business terms, it might still be worth acting on\nShould report: “We observed [describe effect], but this didn’t reach conventional statistical significance (\\(p = 0.08\\))”\n\n\n\n\n3. Statistical vs. Practical\nStudy A: \\(n = 50\\), effect = 15%, \\(p = 0.08\\) Study B: \\(n = 50,000\\), effect = 0.5%, \\(p = 0.001\\)\nWhich finding is more likely to be useful in business? Why?\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\nStudy A is more likely to be useful despite not being “statistically significant.”\nReasoning:\n\nStudy A: 15% effect is substantial and practically meaningful. The \\(p = 0.08\\) suggests marginal statistical evidence, likely due to small sample size (\\(n = 50\\)). The large effect size suggests this could have real business impact.\nStudy B: 0.5% effect is tiny and likely not worth implementing even though it’s “highly significant” (\\(p = 0.001\\)). The tiny p-value is due to the massive sample size (\\(n = 50,000\\)), which can detect even trivial differences.\n\nBusiness decision framework:\n\nFor Study A: The 15% improvement could be worth investigating further with a larger sample to confirm. Even if true effect is smaller (say 10%), it might be valuable.\nFor Study B: Even if we’re certain the effect exists (which \\(p = 0.001\\) suggests), a 0.5% improvement rarely justifies implementation costs, training, and change management.\n\nKey lesson: Large samples make small effects significant; small samples might miss large effects. Always consider effect size and practical significance alongside \\(p\\)-values.\n\n\n\n5. Type I vs. Type II\nYour company is testing a new quality control procedure: - \\(H_0\\): Product quality meets standards - \\(H_1\\): Product quality below standards\nWhich type of error is more serious for:\n\nA medical device manufacturer?\nA toy company?\nA car manufacturer?\n\nExplain your reasoning.\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\na) Medical device manufacturer:\nType II error is more serious (failing to detect a quality problem when one exists)\n\nType I error (false positive): Stopping production or recalling devices unnecessarily → Costly but safe\nType II error (false negative): Missing a defect that could harm patients → Potentially fatal, huge liability, regulatory issues\n\nDecision: Use higher \\(\\alpha\\) (e.g., 0.10) to reduce Type II error rate. Better to be overly cautious.\nb) Toy company:\nType II error is more serious (but less critical than medical devices)\n\nType I error: Unnecessary recalls/production stops → Costly\nType II error: Defective toys reach children → Safety risk, liability, reputation damage, potential regulatory action\n\nDecision: Use standard or slightly higher \\(\\alpha\\) (0.05-0.10). Safety-critical but consequences less severe than medical devices.\nc) Car manufacturer:\nType II error is more serious (missing safety-critical defects)\n\nType I error: Unnecessary production halts → Very expensive but safer\nType II error: Safety defects in vehicles → Potential accidents, deaths, massive recalls, legal liability, brand damage\n\nDecision: Use higher \\(\\alpha\\) (0.10) for safety-critical components. Cost of false positives is preferable to risk of defective vehicles.\nGeneral principle: When safety is at stake, minimize Type II errors (false negatives) even if it means more false positives. When only money is at risk, can balance both error types more evenly based on relative costs.\n\n\n\n\n\nPractical Questions\n6. Computing Confidence Intervals\nA sample of 64 employees shows:\n\nMean productivity: 85 units/day\nStandard deviation: 16 units/day\n\nCalculate and interpret:\n\nStandard error\n95% confidence interval for the mean\n\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\na) Standard error: \\[SE = \\frac{s}{\\sqrt{n}} = \\frac{16}{\\sqrt{64}} = \\frac{16}{8} = 2 \\text{ units/day}\\]\nb) 95% confidence interval:\nFirst, find critical value: \\(t_{63, 0.975} \\approx 2.00\\) (with \\(df = 63\\))\nMargin of error: \\(ME = t^* \\times SE = 2.00 \\times 2 = 4\\) units/day\nConfidence interval: \\(85 \\pm 4 = [81, 89]\\) units/day\nInterpretation: “Using a procedure that works 95% of the time, we estimate that the true average productivity for all employees is between 81 and 89 units per day. The margin of error is ±4 units/day.”\nPractical meaning: If company targets are based on 80 units/day, we can be quite confident (since even the lower bound is 81) that average productivity exceeds this target.\n\n\n\n7. Hypothesis Test\nA coffee shop claims average service time is 3 minutes. You observe 36 customers:\n\nSample mean: 3.5 minutes\nSample SD: 1.2 minutes\n\n\nState appropriate hypotheses (two-sided)\nCalculate the test statistic\nWould you reject \\(H_0\\) at \\(\\alpha = 0.05\\)? (Critical value: \\(t_{35} = 2.03\\))\nWhat’s your business conclusion?\n\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\na) Hypotheses: - \\(H_0: \\mu = 3\\) (claimed service time is correct) - \\(H_1: \\mu \\neq 3\\) (actual service time differs from claim)\nb) Test statistic: \\[t = \\frac{\\bar{x} - \\mu_0}{s/\\sqrt{n}} = \\frac{3.5 - 3.0}{1.2/\\sqrt{36}} = \\frac{0.5}{0.2} = 2.5\\]\nc) Decision: \\(|t| = 2.5 &gt; 2.03\\) (critical value), so reject \\(H_0\\)\nAlternatively, for two-sided test: \\(p\\)-value \\(= 2 \\times P(T &gt; 2.5) \\approx 0.017 &lt; 0.05\\)\nd) Business conclusion: “There is statistically significant evidence (\\(p \\approx 0.017\\)) that actual service times differ from the claimed 3 minutes. The sample suggests service times average 3.5 minutes—about 30 seconds longer than claimed.\nRecommendation: The coffee shop should either:\n\nUpdate their claim to reflect reality (3.5 minutes)\nInvestigate why service takes longer than expected\nImplement changes to reduce service time to meet the 3-minute target\n\nA 95% CI would be approximately [3.1, 3.9] minutes, suggesting the true average is at least 3.1 minutes—still notably above the claim.”\n\n\n\n8. Two-Sample Comparison\nYou compare two training methods:\n\nMethod A: \\(n = 40\\), mean = 78, SD = 12\nMethod B: \\(n = 40\\), mean = 82, SD = 12\n\nThe 95% CI for the difference (B - A) is [-1, 9].\n\nWhat does this interval tell you about statistical significance?\nIf training costs are similar, which method should you use?\nWhat additional information would help your decision?\n\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\na) Statistical significance: The confidence interval [-1, 9] includes zero, which means the difference is not statistically significant at \\(\\alpha = 0.05\\) level. We cannot confidently say Method B is better than Method A based on this data alone.\nInterpretation: The true difference could plausibly be anywhere from -1 (Method A slightly better) to +9 (Method B notably better). Zero difference is within this range.\nb) Which method to use: Given similar costs, there are two reasonable approaches:\n\nConservative approach: Use Method A (current standard) since we haven’t proven B is better. Don’t change without clear evidence.\nOptimistic approach: Use Method B since the point estimate suggests it’s 4 points better, and the worst plausible scenario (lower CI bound = -1) shows minimal downside risk.\n\nPractical recommendation: Since the confidence interval is mostly positive [only extends slightly negative], and point estimate favors B, Method B is reasonable to try—especially given similar costs and limited downside risk.\nc) Additional helpful information:\n\nSample size justification: Can we collect more data? With \\(n = 40\\) per group, power might be too low to detect meaningful differences\nEffect size context: Is a 4-point improvement meaningful for business outcomes? What do these scores represent?\nCost details: Are there hidden costs (time, implementation, disruption)?\nPractical constraints: Implementation difficulty, scalability, employee preferences\nSecondary outcomes: Do methods differ on other important metrics (retention, engagement, long-term learning)?\nVariance in effects: Do some employee subgroups benefit more from one method?\n\nPower consideration: With SD = 12 and \\(n = 40\\) per group, this study may have had only ~40% power to detect a 4-point difference. More data could clarify the picture.\n\n\n\n\n\n\n\n\n\n\nNoteYour Feedback Matters\n\n\n\nThis recap session is designed to be maximally useful for your learning. If you find sections confusing, would like more examples on specific topics, or have suggestions for improvement, please share your feedback. The goal is to make these concepts accessible and practical for your work in management and business."
+    "text": "8. Practice Questions\nTest your understanding with these questions. Think carefully about each one before looking at answers.\n\nConceptual Questions\n1. Sample-Population Connection\nYou survey 200 customers and find average satisfaction of 7.8/10 with a 95% CI of [7.5, 8.1]. Your colleague says: “Great! We know that 95% of all customers have satisfaction between 7.5 and 8.1.”\nWhat’s wrong with this interpretation? What should they say instead?\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\nWhat’s wrong: The colleague is confusing the confidence interval for the population mean with the range where individual data points fall. The CI [7.5, 8.1] is about where we expect the average satisfaction to be, not where individual customer scores fall.\nCorrect interpretation: “We are 95% confident (using a procedure with a 95% success rate) that the true average satisfaction across all customers is between 7.5 and 8.1.”\nAdditional clarification: If they want to know where 95% of individual customers’ scores fall, they would need to calculate something like \\(\\bar{x} \\pm 2s\\) (approximately), which would be much wider than the confidence interval for the mean.\n\n\n\n2. P-value Interpretation\nA marketing test yields \\(p = 0.08\\) at \\(\\alpha = 0.05\\). Your manager says: “The test failed. There’s no effect.”\nWhat’s problematic about this conclusion? What would be a better interpretation?\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\nProblems with the manager’s statement:\n\n“The test failed” - The test didn’t fail; it worked properly. We just didn’t find sufficient evidence to reject \\(H_0\\) at the predetermined threshold.\n“There’s no effect” - Absence of statistical significance doesn’t mean absence of an effect. It could mean:\n\nThere truly is no effect (but we can’t conclude this)\nThere is an effect but our sample was too small to detect it (low power)\nThere is an effect but it’s smaller than we can reliably detect with this sample size\n\n\nBetter interpretation:\n“At the conventional \\(\\alpha = 0.05\\) level, we don’t have sufficient statistical evidence to conclude there’s an effect. However, with \\(p = 0.08\\), we’re borderline. This suggests we should: 1. Consider the effect size and confidence interval (not just the p-value) 2. Look at the practical significance of any observed difference 3. Consider collecting more data if the decision is important 4. Not definitively conclude there’s no effect”\nAdditional considerations:\n\nThe \\(p = 0.08\\) vs. \\(p = 0.05\\) distinction is somewhat arbitrary\nIf the effect size is meaningful in business terms, it might still be worth acting on\nShould report: “We observed [describe effect], but this didn’t reach conventional statistical significance (\\(p = 0.08\\))”\n\n\n\n\n3. Statistical vs. Practical\nStudy A: \\(n = 50\\), effect = 15%, \\(p = 0.08\\) Study B: \\(n = 50,000\\), effect = 0.5%, \\(p = 0.001\\)\nWhich finding is more likely to be useful in business? Why?\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\nStudy A is more likely to be useful despite not being “statistically significant.”\nReasoning:\n\nStudy A: 15% effect is substantial and practically meaningful. The \\(p = 0.08\\) suggests marginal statistical evidence, likely due to small sample size (\\(n = 50\\)). The large effect size suggests this could have real business impact.\nStudy B: 0.5% effect is tiny and likely not worth implementing even though it’s “highly significant” (\\(p = 0.001\\)). The tiny p-value is due to the massive sample size (\\(n = 50,000\\)), which can detect even trivial differences.\n\nBusiness decision framework:\n\nFor Study A: The 15% improvement could be worth investigating further with a larger sample to confirm. Even if true effect is smaller (say 10%), it might be valuable.\nFor Study B: Even if we’re certain the effect exists (which \\(p = 0.001\\) suggests), a 0.5% improvement rarely justifies implementation costs, training, and change management.\n\nKey lesson: Large samples make small effects significant; small samples might miss large effects. Always consider effect size and practical significance alongside \\(p\\)-values.\n\n\n\n5. Type I vs. Type II\nYour company is testing a new quality control procedure: - \\(H_0\\): Product quality meets standards - \\(H_1\\): Product quality below standards\nWhich type of error is more serious for:\n\nA medical device manufacturer?\nA toy company?\nA car manufacturer?\n\nExplain your reasoning.\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\nFirst, let’s clarify what each error means in this context:\nWith \\(H_0\\): Quality meets standards and \\(H_1\\): Quality below standards: - Type I error: Concluding quality is below standards when it actually meets them (false alarm) - Type II error: Concluding quality meets standards when it’s actually below them (missed defect)\na) Medical device manufacturer:\nType II error is more serious (failing to detect a quality problem when one exists)\n\nType I error (false positive): Stopping production or recalling devices unnecessarily → Costly but safe\nType II error (false negative): Missing a defect that could harm patients → Potentially fatal, huge liability, regulatory issues\n\nDecision: Use higher \\(\\alpha\\) (e.g., 0.10) to reduce Type II error rate. Better to be overly cautious.\nb) Toy company:\nType II error is more serious (but less critical than medical devices)\n\nType I error: Unnecessary recalls/production stops → Costly\nType II error: Defective toys reach children → Safety risk, liability, reputation damage, potential regulatory action\n\nDecision: Use standard or slightly higher \\(\\alpha\\) (0.05-0.10). Safety-critical but consequences less severe than medical devices.\nc) Car manufacturer:\nType II error is more serious (missing safety-critical defects)\n\nType I error: Unnecessary production halts → Very expensive but safer\nType II error: Safety defects in vehicles → Potential accidents, deaths, massive recalls, legal liability, brand damage\n\nDecision: Use higher \\(\\alpha\\) (0.10) for safety-critical components. Cost of false positives is preferable to risk of defective vehicles.\nGeneral principle: When safety is at stake, minimize Type II errors (false negatives) even if it means more false positives. When only money is at risk, can balance both error types more evenly based on relative costs.\n\n\n\n\n\nPractical Questions\n6. Computing Confidence Intervals\nA sample of 64 employees shows:\n\nMean productivity: 85 units/day\nStandard deviation: 16 units/day\n\nCalculate and interpret:\n\nStandard error\n95% confidence interval for the mean\n\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\na) Standard error: \\[SE = \\frac{s}{\\sqrt{n}} = \\frac{16}{\\sqrt{64}} = \\frac{16}{8} = 2 \\text{ units/day}\\]\nb) 95% confidence interval:\nFirst, find critical value: \\(t_{63, 0.975} \\approx 2.00\\) (with \\(df = 63\\))\nMargin of error: \\(ME = t^* \\times SE = 2.00 \\times 2 = 4\\) units/day\nConfidence interval: \\(85 \\pm 4 = [81, 89]\\) units/day\nInterpretation: “Using a procedure that works 95% of the time, we estimate that the true average productivity for all employees is between 81 and 89 units per day. The margin of error is ±4 units/day.”\nPractical meaning: If company targets are based on 80 units/day, we can be quite confident (since even the lower bound is 81) that average productivity exceeds this target.\n\n\n\n7. Hypothesis Test\nA coffee shop claims average service time is 3 minutes. You observe 36 customers:\n\nSample mean: 3.5 minutes\nSample SD: 1.2 minutes\n\n\nState appropriate hypotheses (two-sided)\nCalculate the test statistic\nWould you reject \\(H_0\\) at \\(\\alpha = 0.05\\)? (Critical value: \\(t_{35} = 2.03\\))\nWhat’s your business conclusion?\n\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\na) Hypotheses: - \\(H_0: \\mu = 3\\) (claimed service time is correct) - \\(H_1: \\mu \\neq 3\\) (actual service time differs from claim)\nb) Test statistic: \\[t = \\frac{\\bar{x} - \\mu_0}{s/\\sqrt{n}} = \\frac{3.5 - 3.0}{1.2/\\sqrt{36}} = \\frac{0.5}{0.2} = 2.5\\]\nc) Decision: \\(|t| = 2.5 &gt; 2.03\\) (critical value), so reject \\(H_0\\)\nAlternatively, for two-sided test: \\(p\\)-value \\(= 2 \\times P(T &gt; 2.5) \\approx 0.017 &lt; 0.05\\)\nd) Business conclusion: “There is statistically significant evidence (\\(p \\approx 0.017\\)) that actual service times differ from the claimed 3 minutes. The sample suggests service times average 3.5 minutes—about 30 seconds longer than claimed.\nRecommendation: The coffee shop should either:\n\nUpdate their claim to reflect reality (3.5 minutes)\nInvestigate why service takes longer than expected\nImplement changes to reduce service time to meet the 3-minute target\n\nA 95% CI would be approximately [3.1, 3.9] minutes, suggesting the true average is at least 3.1 minutes—still notably above the claim.”\n\n\n\n8. Two-Sample Comparison\nYou compare two training methods:\n\nMethod A: \\(n = 40\\), mean = 78, SD = 12\nMethod B: \\(n = 40\\), mean = 82, SD = 12\n\nThe 95% CI for the difference (B - A) is [-1, 9].\n\nWhat does this interval tell you about statistical significance?\nIf training costs are similar, which method should you use?\nWhat additional information would help your decision?\n\n\n\n\n\n\n\nTipAnswer\n\n\n\n\n\na) Statistical significance: The confidence interval [-1, 9] includes zero, which means the difference is not statistically significant at \\(\\alpha = 0.05\\) level. We cannot confidently say Method B is better than Method A based on this data alone.\nInterpretation: The true difference could plausibly be anywhere from -1 (Method A slightly better) to +9 (Method B notably better). Zero difference is within this range.\nb) Which method to use: Given similar costs, there are two reasonable approaches:\n\nConservative approach: Use Method A (current standard) since we haven’t proven B is better. Don’t change without clear evidence.\nOptimistic approach: Use Method B since the point estimate suggests it’s 4 points better, and the worst plausible scenario (lower CI bound = -1) shows minimal downside risk.\n\nPractical recommendation: Since the confidence interval is mostly positive [only extends slightly negative], and point estimate favors B, Method B is reasonable to try—especially given similar costs and limited downside risk.\nc) Additional helpful information:\n\nSample size justification: Can we collect more data? With \\(n = 40\\) per group, power might be too low to detect meaningful differences\nEffect size context: Is a 4-point improvement meaningful for business outcomes? What do these scores represent?\nCost details: Are there hidden costs (time, implementation, disruption)?\nPractical constraints: Implementation difficulty, scalability, employee preferences\nSecondary outcomes: Do methods differ on other important metrics (retention, engagement, long-term learning)?\nVariance in effects: Do some employee subgroups benefit more from one method?\n\nPower consideration: With SD = 12 and \\(n = 40\\) per group, this study may have had only ~40% power to detect a 4-point difference. More data could clarify the picture.\n\n\n\n\n\n\n\n\n\n\nNoteYour Feedback Matters\n\n\n\nThis recap session is designed to be maximally useful for your learning. If you find sections confusing, would like more examples on specific topics, or have suggestions for improvement, please share your feedback. The goal is to make these concepts accessible and practical for your work in management and business."
   },
   {
     "objectID": "content/tutorials/obj-types-iii-adv/index.html",
@@ -609,76 +609,528 @@
     "text": "✍️ Coursework\n\nDo the exercises LinearRegression1 and LinearRegression2 from the DataScienceExercises package\n\n\n\n\n\n\n\nTipQuick code for starting the exercises I\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"LinearRegression1\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\n\n\n\n\n\nTipQuick code for starting the exercises II\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"LinearRegression2\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))"
   },
   {
-    "objectID": "content/material/session09-ex-solution.html",
-    "href": "content/material/session09-ex-solution.html",
-    "title": "Sample solution for analyzing sales data",
+    "objectID": "content/material/session09.html",
+    "href": "content/material/session09.html",
+    "title": "🗓️ Session 9: Using AI for coding",
     "section": "",
-    "text": "This is an example solution revealing one of the hidden patterns in the data.\nWe use the following packages:\n\nlibrary(readr)\nlibrary(ggplot2)\n\nLoading the data:\n\ncustomer_data &lt;- read_csv(\"customer_sample.csv\")\n\nRows: 200 Columns: 6\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (2): customer_type, preferred_category\ndbl (4): customer_id, age, spending, visit_frequency\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\nCreate a figure on the relationship between age, spending, and product category:\n\nggplot(customer_data, aes(x = age, y = spending, color = preferred_category, size = visit_frequency)) +\n  geom_point(alpha = 0.7) +\n  geom_smooth(aes(group = preferred_category), method = \"loess\", se = FALSE, linewidth = 1) +\n  scale_color_brewer(palette = \"Set1\") +\n  scale_size_continuous(range = c(1, 8)) +\n  labs(\n    title = \"Customer Spending Patterns by Age and Product Category\",\n    subtitle = \"Bubble size represents visit frequency\",\n    x = \"Customer Age\",\n    y = \"Monthly Spending ($)\",\n    color = \"Preferred Category\",\n    size = \"Visits per Month\"\n  ) +\n  theme_minimal() +\n  theme(\n    legend.position = \"right\",\n    plot.title = element_text(face = \"bold\"),\n    panel.grid.minor = element_blank()\n  )\n\nWarning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\nℹ Please use `linewidth` instead.\n\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\nWarning: The following aesthetics were dropped during statistical transformation: size.\nℹ This can happen when ggplot fails to infer the correct grouping structure in\n  the data.\nℹ Did you forget to specify a `group` aesthetic or to convert a numerical\n  variable into a factor?\n\n\n\n\n\n\n\n\n\nFrom his visualization we can infer the following insights: 1. The non-linear relationship between age and spending (peaks at middle age) 2. Electronics customers spend more across all age groups 3. Visit frequency (bubble size) correlates with spending 4. Different product categories have different age-spending curves 5. Some categories are more popular with specific age groups\nOne conclusion for a marketing strategy could be:\n\nMiddle-aged customers (35-55) have the highest spending across all categories, with Electronics shoppers spending significantly more. A targeted campaign for Electronics products to middle-aged customers combined with cross-selling opportunities to younger and older demographics could maximize revenue."
-  },
-  {
-    "objectID": "content/material/session08.html",
-    "href": "content/material/session08.html",
-    "title": "🗓️ Session 8: A very short introduction to Quarto",
-    "section": "",
-    "text": "Quarto is a modern multi-language version of R Markdown. As with its predecessor, the idea is to provide people with the opportunity to write text and code into the very same document. This makes the creation of nice looking and reproducible reports or paper very easy. Moreoever, with Quarto it is very easy to create very nice papers, reports, websites or interactive apps. This website, for example, is fully written in Quarto. In this lecture, you learn everything you need to get started with writing your first Quarto documents. In fact, its really straightforward once you get the basic idea.",
+    "text": "In this lecture you learn the basics of using AI tools for coding tasks. While no AI tool will help you to write code in a language you do not understand, modern AI tools are well suited to assist you in writing code in a language you are familiar with. Here we discuss some of the most common use cases for AI when it comes to the development of R code. We focus on, first, getting a first sketch of an R script and, second, on using AI to help you find mistakes in your current code.\nYou also learn how important it is to provide the AI with context - something you can only do if you already know the basics of the programming language you and the AI are working with. Finally, we also touch upon some AI-like tools and advice on how to avoid typos in code.",
     "crumbs": [
       "🗓️ Material",
-      "Session 08"
+      "Session 09"
     ]
   },
   {
-    "objectID": "content/material/session08.html#lecture-slides",
-    "href": "content/material/session08.html#lecture-slides",
-    "title": "🗓️ Session 8: A very short introduction to Quarto",
+    "objectID": "content/material/session09.html#lecture-slides",
+    "href": "content/material/session09.html#lecture-slides",
+    "title": "🗓️ Session 9: Using AI for coding",
     "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\nDesasterMarkdown.pdf\nNicerMarkdown.pdf\n\n\n\n\n\n\n\nTipCode for the markdown desaster and a possible solution",
+    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipPrompts and code examples from the lecture\n\n\n\n\n\n\n\n\n\n\nDetails for the exercise on e-commerce data (“generate R code”)\n\n\n\n\n\n\n\nTipBase code for exercises on debugging, documenting and optimizing R code",
     "crumbs": [
       "🗓️ Material",
-      "Session 08"
+      "Session 09"
     ]
   },
   {
-    "objectID": "content/material/session08.html#lecture-videos",
-    "href": "content/material/session08.html#lecture-videos",
-    "title": "🗓️ Session 8: A very short introduction to Quarto",
+    "objectID": "content/material/session09.html#suggested-reading",
+    "href": "content/material/session09.html#suggested-reading",
+    "title": "🗓️ Session 9: Using AI for coding",
+    "section": "📚 Suggested Reading",
+    "text": "📚 Suggested Reading\n\nAnthropic’s Prompt Engineering Interactive Tutorial: a more extensive but very good course on how to develop good prompts\nHow to use Github Copilot in R Studio and a guideline on how to get free student access through Github Education\nResources for Gemini Code Assist, which is free but cannot be integrated directly into R Studio\nMore information on Claude Code, which is most interesting for doing advanced programming work\nMore information on Windsurf, which has a good free tier but no plugin for R Studio",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 09"
+    ]
+  },
+  {
+    "objectID": "content/material/session09.html#coursework",
+    "href": "content/material/session09.html#coursework",
+    "title": "🗓️ Session 9: Using AI for coding",
+    "section": "✍️ Coursework",
+    "text": "✍️ Coursework\n\nDo the in-class exercises you did not complete during the session",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 09"
+    ]
+  },
+  {
+    "objectID": "content/material/session09-Exercise.html",
+    "href": "content/material/session09-Exercise.html",
+    "title": "Identify Patterns in E-Commerce Data",
+    "section": "",
+    "text": "This dataset contains information about 200 customers of an e-commerce platform. It includes demographic information, spending habits, and behavioral metrics that the marketing team wants to analyze to develop more targeted campaigns.\n\n\n\ncustomer_sample.csv\n\n\n\n\n\n\n\n\n\n\n\nVariable\nDescription\nType\n\n\n\n\ncustomer_id\nUnique identifier for each customer\nInteger\n\n\nage\nCustomer’s age in years\nInteger\n\n\nspending\nMonthly spending on the platform (in dollars)\nNumeric\n\n\nvisit_frequency\nAverage number of website visits per month\nNumeric\n\n\ncustomer_type\nCustomer classification based on purchasing history\nCategorical\n\n\npreferred_category\nPrimary product category the customer purchases\nCategorical\n\n\n\n\n\ncustomer_type:\n\nNew: Recently joined customers (first purchases within last 3 months)\nOccasional: Make purchases sporadically (no consistent pattern)\nRegular: Consistent purchases but not at high frequency\nLoyal: Frequent, consistent purchasers over extended period\n\npreferred_category:\n\nElectronics: Technology products, gadgets, computers, etc.\nClothing: Apparel items, accessories, shoes\nHome: Furniture, decor, kitchen items, garden supplies\nBeauty: Cosmetics, personal care, grooming products\nFood: Groceries, specialty foods, meal kits\n\n\n\n\n\nYour marketing team needs insights to develop targeted campaigns that will increase customer engagement and spending. The team believes there may be hidden patterns in how different customer segments interact with their platform.\nYour task: Create a visualization that reveals an interesting pattern in this data that could help inform marketing strategy."
+  },
+  {
+    "objectID": "content/material/session09-Exercise.html#overview",
+    "href": "content/material/session09-Exercise.html#overview",
+    "title": "Identify Patterns in E-Commerce Data",
+    "section": "",
+    "text": "This dataset contains information about 200 customers of an e-commerce platform. It includes demographic information, spending habits, and behavioral metrics that the marketing team wants to analyze to develop more targeted campaigns."
+  },
+  {
+    "objectID": "content/material/session09-Exercise.html#file",
+    "href": "content/material/session09-Exercise.html#file",
+    "title": "Identify Patterns in E-Commerce Data",
+    "section": "",
+    "text": "customer_sample.csv"
+  },
+  {
+    "objectID": "content/material/session09-Exercise.html#variables",
+    "href": "content/material/session09-Exercise.html#variables",
+    "title": "Identify Patterns in E-Commerce Data",
+    "section": "",
+    "text": "Variable\nDescription\nType\n\n\n\n\ncustomer_id\nUnique identifier for each customer\nInteger\n\n\nage\nCustomer’s age in years\nInteger\n\n\nspending\nMonthly spending on the platform (in dollars)\nNumeric\n\n\nvisit_frequency\nAverage number of website visits per month\nNumeric\n\n\ncustomer_type\nCustomer classification based on purchasing history\nCategorical\n\n\npreferred_category\nPrimary product category the customer purchases\nCategorical\n\n\n\n\n\ncustomer_type:\n\nNew: Recently joined customers (first purchases within last 3 months)\nOccasional: Make purchases sporadically (no consistent pattern)\nRegular: Consistent purchases but not at high frequency\nLoyal: Frequent, consistent purchasers over extended period\n\npreferred_category:\n\nElectronics: Technology products, gadgets, computers, etc.\nClothing: Apparel items, accessories, shoes\nHome: Furniture, decor, kitchen items, garden supplies\nBeauty: Cosmetics, personal care, grooming products\nFood: Groceries, specialty foods, meal kits"
+  },
+  {
+    "objectID": "content/material/session09-Exercise.html#your-task",
+    "href": "content/material/session09-Exercise.html#your-task",
+    "title": "Identify Patterns in E-Commerce Data",
+    "section": "",
+    "text": "Your marketing team needs insights to develop targeted campaigns that will increase customer engagement and spending. The team believes there may be hidden patterns in how different customer segments interact with their platform.\nYour task: Create a visualization that reveals an interesting pattern in this data that could help inform marketing strategy."
+  },
+  {
+    "objectID": "content/material/session07.html",
+    "href": "content/material/session07.html",
+    "title": "🗓️ Session 7: Visualization",
+    "section": "",
+    "text": "One area for which R is particulary well-known for is the area of visualization. This is particularly because of the package ggplot2. This session introduces ggplot2 and the general approach to generate visualization in R. The good thing is that if you follow the approach described here, you can basically create every visualization type you can think of.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 07"
+    ]
+  },
+  {
+    "objectID": "content/material/session07.html#lecture-slides",
+    "href": "content/material/session07.html#lecture-slides",
+    "title": "🗓️ Session 7: Visualization",
+    "section": "👨‍🏫 Lecture Slides",
+    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipThe R script of this session",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 07"
+    ]
+  },
+  {
+    "objectID": "content/material/session07.html#lecture-videos",
+    "href": "content/material/session07.html#lecture-videos",
+    "title": "🗓️ Session 7: Visualization",
     "section": "🎥 Lecture videos",
     "text": "🎥 Lecture videos\nAll the videos are available via this playlist.",
     "crumbs": [
       "🗓️ Material",
-      "Session 08"
+      "Session 07"
     ]
   },
   {
-    "objectID": "content/material/session08.html#mandatory-reading",
-    "href": "content/material/session08.html#mandatory-reading",
-    "title": "🗓️ Session 8: A very short introduction to Quarto",
+    "objectID": "content/material/session07.html#mandatory-reading",
+    "href": "content/material/session07.html#mandatory-reading",
+    "title": "🗓️ Session 7: Visualization",
     "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\n\nThe CommonMark markdown tutorial\nQuarto tutorial I: the basics\nQuarto tutorial II: computations\nQuarto tutorial III: authoring quarto documents",
+    "text": "📚 Mandatory Reading\n\nThe tutorial visualization",
     "crumbs": [
       "🗓️ Material",
-      "Session 08"
+      "Session 07"
     ]
   },
   {
-    "objectID": "content/material/session08.html#further-reading",
-    "href": "content/material/session08.html#further-reading",
-    "title": "🗓️ Session 8: A very short introduction to Quarto",
+    "objectID": "content/material/session07.html#further-reading",
+    "href": "content/material/session07.html#further-reading",
+    "title": "🗓️ Session 7: Visualization",
     "section": "Further Reading",
-    "text": "Further Reading\n\nBlog introducing Quarto\nQuarto and R Markdown\nThe comprehensive Quarto documentation\nMarkdown basics\nThe R Markdown Cookbook",
+    "text": "Further Reading\n\nWickham (2010), who introduces the theory underlying ggplot2\nggplot2 cheat sheet\nBrowse the website from Data to Viz and try to re-create some of the figures yourself",
     "crumbs": [
       "🗓️ Material",
-      "Session 08"
+      "Session 07"
     ]
   },
   {
-    "objectID": "content/material/session08.html#coursework",
-    "href": "content/material/session08.html#coursework",
-    "title": "🗓️ Session 8: A very short introduction to Quarto",
+    "objectID": "content/material/session07.html#coursework",
+    "href": "content/material/session07.html#coursework",
+    "title": "🗓️ Session 7: Visualization",
     "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the exercises Quarto from the DataScienceExercises package\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Quarto\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nDo the following practical exercise:\n\n\n\n\n\n\n\nNoteExercise description\n\n\n\n\n\nCreate a new Quarto document where you set the title, date, and the author explicitly. Write a sample text that comprises…\n\n…at least one level 1 heading\n…at least two level 2 headings\n…a YAML part that specifies that R code remains hidden by default\n…one R chunk where both the output and the code is printed in the final document\n…one R chunk that produces a simply ggplot object and where the code producing the plot is hidden\n\nThen do the following:\n\nKnit the document to html with a floating table of contents and a special theme.\nMake the document available via Netlify Drop and add the possibility to download the underlying Rmd file. &gt; Note: For Netlify Drop to work, the html file must be called index.html!\nKnit the document to PDF and make sure that it includes a table of contents.\n\n\n\n\n\n\n\n\n\n\nTipPossible solution",
+    "text": "✍️ Coursework\n\nDo the exercises Visualization1 from the DataScienceExercises package\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Visualization1\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))",
     "crumbs": [
       "🗓️ Material",
-      "Session 08"
+      "Session 07"
+    ]
+  },
+  {
+    "objectID": "content/material/session05.html",
+    "href": "content/material/session05.html",
+    "title": "🗓️ Session 5: Importing data",
+    "section": "",
+    "text": "This is also one of the most underestimated topics. This session builds upon the previous session on setting up a project environment. Now you will learn how to import data obtained elsewhere into R. We focus on importing .csv files, but with the skills acquired in this context you will face no difficulties in importing other data types as well.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 05"
+    ]
+  },
+  {
+    "objectID": "content/material/session05.html#lecture-slides",
+    "href": "content/material/session05.html#lecture-slides",
+    "title": "🗓️ Session 5: Importing data",
+    "section": "👨‍🏫 Lecture Slides",
+    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\nData for the exercises",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 05"
+    ]
+  },
+  {
+    "objectID": "content/material/session05.html#lecture-videos",
+    "href": "content/material/session05.html#lecture-videos",
+    "title": "🗓️ Session 5: Importing data",
+    "section": "🎥 Lecture videos",
+    "text": "🎥 Lecture videos\nAll the videos are available via this playlist.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 05"
+    ]
+  },
+  {
+    "objectID": "content/material/session05.html#mandatory-reading",
+    "href": "content/material/session05.html#mandatory-reading",
+    "title": "🗓️ Session 5: Importing data",
+    "section": "📚 Mandatory Reading",
+    "text": "📚 Mandatory Reading\n\nThe tutorial Importing and exporting data using data.table",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 05"
+    ]
+  },
+  {
+    "objectID": "content/material/session05.html#further-reading",
+    "href": "content/material/session05.html#further-reading",
+    "title": "🗓️ Session 5: Importing data",
+    "section": "Further Reading",
+    "text": "Further Reading\nTBA",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 05"
+    ]
+  },
+  {
+    "objectID": "content/material/session05.html#coursework",
+    "href": "content/material/session05.html#coursework",
+    "title": "🗓️ Session 5: Importing data",
+    "section": "✍️ Coursework",
+    "text": "✍️ Coursework\n\nDo the exercises ImportData from the DataScienceExercises package\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ImportData\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 05"
+    ]
+  },
+  {
+    "objectID": "content/material/session03.html",
+    "href": "content/material/session03.html",
+    "title": "🗓️ Session 3: Project management",
+    "section": "",
+    "text": "This is one of the most underestimated topics. In this session you learn how to adequately set up your working environment on your computer. This means where you should save which files, which directory structure you should use, and how to point the computer to other files on your computer. While this sounds boring at first, taking seriously the insights from this session will save you tons of hours of frustration in the future!",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 03"
+    ]
+  },
+  {
+    "objectID": "content/material/session03.html#lecture-slides",
+    "href": "content/material/session03.html#lecture-slides",
+    "title": "🗓️ Session 3: Project management",
+    "section": "👨‍🏫 Lecture Slides",
+    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nNoteLecture script",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 03"
+    ]
+  },
+  {
+    "objectID": "content/material/session03.html#lecture-videos",
+    "href": "content/material/session03.html#lecture-videos",
+    "title": "🗓️ Session 3: Project management",
+    "section": "🎥 Lecture videos",
+    "text": "🎥 Lecture videos\nCurrently, no videos are available for this session. Check out the tutorial on project setup instead.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 03"
+    ]
+  },
+  {
+    "objectID": "content/material/session03.html#mandatory-reading",
+    "href": "content/material/session03.html#mandatory-reading",
+    "title": "🗓️ Session 3: Project management",
+    "section": "📚 Mandatory Reading",
+    "text": "📚 Mandatory Reading\n\nThe tutorial Setting up an R project",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 03"
+    ]
+  },
+  {
+    "objectID": "content/material/session03.html#further-reading",
+    "href": "content/material/session03.html#further-reading",
+    "title": "🗓️ Session 3: Project management",
+    "section": "Further Reading",
+    "text": "Further Reading\nWhile we do not cover this in this course, I highly recommend learning the version control system Git. Personally, I can recommend the following:\n\nVery concise introduction to Git\nIntroduction to GitHub: GitHub skills and the official docs",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 03"
+    ]
+  },
+  {
+    "objectID": "content/material/session03.html#coursework",
+    "href": "content/material/session03.html#coursework",
+    "title": "🗓️ Session 3: Project management",
+    "section": "✍️ Coursework",
+    "text": "✍️ Coursework\n\nDo the exercises ProjectOrga from the DataScienceExercises package that refer to setting up an R project\nIf you still have problems with R Packages, re-read the respective section of the tutorial from session 2\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ProjectOrga\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 03"
+    ]
+  },
+  {
+    "objectID": "content/material/session01.html",
+    "href": "content/material/session01.html",
+    "title": "🗓️ Session 01 - Introduction, overview and installation",
+    "section": "",
+    "text": "In this first week, we will cover what you can expect to learn from these exercises and how they differ from the main lecture. I will elaborate a bit on why I chose R for this course, what you can do with it, and what has helped previous participants helped excelling in this course. Finally, I explain a bit what R is, how it relates to R Studio and LaTeX.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 01"
+    ]
+  },
+  {
+    "objectID": "content/material/session01.html#lecture-slides",
+    "href": "content/material/session01.html#lecture-slides",
+    "title": "🗓️ Session 01 - Introduction, overview and installation",
+    "section": "👨‍🏫 Lecture Slides",
+    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 01"
+    ]
+  },
+  {
+    "objectID": "content/material/session01.html#accompanying-lecture-videos",
+    "href": "content/material/session01.html#accompanying-lecture-videos",
+    "title": "🗓️ Session 01 - Introduction, overview and installation",
+    "section": "🎥 Accompanying lecture videos",
+    "text": "🎥 Accompanying lecture videos\nAll the videos are available via this playlist.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 01"
+    ]
+  },
+  {
+    "objectID": "content/material/session01.html#mandatory-reading",
+    "href": "content/material/session01.html#mandatory-reading",
+    "title": "🗓️ Session 01 - Introduction, overview and installation",
+    "section": "📚 Mandatory Reading",
+    "text": "📚 Mandatory Reading\nRead the following tutorials:\n\nInstallation of the necessary software\nInstalling R packages\nUsing the exercise package",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 01"
+    ]
+  },
+  {
+    "objectID": "content/material/session01.html#coursework",
+    "href": "content/material/session01.html#coursework",
+    "title": "🗓️ Session 01 - Introduction, overview and installation",
+    "section": "✍️ Coursework",
+    "text": "✍️ Coursework\n\nMake sure you installed R, R-Studio, Git and all the required R packages\nIf you have questions or problems, please post them in the Moodle forum",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 01"
+    ]
+  },
+  {
+    "objectID": "content/tutorials.html",
+    "href": "content/tutorials.html",
+    "title": "Tutorials",
+    "section": "",
+    "text": "Here are tutorials, meant to complement the course.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Session date - Oldest\n      \n      \n        Session date - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\nSession date\n\n\n\nTitle\n\n\n\n\n\n\n\n\nSeptember 19, 2025\n\n\nInstallation of the necessary software\n\n\n\n\n\n\nSeptember 19, 2025\n\n\nInstalling R packages\n\n\n\n\n\n\nSeptember 19, 2025\n\n\nUsing the exercise package\n\n\n\n\n\n\nSeptember 26, 2025\n\n\nFirst steps in R\n\n\n\n\n\n\nOctober 10, 2025\n\n\nSetting up an R project\n\n\n\n\n\n\nOctober 17, 2025\n\n\nFundamental object types in R I: Functions\n\n\n\n\n\n\nOctober 17, 2025\n\n\nFundamental object types in R II: Vectors\n\n\n\n\n\n\nOctober 17, 2025\n\n\nFundamental object types in R III: Factors and data frames\n\n\n\n\n\n\nOctober 20, 2025\n\n\nImporting and exporting data\n\n\n\n\n\n\nOctober 24, 2025\n\n\nData preparation\n\n\n\n\n\n\nOctober 31, 2025\n\n\nVisualization\n\n\n\n\n\n\nNovember 24, 2025\n\n\nHypothesis Testing and Confidence Intervals\n\n\n\n\n\n\nDecember 5, 2025\n\n\nExperiments\n\n\n\n\n\n\nDecember 5, 2025\n\n\nLinear Regression\n\n\n\n\n\n\nNo matching items",
+    "crumbs": [
+      "💻 Tutorials"
+    ]
+  },
+  {
+    "objectID": "content/index.html",
+    "href": "content/index.html",
+    "title": "Theoretical and Empirical Research Methodology",
+    "section": "",
+    "text": "📍 Lecture\nMondays 13:00-14:30 in MAD (room MAD 099) & Fridays 11:00-12:30 in MAD (room MAD 225; biweekly, see seminar timetable)\nPlease make sure to check out the most recent version of the seminar timetable since lecture dates might differ from one week to another. The most recent version can be found in Moodle.\n\n\n💻 Exercises\nThere is an R package with interactive exercises for this course. I strongly recommend to do the exercises for each session since regular practice is the most important determinant in your success in learning R. You find more information on how to use the exercises in this tutorial. On top of that, there are some additional exercises on selected topics here.\n\n\n📂 Material\nYou find an overview about all lecture materials, such as slides and reading lists here. Complete material lists for the single sessions are distributed via the respective session pages. Lecture videos can, so far, only be accessed via Moodle. EUF students can register for the Moodle course 16256 using the password ResearchMethods25.\n\n\n📖 Tutorials\nComplementary to the lectures there are also short tutorials, which explain certain concepts in a more detailed and applied manner. You can find an overview over all tutorials here.\n\n\n💌 Contact and discussion\nFor asking questions and starting discussions, please use the forum in Moodle.",
+    "crumbs": [
+      "🏢 Getting Started"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Theoretical and Empirical Research Methodology",
+    "section": "",
+    "text": "📑 The course in brief\nFocus: This course is part of the module Theoretical and Empirical Research Methodology. It complements the theoretical lectures by introducing you to the statistical programming language R and acquire practical knowledge about how to implement essential research tools and all theoretical concepts discussed during the main lecture in R.\nHow: The implementation lab comprises a mixture of (i) lectures, in which I introduce concepts in the classroom, (ii) automated hands-on exercises for you to do at home on your own and (iii) instructional videos for topics that are best learned and practiced by yourself. Of course, you are always invited to post your questions to the course forum on Moodle and more intricate problems can be solved in class.\nPrerequisites: The lab does not require you to have any prior knowledge in R or any other programming language. Depending on your prior knowledge or affinity to programming, the course will be quite demanding, but equip you with computational skills that are most valuable both within academia and the business world.\n\n\n🎯 Learning Objectives\n\nUse R together with the integrated development environment R Studio\nUnderstand the use of R packages to perform specific data analytic tasks\nWrite reproducible data analysis reports using Quarto\nTransform raw data into tidy data, which is suitable for further analysis\nChoose and justify the correct visualization approach, and create appealing visualizations using the R package ggplot2\nImplement and interpret linear regression models with numerical and categorial variables\nAnalyze experimental data in R\n\n\n The main course on moodle",
+    "crumbs": [
+      "🏠 Home"
+    ]
+  },
+  {
+    "objectID": "content/exercises.html",
+    "href": "content/exercises.html",
+    "title": "Additional exercises",
+    "section": "",
+    "text": "Here are some additional exercises, on top of those provided by the exercise package.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Session date - Oldest\n      \n      \n        Session date - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\nSession date\n\n\n\nTitle\n\n\n\n\n\n\n\n\nOctober 17, 2025\n\n\nBasic object types: exercises\n\n\n\n\n\n\nNovember 7, 2025\n\n\nRecap exercises: import, preparation and visualization\n\n\n\n\n\n\nNovember 7, 2025\n\n\nQuarto exercises\n\n\n\n\n\n\nDecember 5, 2025\n\n\nExercise on experiments\n\n\n\n\n\n\nDecember 5, 2025\n\n\nExercises on multiple linear regression\n\n\n\n\n\n\n \n\n\nExercise on experiments - possible solution\n\n\n\n\n\n\nNo matching items",
+    "crumbs": [
+      "👾 Additional exercises"
+    ]
+  },
+  {
+    "objectID": "content/statrecap.html",
+    "href": "content/statrecap.html",
+    "title": "A short and friendly recap of mathematical and statistical fundamentals",
+    "section": "",
+    "text": "Here I provide you with explanations of the basics in statistics and mathematics that are required for this course, as explicated in the seminar description.\nThis is ongoing work, so I greatly value your feedback and your suggestions on how to make this material more comprehensive and accessible.\n\n\n\n\n\n\n\n\n\n\nTitle\n\n\n\n\n\n\n\n\n1: What is Statistics all about? Conceptual Foundations\n\n\n\n\n\n\n2: Data Fundamentals\n\n\n\n\n\n\n3: Descriptive Statistics\n\n\n\n\n\n\n4: Essentials in Probability Theory for Statistics\n\n\n\n\n\n\nNo matching items",
+    "crumbs": [
+      "📈 Statistics recap"
+    ]
+  },
+  {
+    "objectID": "content/material/index.html",
+    "href": "content/material/index.html",
+    "title": "Material overview",
+    "section": "",
+    "text": "The following textbooks offer a good general reference to the course content, and I think its a good idea to read into these books in a general way. Moreover, I often point to chapters in the respective session pages.\n\nWickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). R for data science: Import, tidy, transform, visualize, and model data (2nd edition). O’Reilly. https://r4ds.hadley.nz/\nIsmay, C., & Kim, A. Y.-S. (2020). Statistical inference via data science: A ModernDive, into R and the tidyverse. CRC Press, Taylor and Francis Group. https://moderndive.com/index.html\n\nFor more advanced details on the fundamentals of programming in R, I recommend the following:\n\nWickham, H. (2019). Advanced R (Second edition). CRC Press/Taylor & Francis Group. https://adv-r.hadley.nz/\n\nFor the model-related parts of the lecture I recommend the following book as a further reading reference:\n\nJames, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). An introduction to statistical learning: With applications in R (Second edition). Springer. https://www.statlearning.com/",
+    "crumbs": [
+      "🗓️ Material",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "content/material/index.html#general-references",
+    "href": "content/material/index.html#general-references",
+    "title": "Material overview",
+    "section": "",
+    "text": "The following textbooks offer a good general reference to the course content, and I think its a good idea to read into these books in a general way. Moreover, I often point to chapters in the respective session pages.\n\nWickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). R for data science: Import, tidy, transform, visualize, and model data (2nd edition). O’Reilly. https://r4ds.hadley.nz/\nIsmay, C., & Kim, A. Y.-S. (2020). Statistical inference via data science: A ModernDive, into R and the tidyverse. CRC Press, Taylor and Francis Group. https://moderndive.com/index.html\n\nFor more advanced details on the fundamentals of programming in R, I recommend the following:\n\nWickham, H. (2019). Advanced R (Second edition). CRC Press/Taylor & Francis Group. https://adv-r.hadley.nz/\n\nFor the model-related parts of the lecture I recommend the following book as a further reading reference:\n\nJames, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). An introduction to statistical learning: With applications in R (Second edition). Springer. https://www.statlearning.com/",
+    "crumbs": [
+      "🗓️ Material",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "content/material/index.html#session-specific-material",
+    "href": "content/material/index.html#session-specific-material",
+    "title": "Material overview",
+    "section": "🔖 Session-specific material",
+    "text": "🔖 Session-specific material\n\n\n\n\n\n\nNoteHow to use the exercise codes?\n\n\n\n\n\nFor information on how to use the exercise code, read this tutorial.\n\n\n\n\n\n\nSession\nTopic\nExercise code\n\n\n\n\n1\nGeneral introduction\n\n\n\n2\nBasics of R and R-Studio\nBasics, Functions\n\n\n3\nProject management\nProjectOrga\n\n\n4\nObject types\nObjectTypes1, ObjectTypes2\n\n\n5\nImporting data\nWrangling1, Wrangling2\n\n\n6\nPreparing data\nWrangling1, Wrangling2\n\n\n7\nVisualization\nVisualization1\n\n\n8\nQuarto\nQuarto",
+    "crumbs": [
+      "🗓️ Material",
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "content/material/session02.html",
+    "href": "content/material/session02.html",
+    "title": "🗓️ Session 2: First steps in R",
+    "section": "",
+    "text": "In this session, you will learn about how to use the integrated development environment R-Studio to edit and execute R script and about the basic commands in R. Moreover, you will be introduced to two fundamental concepts: assignments and functions.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 02"
+    ]
+  },
+  {
+    "objectID": "content/material/session02.html#lecture-slides",
+    "href": "content/material/session02.html#lecture-slides",
+    "title": "🗓️ Session 2: First steps in R",
+    "section": "👨‍🏫 Lecture Slides",
+    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipThe R script of this session",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 02"
+    ]
+  },
+  {
+    "objectID": "content/material/session02.html#accompanying-lecture-videos",
+    "href": "content/material/session02.html#accompanying-lecture-videos",
+    "title": "🗓️ Session 2: First steps in R",
+    "section": "🎥 Accompanying lecture videos",
+    "text": "🎥 Accompanying lecture videos\nAll the videos are available via this playlist.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 02"
+    ]
+  },
+  {
+    "objectID": "content/material/session02.html#mandatory-reading",
+    "href": "content/material/session02.html#mandatory-reading",
+    "title": "🗓️ Session 2: First steps in R",
+    "section": "📚 Mandatory Reading",
+    "text": "📚 Mandatory Reading\n\nTutorial First steps in R\nChapter 2 in Wickham et al. (2023).\n\n\n🏆 Further readings\n\nR Studio Cheat Sheet\nChapter 4 in Wickham et al. (2023).\nChapter 8 in Wickham et al. (2023).",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 02"
+    ]
+  },
+  {
+    "objectID": "content/material/session02.html#coursework",
+    "href": "content/material/session02.html#coursework",
+    "title": "🗓️ Session 2: First steps in R",
+    "section": "✍️ Coursework",
+    "text": "✍️ Coursework\n\nDo the Basics exercises of the package DataScienceExercises\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Basics\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nDo the Functions exercises of the package DataScienceExercises\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Functions\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nIf you have questions or problems, please post them in the Moodle forum",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 02"
+    ]
+  },
+  {
+    "objectID": "content/material/session04.html",
+    "href": "content/material/session04.html",
+    "title": "🗓️ Session 4: Object types in R",
+    "section": "",
+    "text": "In the first part of this session you learn some additional details about R packages and about the most important and most fundamental object types in R, such as decimal numbers or words. While this might look a bit boring at first, understanding these basic types is fundamental for all the more advanced (and exiting) stuff in the future!\nIn the second part of this session, you are then introduced to two more advanced object types in R. The two object types covered, factors and data frames, are advanced in the sense that they can be thought of extensions of some of the basic object types you encountered before: factors and special kinds of integers, and data frames are special kinds of lists.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 04"
+    ]
+  },
+  {
+    "objectID": "content/material/session04.html#lecture-slides",
+    "href": "content/material/session04.html#lecture-slides",
+    "title": "🗓️ Session 4: Object types in R",
+    "section": "👨‍🏫 Lecture Slides",
+    "text": "👨‍🏫 Lecture Slides\nFor the slides of the first part of this session (Packages and basic object types) on click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipSolutions to the intermediate exercises of part 1\n\n\n\n\n\n\n\n\n\nFor the slides of the second part of this session (Advanced object types) see the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipNotes and solutions for the second part of this session",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 04"
+    ]
+  },
+  {
+    "objectID": "content/material/session04.html#lecture-videos",
+    "href": "content/material/session04.html#lecture-videos",
+    "title": "🗓️ Session 4: Object types in R",
+    "section": "🎥 Lecture videos",
+    "text": "🎥 Lecture videos\nAll the videos for the first part on basic object types are available via this playlist.\n\n\n\nAll the videos for the second part on advanced object types are available via this playlist.",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 04"
+    ]
+  },
+  {
+    "objectID": "content/material/session04.html#mandatory-reading",
+    "href": "content/material/session04.html#mandatory-reading",
+    "title": "🗓️ Session 4: Object types in R",
+    "section": "📚 Mandatory Reading",
+    "text": "📚 Mandatory Reading\nRead the following tutorials for the first part on basic object types:\n\nFundamental object types in R I: Functions\nFundamental object types in R II: Vectors\n\nThe topics of the second part on advanced object types are covered here:\n\nFundamental object types in R III: Factors and data frames\n\n\n🏆 Further readings\nI suggest you read these references after you learned about data wrangling techniques in session 10.\n\nSections 1-3 in Chapter 12 of Wickham et al. (2023).\nChapter 13 in Wickham et al. (2023).\nChapter 14 in Wickham et al. (2023).\nChapter 16 in Wickham et al. (2023).",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 04"
+    ]
+  },
+  {
+    "objectID": "content/material/session04.html#coursework",
+    "href": "content/material/session04.html#coursework",
+    "title": "🗓️ Session 4: Object types in R",
+    "section": "✍️ Coursework",
+    "text": "✍️ Coursework\n\nDo the ObjectTypes1 exercises of the package DataScienceExercises for the first part on basic object types:\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ObjectTypes1\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nFor the second part do the ObjectTypes2 exercises of the package DataScienceExercises\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ObjectTypes2\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nIf you have questions or problems, please post them in the Moodle forum",
+    "crumbs": [
+      "🗓️ Material",
+      "Session 04"
     ]
   },
   {
@@ -759,528 +1211,120 @@
     ]
   },
   {
-    "objectID": "content/material/session04.html",
-    "href": "content/material/session04.html",
-    "title": "🗓️ Session 4: Object types in R",
+    "objectID": "content/material/session08.html",
+    "href": "content/material/session08.html",
+    "title": "🗓️ Session 8: A very short introduction to Quarto",
     "section": "",
-    "text": "In the first part of this session you learn some additional details about R packages and about the most important and most fundamental object types in R, such as decimal numbers or words. While this might look a bit boring at first, understanding these basic types is fundamental for all the more advanced (and exiting) stuff in the future!\nIn the second part of this session, you are then introduced to two more advanced object types in R. The two object types covered, factors and data frames, are advanced in the sense that they can be thought of extensions of some of the basic object types you encountered before: factors and special kinds of integers, and data frames are special kinds of lists.",
+    "text": "Quarto is a modern multi-language version of R Markdown. As with its predecessor, the idea is to provide people with the opportunity to write text and code into the very same document. This makes the creation of nice looking and reproducible reports or paper very easy. Moreoever, with Quarto it is very easy to create very nice papers, reports, websites or interactive apps. This website, for example, is fully written in Quarto. In this lecture, you learn everything you need to get started with writing your first Quarto documents. In fact, its really straightforward once you get the basic idea.",
     "crumbs": [
       "🗓️ Material",
-      "Session 04"
+      "Session 08"
     ]
   },
   {
-    "objectID": "content/material/session04.html#lecture-slides",
-    "href": "content/material/session04.html#lecture-slides",
-    "title": "🗓️ Session 4: Object types in R",
+    "objectID": "content/material/session08.html#lecture-slides",
+    "href": "content/material/session08.html#lecture-slides",
+    "title": "🗓️ Session 8: A very short introduction to Quarto",
     "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nFor the slides of the first part of this session (Packages and basic object types) on click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipSolutions to the intermediate exercises of part 1\n\n\n\n\n\n\n\n\n\nFor the slides of the second part of this session (Advanced object types) see the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipNotes and solutions for the second part of this session",
+    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\nDesasterMarkdown.pdf\nNicerMarkdown.pdf\n\n\n\n\n\n\n\nTipCode for the markdown desaster and a possible solution",
     "crumbs": [
       "🗓️ Material",
-      "Session 04"
+      "Session 08"
     ]
   },
   {
-    "objectID": "content/material/session04.html#lecture-videos",
-    "href": "content/material/session04.html#lecture-videos",
-    "title": "🗓️ Session 4: Object types in R",
-    "section": "🎥 Lecture videos",
-    "text": "🎥 Lecture videos\nAll the videos for the first part on basic object types are available via this playlist.\n\n\n\nAll the videos for the second part on advanced object types are available via this playlist.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 04"
-    ]
-  },
-  {
-    "objectID": "content/material/session04.html#mandatory-reading",
-    "href": "content/material/session04.html#mandatory-reading",
-    "title": "🗓️ Session 4: Object types in R",
-    "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\nRead the following tutorials for the first part on basic object types:\n\nFundamental object types in R I: Functions\nFundamental object types in R II: Vectors\n\nThe topics of the second part on advanced object types are covered here:\n\nFundamental object types in R III: Factors and data frames\n\n\n🏆 Further readings\nI suggest you read these references after you learned about data wrangling techniques in session 10.\n\nSections 1-3 in Chapter 12 of Wickham et al. (2023).\nChapter 13 in Wickham et al. (2023).\nChapter 14 in Wickham et al. (2023).\nChapter 16 in Wickham et al. (2023).",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 04"
-    ]
-  },
-  {
-    "objectID": "content/material/session04.html#coursework",
-    "href": "content/material/session04.html#coursework",
-    "title": "🗓️ Session 4: Object types in R",
-    "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the ObjectTypes1 exercises of the package DataScienceExercises for the first part on basic object types:\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ObjectTypes1\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nFor the second part do the ObjectTypes2 exercises of the package DataScienceExercises\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ObjectTypes2\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nIf you have questions or problems, please post them in the Moodle forum",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 04"
-    ]
-  },
-  {
-    "objectID": "content/material/session02.html",
-    "href": "content/material/session02.html",
-    "title": "🗓️ Session 2: First steps in R",
-    "section": "",
-    "text": "In this session, you will learn about how to use the integrated development environment R-Studio to edit and execute R script and about the basic commands in R. Moreover, you will be introduced to two fundamental concepts: assignments and functions.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 02"
-    ]
-  },
-  {
-    "objectID": "content/material/session02.html#lecture-slides",
-    "href": "content/material/session02.html#lecture-slides",
-    "title": "🗓️ Session 2: First steps in R",
-    "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipThe R script of this session",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 02"
-    ]
-  },
-  {
-    "objectID": "content/material/session02.html#accompanying-lecture-videos",
-    "href": "content/material/session02.html#accompanying-lecture-videos",
-    "title": "🗓️ Session 2: First steps in R",
-    "section": "🎥 Accompanying lecture videos",
-    "text": "🎥 Accompanying lecture videos\nAll the videos are available via this playlist.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 02"
-    ]
-  },
-  {
-    "objectID": "content/material/session02.html#mandatory-reading",
-    "href": "content/material/session02.html#mandatory-reading",
-    "title": "🗓️ Session 2: First steps in R",
-    "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\n\nTutorial First steps in R\nChapter 2 in Wickham et al. (2023).\n\n\n🏆 Further readings\n\nR Studio Cheat Sheet\nChapter 4 in Wickham et al. (2023).\nChapter 8 in Wickham et al. (2023).",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 02"
-    ]
-  },
-  {
-    "objectID": "content/material/session02.html#coursework",
-    "href": "content/material/session02.html#coursework",
-    "title": "🗓️ Session 2: First steps in R",
-    "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the Basics exercises of the package DataScienceExercises\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Basics\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nDo the Functions exercises of the package DataScienceExercises\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Functions\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nIf you have questions or problems, please post them in the Moodle forum",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 02"
-    ]
-  },
-  {
-    "objectID": "content/material/index.html",
-    "href": "content/material/index.html",
-    "title": "Material overview",
-    "section": "",
-    "text": "The following textbooks offer a good general reference to the course content, and I think its a good idea to read into these books in a general way. Moreover, I often point to chapters in the respective session pages.\n\nWickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). R for data science: Import, tidy, transform, visualize, and model data (2nd edition). O’Reilly. https://r4ds.hadley.nz/\nIsmay, C., & Kim, A. Y.-S. (2020). Statistical inference via data science: A ModernDive, into R and the tidyverse. CRC Press, Taylor and Francis Group. https://moderndive.com/index.html\n\nFor more advanced details on the fundamentals of programming in R, I recommend the following:\n\nWickham, H. (2019). Advanced R (Second edition). CRC Press/Taylor & Francis Group. https://adv-r.hadley.nz/\n\nFor the model-related parts of the lecture I recommend the following book as a further reading reference:\n\nJames, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). An introduction to statistical learning: With applications in R (Second edition). Springer. https://www.statlearning.com/",
-    "crumbs": [
-      "🗓️ Material",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "content/material/index.html#general-references",
-    "href": "content/material/index.html#general-references",
-    "title": "Material overview",
-    "section": "",
-    "text": "The following textbooks offer a good general reference to the course content, and I think its a good idea to read into these books in a general way. Moreover, I often point to chapters in the respective session pages.\n\nWickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). R for data science: Import, tidy, transform, visualize, and model data (2nd edition). O’Reilly. https://r4ds.hadley.nz/\nIsmay, C., & Kim, A. Y.-S. (2020). Statistical inference via data science: A ModernDive, into R and the tidyverse. CRC Press, Taylor and Francis Group. https://moderndive.com/index.html\n\nFor more advanced details on the fundamentals of programming in R, I recommend the following:\n\nWickham, H. (2019). Advanced R (Second edition). CRC Press/Taylor & Francis Group. https://adv-r.hadley.nz/\n\nFor the model-related parts of the lecture I recommend the following book as a further reading reference:\n\nJames, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). An introduction to statistical learning: With applications in R (Second edition). Springer. https://www.statlearning.com/",
-    "crumbs": [
-      "🗓️ Material",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "content/material/index.html#session-specific-material",
-    "href": "content/material/index.html#session-specific-material",
-    "title": "Material overview",
-    "section": "🔖 Session-specific material",
-    "text": "🔖 Session-specific material\n\n\n\n\n\n\nNoteHow to use the exercise codes?\n\n\n\n\n\nFor information on how to use the exercise code, read this tutorial.\n\n\n\n\n\n\nSession\nTopic\nExercise code\n\n\n\n\n1\nGeneral introduction\n\n\n\n2\nBasics of R and R-Studio\nBasics, Functions\n\n\n3\nProject management\nProjectOrga\n\n\n4\nObject types\nObjectTypes1, ObjectTypes2\n\n\n5\nImporting data\nWrangling1, Wrangling2\n\n\n6\nPreparing data\nWrangling1, Wrangling2\n\n\n7\nVisualization\nVisualization1\n\n\n8\nQuarto\nQuarto",
-    "crumbs": [
-      "🗓️ Material",
-      "Overview"
-    ]
-  },
-  {
-    "objectID": "content/statrecap.html",
-    "href": "content/statrecap.html",
-    "title": "A short and friendly recap of mathematical and statistical fundamentals",
-    "section": "",
-    "text": "Here I provide you with explanations of the basics in statistics and mathematics that are required for this course, as explicated in the seminar description.\nThis is ongoing work, so I greatly value your feedback and your suggestions on how to make this material more comprehensive and accessible.\n\n\n\n\n\n\n\n\n\n\nTitle\n\n\n\n\n\n\n\n\n1: What is Statistics all about? Conceptual Foundations\n\n\n\n\n\n\n2: Data Fundamentals\n\n\n\n\n\n\n3: Descriptive Statistics\n\n\n\n\n\n\n4: Essentials in Probability Theory for Statistics\n\n\n\n\n\n\nNo matching items",
-    "crumbs": [
-      "📈 Statistics recap"
-    ]
-  },
-  {
-    "objectID": "content/exercises.html",
-    "href": "content/exercises.html",
-    "title": "Additional exercises",
-    "section": "",
-    "text": "Here are some additional exercises, on top of those provided by the exercise package.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Session date - Oldest\n      \n      \n        Session date - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\nSession date\n\n\n\nTitle\n\n\n\n\n\n\n\n\nOctober 17, 2025\n\n\nBasic object types: exercises\n\n\n\n\n\n\nNovember 7, 2025\n\n\nRecap exercises: import, preparation and visualization\n\n\n\n\n\n\nNovember 7, 2025\n\n\nQuarto exercises\n\n\n\n\n\n\nDecember 5, 2025\n\n\nExercise on experiments\n\n\n\n\n\n\nDecember 5, 2025\n\n\nExercises on multiple linear regression\n\n\n\n\n\n\n \n\n\nExercise on experiments - possible solution\n\n\n\n\n\n\nNo matching items",
-    "crumbs": [
-      "👾 Additional exercises"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Theoretical and Empirical Research Methodology",
-    "section": "",
-    "text": "📑 The course in brief\nFocus: This course is part of the module Theoretical and Empirical Research Methodology. It complements the theoretical lectures by introducing you to the statistical programming language R and acquire practical knowledge about how to implement essential research tools and all theoretical concepts discussed during the main lecture in R.\nHow: The implementation lab comprises a mixture of (i) lectures, in which I introduce concepts in the classroom, (ii) automated hands-on exercises for you to do at home on your own and (iii) instructional videos for topics that are best learned and practiced by yourself. Of course, you are always invited to post your questions to the course forum on Moodle and more intricate problems can be solved in class.\nPrerequisites: The lab does not require you to have any prior knowledge in R or any other programming language. Depending on your prior knowledge or affinity to programming, the course will be quite demanding, but equip you with computational skills that are most valuable both within academia and the business world.\n\n\n🎯 Learning Objectives\n\nUse R together with the integrated development environment R Studio\nUnderstand the use of R packages to perform specific data analytic tasks\nWrite reproducible data analysis reports using Quarto\nTransform raw data into tidy data, which is suitable for further analysis\nChoose and justify the correct visualization approach, and create appealing visualizations using the R package ggplot2\nImplement and interpret linear regression models with numerical and categorial variables\nAnalyze experimental data in R\n\n\n The main course on moodle",
-    "crumbs": [
-      "🏠 Home"
-    ]
-  },
-  {
-    "objectID": "content/index.html",
-    "href": "content/index.html",
-    "title": "Theoretical and Empirical Research Methodology",
-    "section": "",
-    "text": "📍 Lecture\nMondays 13:00-14:30 in MAD (room MAD 099) & Fridays 11:00-12:30 in MAD (room MAD 225; biweekly, see seminar timetable)\nPlease make sure to check out the most recent version of the seminar timetable since lecture dates might differ from one week to another. The most recent version can be found in Moodle.\n\n\n💻 Exercises\nThere is an R package with interactive exercises for this course. I strongly recommend to do the exercises for each session since regular practice is the most important determinant in your success in learning R. You find more information on how to use the exercises in this tutorial. On top of that, there are some additional exercises on selected topics here.\n\n\n📂 Material\nYou find an overview about all lecture materials, such as slides and reading lists here. Complete material lists for the single sessions are distributed via the respective session pages. Lecture videos can, so far, only be accessed via Moodle. EUF students can register for the Moodle course 16256 using the password ResearchMethods25.\n\n\n📖 Tutorials\nComplementary to the lectures there are also short tutorials, which explain certain concepts in a more detailed and applied manner. You can find an overview over all tutorials here.\n\n\n💌 Contact and discussion\nFor asking questions and starting discussions, please use the forum in Moodle.",
-    "crumbs": [
-      "🏢 Getting Started"
-    ]
-  },
-  {
-    "objectID": "content/tutorials.html",
-    "href": "content/tutorials.html",
-    "title": "Tutorials",
-    "section": "",
-    "text": "Here are tutorials, meant to complement the course.\n\n\n\n\n\n\n   \n    \n    \n      Order By\n      Default\n      \n        Session date - Oldest\n      \n      \n        Session date - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\nSession date\n\n\n\nTitle\n\n\n\n\n\n\n\n\nSeptember 19, 2025\n\n\nInstallation of the necessary software\n\n\n\n\n\n\nSeptember 19, 2025\n\n\nInstalling R packages\n\n\n\n\n\n\nSeptember 19, 2025\n\n\nUsing the exercise package\n\n\n\n\n\n\nSeptember 26, 2025\n\n\nFirst steps in R\n\n\n\n\n\n\nOctober 10, 2025\n\n\nSetting up an R project\n\n\n\n\n\n\nOctober 17, 2025\n\n\nFundamental object types in R I: Functions\n\n\n\n\n\n\nOctober 17, 2025\n\n\nFundamental object types in R II: Vectors\n\n\n\n\n\n\nOctober 17, 2025\n\n\nFundamental object types in R III: Factors and data frames\n\n\n\n\n\n\nOctober 20, 2025\n\n\nImporting and exporting data\n\n\n\n\n\n\nOctober 24, 2025\n\n\nData preparation\n\n\n\n\n\n\nOctober 31, 2025\n\n\nVisualization\n\n\n\n\n\n\nNovember 24, 2025\n\n\nHypothesis Testing and Confidence Intervals\n\n\n\n\n\n\nDecember 5, 2025\n\n\nExperiments\n\n\n\n\n\n\nDecember 5, 2025\n\n\nLinear Regression\n\n\n\n\n\n\nNo matching items",
-    "crumbs": [
-      "💻 Tutorials"
-    ]
-  },
-  {
-    "objectID": "content/material/session01.html",
-    "href": "content/material/session01.html",
-    "title": "🗓️ Session 01 - Introduction, overview and installation",
-    "section": "",
-    "text": "In this first week, we will cover what you can expect to learn from these exercises and how they differ from the main lecture. I will elaborate a bit on why I chose R for this course, what you can do with it, and what has helped previous participants helped excelling in this course. Finally, I explain a bit what R is, how it relates to R Studio and LaTeX.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 01"
-    ]
-  },
-  {
-    "objectID": "content/material/session01.html#lecture-slides",
-    "href": "content/material/session01.html#lecture-slides",
-    "title": "🗓️ Session 01 - Introduction, overview and installation",
-    "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 01"
-    ]
-  },
-  {
-    "objectID": "content/material/session01.html#accompanying-lecture-videos",
-    "href": "content/material/session01.html#accompanying-lecture-videos",
-    "title": "🗓️ Session 01 - Introduction, overview and installation",
-    "section": "🎥 Accompanying lecture videos",
-    "text": "🎥 Accompanying lecture videos\nAll the videos are available via this playlist.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 01"
-    ]
-  },
-  {
-    "objectID": "content/material/session01.html#mandatory-reading",
-    "href": "content/material/session01.html#mandatory-reading",
-    "title": "🗓️ Session 01 - Introduction, overview and installation",
-    "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\nRead the following tutorials:\n\nInstallation of the necessary software\nInstalling R packages\nUsing the exercise package",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 01"
-    ]
-  },
-  {
-    "objectID": "content/material/session01.html#coursework",
-    "href": "content/material/session01.html#coursework",
-    "title": "🗓️ Session 01 - Introduction, overview and installation",
-    "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nMake sure you installed R, R-Studio, Git and all the required R packages\nIf you have questions or problems, please post them in the Moodle forum",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 01"
-    ]
-  },
-  {
-    "objectID": "content/material/session03.html",
-    "href": "content/material/session03.html",
-    "title": "🗓️ Session 3: Project management",
-    "section": "",
-    "text": "This is one of the most underestimated topics. In this session you learn how to adequately set up your working environment on your computer. This means where you should save which files, which directory structure you should use, and how to point the computer to other files on your computer. While this sounds boring at first, taking seriously the insights from this session will save you tons of hours of frustration in the future!",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 03"
-    ]
-  },
-  {
-    "objectID": "content/material/session03.html#lecture-slides",
-    "href": "content/material/session03.html#lecture-slides",
-    "title": "🗓️ Session 3: Project management",
-    "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nNoteLecture script",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 03"
-    ]
-  },
-  {
-    "objectID": "content/material/session03.html#lecture-videos",
-    "href": "content/material/session03.html#lecture-videos",
-    "title": "🗓️ Session 3: Project management",
-    "section": "🎥 Lecture videos",
-    "text": "🎥 Lecture videos\nCurrently, no videos are available for this session. Check out the tutorial on project setup instead.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 03"
-    ]
-  },
-  {
-    "objectID": "content/material/session03.html#mandatory-reading",
-    "href": "content/material/session03.html#mandatory-reading",
-    "title": "🗓️ Session 3: Project management",
-    "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\n\nThe tutorial Setting up an R project",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 03"
-    ]
-  },
-  {
-    "objectID": "content/material/session03.html#further-reading",
-    "href": "content/material/session03.html#further-reading",
-    "title": "🗓️ Session 3: Project management",
-    "section": "Further Reading",
-    "text": "Further Reading\nWhile we do not cover this in this course, I highly recommend learning the version control system Git. Personally, I can recommend the following:\n\nVery concise introduction to Git\nIntroduction to GitHub: GitHub skills and the official docs",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 03"
-    ]
-  },
-  {
-    "objectID": "content/material/session03.html#coursework",
-    "href": "content/material/session03.html#coursework",
-    "title": "🗓️ Session 3: Project management",
-    "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the exercises ProjectOrga from the DataScienceExercises package that refer to setting up an R project\nIf you still have problems with R Packages, re-read the respective section of the tutorial from session 2\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ProjectOrga\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 03"
-    ]
-  },
-  {
-    "objectID": "content/material/session05.html",
-    "href": "content/material/session05.html",
-    "title": "🗓️ Session 5: Importing data",
-    "section": "",
-    "text": "This is also one of the most underestimated topics. This session builds upon the previous session on setting up a project environment. Now you will learn how to import data obtained elsewhere into R. We focus on importing .csv files, but with the skills acquired in this context you will face no difficulties in importing other data types as well.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 05"
-    ]
-  },
-  {
-    "objectID": "content/material/session05.html#lecture-slides",
-    "href": "content/material/session05.html#lecture-slides",
-    "title": "🗓️ Session 5: Importing data",
-    "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\nData for the exercises",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 05"
-    ]
-  },
-  {
-    "objectID": "content/material/session05.html#lecture-videos",
-    "href": "content/material/session05.html#lecture-videos",
-    "title": "🗓️ Session 5: Importing data",
+    "objectID": "content/material/session08.html#lecture-videos",
+    "href": "content/material/session08.html#lecture-videos",
+    "title": "🗓️ Session 8: A very short introduction to Quarto",
     "section": "🎥 Lecture videos",
     "text": "🎥 Lecture videos\nAll the videos are available via this playlist.",
     "crumbs": [
       "🗓️ Material",
-      "Session 05"
+      "Session 08"
     ]
   },
   {
-    "objectID": "content/material/session05.html#mandatory-reading",
-    "href": "content/material/session05.html#mandatory-reading",
-    "title": "🗓️ Session 5: Importing data",
+    "objectID": "content/material/session08.html#mandatory-reading",
+    "href": "content/material/session08.html#mandatory-reading",
+    "title": "🗓️ Session 8: A very short introduction to Quarto",
     "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\n\nThe tutorial Importing and exporting data using data.table",
+    "text": "📚 Mandatory Reading\n\nThe CommonMark markdown tutorial\nQuarto tutorial I: the basics\nQuarto tutorial II: computations\nQuarto tutorial III: authoring quarto documents",
     "crumbs": [
       "🗓️ Material",
-      "Session 05"
+      "Session 08"
     ]
   },
   {
-    "objectID": "content/material/session05.html#further-reading",
-    "href": "content/material/session05.html#further-reading",
-    "title": "🗓️ Session 5: Importing data",
+    "objectID": "content/material/session08.html#further-reading",
+    "href": "content/material/session08.html#further-reading",
+    "title": "🗓️ Session 8: A very short introduction to Quarto",
     "section": "Further Reading",
-    "text": "Further Reading\nTBA",
+    "text": "Further Reading\n\nBlog introducing Quarto\nQuarto and R Markdown\nThe comprehensive Quarto documentation\nMarkdown basics\nThe R Markdown Cookbook",
     "crumbs": [
       "🗓️ Material",
-      "Session 05"
+      "Session 08"
     ]
   },
   {
-    "objectID": "content/material/session05.html#coursework",
-    "href": "content/material/session05.html#coursework",
-    "title": "🗓️ Session 5: Importing data",
+    "objectID": "content/material/session08.html#coursework",
+    "href": "content/material/session08.html#coursework",
+    "title": "🗓️ Session 8: A very short introduction to Quarto",
     "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the exercises ImportData from the DataScienceExercises package\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"ImportData\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))",
+    "text": "✍️ Coursework\n\nDo the exercises Quarto from the DataScienceExercises package\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Quarto\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\nDo the following practical exercise:\n\n\n\n\n\n\n\nNoteExercise description\n\n\n\n\n\nCreate a new Quarto document where you set the title, date, and the author explicitly. Write a sample text that comprises…\n\n…at least one level 1 heading\n…at least two level 2 headings\n…a YAML part that specifies that R code remains hidden by default\n…one R chunk where both the output and the code is printed in the final document\n…one R chunk that produces a simply ggplot object and where the code producing the plot is hidden\n\nThen do the following:\n\nKnit the document to html with a floating table of contents and a special theme.\nMake the document available via Netlify Drop and add the possibility to download the underlying Rmd file. &gt; Note: For Netlify Drop to work, the html file must be called index.html!\nKnit the document to PDF and make sure that it includes a table of contents.\n\n\n\n\n\n\n\n\n\n\nTipPossible solution",
     "crumbs": [
       "🗓️ Material",
-      "Session 05"
+      "Session 08"
     ]
   },
   {
-    "objectID": "content/material/session07.html",
-    "href": "content/material/session07.html",
-    "title": "🗓️ Session 7: Visualization",
+    "objectID": "content/material/session09-ex-solution.html",
+    "href": "content/material/session09-ex-solution.html",
+    "title": "Sample solution for analyzing sales data",
     "section": "",
-    "text": "One area for which R is particulary well-known for is the area of visualization. This is particularly because of the package ggplot2. This session introduces ggplot2 and the general approach to generate visualization in R. The good thing is that if you follow the approach described here, you can basically create every visualization type you can think of.",
+    "text": "This is an example solution revealing one of the hidden patterns in the data.\nWe use the following packages:\n\nlibrary(readr)\nlibrary(ggplot2)\n\nLoading the data:\n\ncustomer_data &lt;- read_csv(\"customer_sample.csv\")\n\nRows: 200 Columns: 6\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (2): customer_type, preferred_category\ndbl (4): customer_id, age, spending, visit_frequency\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\nCreate a figure on the relationship between age, spending, and product category:\n\nggplot(customer_data, aes(x = age, y = spending, color = preferred_category, size = visit_frequency)) +\n  geom_point(alpha = 0.7) +\n  geom_smooth(aes(group = preferred_category), method = \"loess\", se = FALSE, linewidth = 1) +\n  scale_color_brewer(palette = \"Set1\") +\n  scale_size_continuous(range = c(1, 8)) +\n  labs(\n    title = \"Customer Spending Patterns by Age and Product Category\",\n    subtitle = \"Bubble size represents visit frequency\",\n    x = \"Customer Age\",\n    y = \"Monthly Spending ($)\",\n    color = \"Preferred Category\",\n    size = \"Visits per Month\"\n  ) +\n  theme_minimal() +\n  theme(\n    legend.position = \"right\",\n    plot.title = element_text(face = \"bold\"),\n    panel.grid.minor = element_blank()\n  )\n\nWarning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\nℹ Please use `linewidth` instead.\n\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\nWarning: The following aesthetics were dropped during statistical transformation: size.\nℹ This can happen when ggplot fails to infer the correct grouping structure in\n  the data.\nℹ Did you forget to specify a `group` aesthetic or to convert a numerical\n  variable into a factor?\n\n\n\n\n\n\n\n\n\nFrom his visualization we can infer the following insights: 1. The non-linear relationship between age and spending (peaks at middle age) 2. Electronics customers spend more across all age groups 3. Visit frequency (bubble size) correlates with spending 4. Different product categories have different age-spending curves 5. Some categories are more popular with specific age groups\nOne conclusion for a marketing strategy could be:\n\nMiddle-aged customers (35-55) have the highest spending across all categories, with Electronics shoppers spending significantly more. A targeted campaign for Electronics products to middle-aged customers combined with cross-selling opportunities to younger and older demographics could maximize revenue."
+  },
+  {
+    "objectID": "content/material/session10.html",
+    "href": "content/material/session10.html",
+    "title": "🗓️ Session 10: Linear regression and experiments in R",
+    "section": "",
+    "text": "This session focuses on the practical implementation of linear regression models and on how to conduct the most common tasks associated with designing and implementing experiments in R.\nThis way it complements the more theoretical lectures. More precisely, we focus on the following topics:",
     "crumbs": [
       "🗓️ Material",
-      "Session 07"
+      "Session 10"
     ]
   },
   {
-    "objectID": "content/material/session07.html#lecture-slides",
-    "href": "content/material/session07.html#lecture-slides",
-    "title": "🗓️ Session 7: Visualization",
-    "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipThe R script of this session",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 07"
-    ]
-  },
-  {
-    "objectID": "content/material/session07.html#lecture-videos",
-    "href": "content/material/session07.html#lecture-videos",
-    "title": "🗓️ Session 7: Visualization",
-    "section": "🎥 Lecture videos",
-    "text": "🎥 Lecture videos\nAll the videos are available via this playlist.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 07"
-    ]
-  },
-  {
-    "objectID": "content/material/session07.html#mandatory-reading",
-    "href": "content/material/session07.html#mandatory-reading",
-    "title": "🗓️ Session 7: Visualization",
+    "objectID": "content/material/session10.html#mandatory-reading",
+    "href": "content/material/session10.html#mandatory-reading",
+    "title": "🗓️ Session 10: Linear regression and experiments in R",
     "section": "📚 Mandatory Reading",
-    "text": "📚 Mandatory Reading\n\nThe tutorial visualization",
+    "text": "📚 Mandatory Reading\n\nThe tutorial Linear Regression in R\n\nData sets used\n\nThe tutorial Experiments in R\n\nData sets used",
     "crumbs": [
       "🗓️ Material",
-      "Session 07"
+      "Session 10"
     ]
   },
   {
-    "objectID": "content/material/session07.html#further-reading",
-    "href": "content/material/session07.html#further-reading",
-    "title": "🗓️ Session 7: Visualization",
+    "objectID": "content/material/session10.html#further-reading",
+    "href": "content/material/session10.html#further-reading",
+    "title": "🗓️ Session 10: Linear regression and experiments in R",
     "section": "Further Reading",
-    "text": "Further Reading\n\nWickham (2010), who introduces the theory underlying ggplot2\nggplot2 cheat sheet\nBrowse the website from Data to Viz and try to re-create some of the figures yourself",
+    "text": "Further Reading\n\nChapter 5 and Chapter 6 in Ismay and Kim (2020)",
     "crumbs": [
       "🗓️ Material",
-      "Session 07"
+      "Session 10"
     ]
   },
   {
-    "objectID": "content/material/session07.html#coursework",
-    "href": "content/material/session07.html#coursework",
-    "title": "🗓️ Session 7: Visualization",
+    "objectID": "content/material/session10.html#coursework",
+    "href": "content/material/session10.html#coursework",
+    "title": "🗓️ Session 10: Linear regression and experiments in R",
     "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the exercises Visualization1 from the DataScienceExercises package\n\n\n\n\n\n\n\nTipQuick code for starting the exercises\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"Visualization1\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))",
+    "text": "✍️ Coursework\n\nDo the exercises LinearRegression1 and LinearRegression2 from the DataScienceExercises package\n\n\n\n\n\n\n\nTipQuick code for starting the exercises I\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"LinearRegression1\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))\n\n\n\n\n\n\n\n\n\n\nTipQuick code for starting the exercises II\n\n\n\n\n\n\nlearnr::run_tutorial(\n  name = \"LinearRegression2\", \n  package = \"DataScienceExercises\", \n  shiny_args=list(\"launch.browser\"=TRUE))",
     "crumbs": [
       "🗓️ Material",
-      "Session 07"
-    ]
-  },
-  {
-    "objectID": "content/material/session09-Exercise.html",
-    "href": "content/material/session09-Exercise.html",
-    "title": "Identify Patterns in E-Commerce Data",
-    "section": "",
-    "text": "This dataset contains information about 200 customers of an e-commerce platform. It includes demographic information, spending habits, and behavioral metrics that the marketing team wants to analyze to develop more targeted campaigns.\n\n\n\ncustomer_sample.csv\n\n\n\n\n\n\n\n\n\n\n\nVariable\nDescription\nType\n\n\n\n\ncustomer_id\nUnique identifier for each customer\nInteger\n\n\nage\nCustomer’s age in years\nInteger\n\n\nspending\nMonthly spending on the platform (in dollars)\nNumeric\n\n\nvisit_frequency\nAverage number of website visits per month\nNumeric\n\n\ncustomer_type\nCustomer classification based on purchasing history\nCategorical\n\n\npreferred_category\nPrimary product category the customer purchases\nCategorical\n\n\n\n\n\ncustomer_type:\n\nNew: Recently joined customers (first purchases within last 3 months)\nOccasional: Make purchases sporadically (no consistent pattern)\nRegular: Consistent purchases but not at high frequency\nLoyal: Frequent, consistent purchasers over extended period\n\npreferred_category:\n\nElectronics: Technology products, gadgets, computers, etc.\nClothing: Apparel items, accessories, shoes\nHome: Furniture, decor, kitchen items, garden supplies\nBeauty: Cosmetics, personal care, grooming products\nFood: Groceries, specialty foods, meal kits\n\n\n\n\n\nYour marketing team needs insights to develop targeted campaigns that will increase customer engagement and spending. The team believes there may be hidden patterns in how different customer segments interact with their platform.\nYour task: Create a visualization that reveals an interesting pattern in this data that could help inform marketing strategy."
-  },
-  {
-    "objectID": "content/material/session09-Exercise.html#overview",
-    "href": "content/material/session09-Exercise.html#overview",
-    "title": "Identify Patterns in E-Commerce Data",
-    "section": "",
-    "text": "This dataset contains information about 200 customers of an e-commerce platform. It includes demographic information, spending habits, and behavioral metrics that the marketing team wants to analyze to develop more targeted campaigns."
-  },
-  {
-    "objectID": "content/material/session09-Exercise.html#file",
-    "href": "content/material/session09-Exercise.html#file",
-    "title": "Identify Patterns in E-Commerce Data",
-    "section": "",
-    "text": "customer_sample.csv"
-  },
-  {
-    "objectID": "content/material/session09-Exercise.html#variables",
-    "href": "content/material/session09-Exercise.html#variables",
-    "title": "Identify Patterns in E-Commerce Data",
-    "section": "",
-    "text": "Variable\nDescription\nType\n\n\n\n\ncustomer_id\nUnique identifier for each customer\nInteger\n\n\nage\nCustomer’s age in years\nInteger\n\n\nspending\nMonthly spending on the platform (in dollars)\nNumeric\n\n\nvisit_frequency\nAverage number of website visits per month\nNumeric\n\n\ncustomer_type\nCustomer classification based on purchasing history\nCategorical\n\n\npreferred_category\nPrimary product category the customer purchases\nCategorical\n\n\n\n\n\ncustomer_type:\n\nNew: Recently joined customers (first purchases within last 3 months)\nOccasional: Make purchases sporadically (no consistent pattern)\nRegular: Consistent purchases but not at high frequency\nLoyal: Frequent, consistent purchasers over extended period\n\npreferred_category:\n\nElectronics: Technology products, gadgets, computers, etc.\nClothing: Apparel items, accessories, shoes\nHome: Furniture, decor, kitchen items, garden supplies\nBeauty: Cosmetics, personal care, grooming products\nFood: Groceries, specialty foods, meal kits"
-  },
-  {
-    "objectID": "content/material/session09-Exercise.html#your-task",
-    "href": "content/material/session09-Exercise.html#your-task",
-    "title": "Identify Patterns in E-Commerce Data",
-    "section": "",
-    "text": "Your marketing team needs insights to develop targeted campaigns that will increase customer engagement and spending. The team believes there may be hidden patterns in how different customer segments interact with their platform.\nYour task: Create a visualization that reveals an interesting pattern in this data that could help inform marketing strategy."
-  },
-  {
-    "objectID": "content/material/session09.html",
-    "href": "content/material/session09.html",
-    "title": "🗓️ Session 9: Using AI for coding",
-    "section": "",
-    "text": "In this lecture you learn the basics of using AI tools for coding tasks. While no AI tool will help you to write code in a language you do not understand, modern AI tools are well suited to assist you in writing code in a language you are familiar with. Here we discuss some of the most common use cases for AI when it comes to the development of R code. We focus on, first, getting a first sketch of an R script and, second, on using AI to help you find mistakes in your current code.\nYou also learn how important it is to provide the AI with context - something you can only do if you already know the basics of the programming language you and the AI are working with. Finally, we also touch upon some AI-like tools and advice on how to avoid typos in code.",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 09"
-    ]
-  },
-  {
-    "objectID": "content/material/session09.html#lecture-slides",
-    "href": "content/material/session09.html#lecture-slides",
-    "title": "🗓️ Session 9: Using AI for coding",
-    "section": "👨‍🏫 Lecture Slides",
-    "text": "👨‍🏫 Lecture Slides\nEither click on the slide area below or click here to download the slides.\n\n  \n\n\n\n\n\n\n\nTipPrompts and code examples from the lecture\n\n\n\n\n\n\n\n\n\n\nDetails for the exercise on e-commerce data (“generate R code”)\n\n\n\n\n\n\n\nTipBase code for exercises on debugging, documenting and optimizing R code",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 09"
-    ]
-  },
-  {
-    "objectID": "content/material/session09.html#suggested-reading",
-    "href": "content/material/session09.html#suggested-reading",
-    "title": "🗓️ Session 9: Using AI for coding",
-    "section": "📚 Suggested Reading",
-    "text": "📚 Suggested Reading\n\nAnthropic’s Prompt Engineering Interactive Tutorial: a more extensive but very good course on how to develop good prompts\nHow to use Github Copilot in R Studio and a guideline on how to get free student access through Github Education\nResources for Gemini Code Assist, which is free but cannot be integrated directly into R Studio\nMore information on Claude Code, which is most interesting for doing advanced programming work\nMore information on Windsurf, which has a good free tier but no plugin for R Studio",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 09"
-    ]
-  },
-  {
-    "objectID": "content/material/session09.html#coursework",
-    "href": "content/material/session09.html#coursework",
-    "title": "🗓️ Session 9: Using AI for coding",
-    "section": "✍️ Coursework",
-    "text": "✍️ Coursework\n\nDo the in-class exercises you did not complete during the session",
-    "crumbs": [
-      "🗓️ Material",
-      "Session 09"
+      "Session 10"
     ]
   },
   {

@@ -1,25 +1,5 @@
 [
   {
-    "listing": "/content/statrecap.html",
-    "items": [
-      "/content/statrecap/ConceptualFoundations/index.html",
-      "/content/statrecap/DataFundamentals/index.html",
-      "/content/statrecap/DescriptiveStatistics/index.html",
-      "/content/statrecap/ProbabilityTheory/index.html"
-    ]
-  },
-  {
-    "listing": "/content/exercises.html",
-    "items": [
-      "/content/exercises/obj-types-exercises/index.html",
-      "/content/exercises/dataprep-vis/index.html",
-      "/content/exercises/quarto-exercises/index.html",
-      "/content/exercises/experiments/session13-Exercise.html",
-      "/content/exercises/multiple-regression/index.html",
-      "/content/exercises/experiments/session13-Exercise-Solution.html"
-    ]
-  },
-  {
     "listing": "/content/tutorials.html",
     "items": [
       "/content/tutorials/installation/index.html",
@@ -36,6 +16,26 @@
       "/content/tutorials/testing/index.html",
       "/content/tutorials/experiments/index.html",
       "/content/tutorials/linear-regression/index.html"
+    ]
+  },
+  {
+    "listing": "/content/exercises.html",
+    "items": [
+      "/content/exercises/obj-types-exercises/index.html",
+      "/content/exercises/dataprep-vis/index.html",
+      "/content/exercises/quarto-exercises/index.html",
+      "/content/exercises/experiments/session13-Exercise.html",
+      "/content/exercises/multiple-regression/index.html",
+      "/content/exercises/experiments/session13-Exercise-Solution.html"
+    ]
+  },
+  {
+    "listing": "/content/statrecap.html",
+    "items": [
+      "/content/statrecap/ConceptualFoundations/index.html",
+      "/content/statrecap/DataFundamentals/index.html",
+      "/content/statrecap/DescriptiveStatistics/index.html",
+      "/content/statrecap/ProbabilityTheory/index.html"
     ]
   }
 ]
