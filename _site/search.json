@@ -2039,7 +2039,7 @@
     "href": "content/material/session10.html#in-class-exercises",
     "title": "🗓️ Session 10: Linear regression and experiments in R",
     "section": "In-class exercises",
-    "text": "In-class exercises\n\nWork sheet1\nData sets",
+    "text": "In-class exercises\n\nWork sheet\nData sets\nCheat Sheet",
     "crumbs": [
       "🗓️ Material",
       "Session 10"
@@ -2244,5 +2244,159 @@
       "🗓️ Material",
       "Session 10"
     ]
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html",
+    "href": "content/material/session10/cheat_sheet.html",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "",
+    "text": "# Simple regression\nmodel &lt;- lm(dependent_var ~ independent_var, data = mydata)\n\n# Multiple regression\nmodel &lt;- lm(dependent_var ~ var1 + var2, data = mydata)\n\n# With log transformation\nmodel &lt;- lm(log(dependent_var) ~ independent_var, data = mydata)\n\n\n\nsummary(model)                    # Full model summary\ncoef(model)                       # Extract coefficients\nconfint(model)                    # Confidence intervals\nsummary(model)$r.squared          # R²\n\n\n\n# Extract values\nfitted_values &lt;- fitted(model)      # Fitted values (predictions)\nresiduals_values &lt;- residuals(model) # Residuals\n\n# Diagnostic plots\nplot(fitted_values, residuals_values)  # Residuals vs Fitted\nqqnorm(residuals_values)               # Q-Q plot\nqqline(residuals_values)               # Add reference line"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#fitting-models",
+    "href": "content/material/session10/cheat_sheet.html#fitting-models",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "",
+    "text": "# Simple regression\nmodel &lt;- lm(dependent_var ~ independent_var, data = mydata)\n\n# Multiple regression\nmodel &lt;- lm(dependent_var ~ var1 + var2, data = mydata)\n\n# With log transformation\nmodel &lt;- lm(log(dependent_var) ~ independent_var, data = mydata)"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#examining-results",
+    "href": "content/material/session10/cheat_sheet.html#examining-results",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "",
+    "text": "summary(model)                    # Full model summary\ncoef(model)                       # Extract coefficients\nconfint(model)                    # Confidence intervals\nsummary(model)$r.squared          # R²"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#model-diagnostics",
+    "href": "content/material/session10/cheat_sheet.html#model-diagnostics",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "",
+    "text": "# Extract values\nfitted_values &lt;- fitted(model)      # Fitted values (predictions)\nresiduals_values &lt;- residuals(model) # Residuals\n\n# Diagnostic plots\nplot(fitted_values, residuals_values)  # Residuals vs Fitted\nqqnorm(residuals_values)               # Q-Q plot\nqqline(residuals_values)               # Add reference line"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#independent-samples-t-test",
+    "href": "content/material/session10/cheat_sheet.html#independent-samples-t-test",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "Independent Samples t-test",
+    "text": "Independent Samples t-test\n# Basic syntax\nt.test(outcome ~ group, data = mydata)\n\n# With equal variances assumed\nt.test(outcome ~ group, data = mydata, var.equal = TRUE)\n\n# With unequal variances (Welch's test)\nt.test(outcome ~ group, data = mydata, var.equal = FALSE)"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#paired-t-test",
+    "href": "content/material/session10/cheat_sheet.html#paired-t-test",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "Paired t-test",
+    "text": "Paired t-test\nt.test(after ~ before, data = mydata, paired = TRUE)"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#effect-size-cohens-d",
+    "href": "content/material/session10/cheat_sheet.html#effect-size-cohens-d",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "Effect Size (Cohen’s d)",
+    "text": "Effect Size (Cohen’s d)\nlibrary(effectsize)\ncohens_d(outcome ~ group, data = mydata)"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#one-way-anova",
+    "href": "content/material/session10/cheat_sheet.html#one-way-anova",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "One-Way ANOVA",
+    "text": "One-Way ANOVA\n# Using aov()\nmodel &lt;- aov(outcome ~ group, data = mydata)\nsummary(model)\n\n# Using lm() (gives same results)\nmodel &lt;- lm(outcome ~ group, data = mydata)\nanova(model)"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#effect-size-η²",
+    "href": "content/material/session10/cheat_sheet.html#effect-size-η²",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "Effect Size (η²)",
+    "text": "Effect Size (η²)\nlibrary(effectsize)\neta_squared(model)"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#post-hoc-tests",
+    "href": "content/material/session10/cheat_sheet.html#post-hoc-tests",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "Post-Hoc Tests",
+    "text": "Post-Hoc Tests\n# Tukey HSD (for aov models)\nTukeyHSD(model)\n\n# Alternative using emmeans (works with lm too)\nlibrary(emmeans)\nemmeans(model, pairwise ~ group)"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#normality-tests",
+    "href": "content/material/session10/cheat_sheet.html#normality-tests",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "Normality Tests",
+    "text": "Normality Tests\n# Shapiro-Wilk test (H0: data is normally distributed)\nshapiro.test(mydata$variable)\n\n# For residuals\nshapiro.test(residuals(model))\n\n# Visual check\nqqnorm(mydata$variable)\nqqline(mydata$variable)"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#equal-variances-test",
+    "href": "content/material/session10/cheat_sheet.html#equal-variances-test",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "Equal Variances Test",
+    "text": "Equal Variances Test\nlibrary(car)\n# Levene's test (H0: variances are equal)\nleveneTest(outcome ~ group, data = mydata)"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#log-transformation",
+    "href": "content/material/session10/cheat_sheet.html#log-transformation",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "Log Transformation",
+    "text": "Log Transformation\n# Create new variable\nmydata &lt;- mydata %&gt;%\n  mutate(log_var = log(variable))\n\n# Interpretation: coefficients = % change\n# Formula: percentage_change = (exp(coefficient) - 1) * 100"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#squarequadratic",
+    "href": "content/material/session10/cheat_sheet.html#squarequadratic",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "Square/Quadratic",
+    "text": "Square/Quadratic\n# For U-shaped or inverted-U relationships\nmydata &lt;- mydata %&gt;%\n  mutate(var_squared = variable^2)\n\nmodel &lt;- lm(outcome ~ variable + var_squared, data = mydata)"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#scatter-plot-with-regression-line",
+    "href": "content/material/session10/cheat_sheet.html#scatter-plot-with-regression-line",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "Scatter Plot with Regression Line",
+    "text": "Scatter Plot with Regression Line\nggplot(data, aes(x = predictor, y = outcome)) +\n  geom_point() +\n  geom_smooth(method = \"lm\", se = TRUE)"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#boxplot-for-group-comparisons",
+    "href": "content/material/session10/cheat_sheet.html#boxplot-for-group-comparisons",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "Boxplot for Group Comparisons",
+    "text": "Boxplot for Group Comparisons\nggplot(data, aes(x = group, y = outcome, fill = group)) +\n  geom_boxplot() +\n  geom_jitter(width = 0.2, alpha = 0.5) +\n  stat_summary(fun = mean, geom = \"point\", shape = 23, size = 3, fill = \"red\")"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#bar-plot-with-error-bars",
+    "href": "content/material/session10/cheat_sheet.html#bar-plot-with-error-bars",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "Bar Plot with Error Bars",
+    "text": "Bar Plot with Error Bars\n# First calculate means and SE\nsummary_data &lt;- data %&gt;%\n  group_by(group) %&gt;%\n  summarise(\n    mean = mean(outcome),\n    se = sd(outcome) / sqrt(n())\n  )\n\n# Then plot\nggplot(summary_data, aes(x = group, y = mean)) +\n  geom_col(fill = \"steelblue\") +\n  geom_errorbar(aes(ymin = mean - 1.96*se, ymax = mean + 1.96*se), \n                width = 0.2)"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#p-values",
+    "href": "content/material/session10/cheat_sheet.html#p-values",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "p-values",
+    "text": "p-values\n\np &lt; 0.05: Statistically significant (reject null hypothesis)\np ≥ 0.05: Not statistically significant (fail to reject null)\nReport exact p-values when possible (not just “p &lt; 0.05”)"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#effect-sizes",
+    "href": "content/material/session10/cheat_sheet.html#effect-sizes",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "Effect Sizes",
+    "text": "Effect Sizes\n\nCohen’s d (for t-tests)\n\nSmall: d ≈ 0.2\nMedium: d ≈ 0.5\nLarge: d ≈ 0.8\n\n\n\nη² (eta-squared, for ANOVA)\n\nSmall: η² ≈ 0.01 (1% of variance)\nMedium: η² ≈ 0.06 (6% of variance)\nLarge: η² ≈ 0.14 (14% of variance)"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#r²-for-regression",
+    "href": "content/material/session10/cheat_sheet.html#r²-for-regression",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "R² (for regression)",
+    "text": "R² (for regression)\n\nProportion of variance explained\nRange: 0 to 1 (or 0% to 100%)\nHigher is better, but context matters!"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#common-errors",
+    "href": "content/material/session10/cheat_sheet.html#common-errors",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "Common Errors",
+    "text": "Common Errors\n\n\n\n\n\n\n\n\nError\nLikely Cause\nSolution\n\n\n\n\nobject not found\nVariable name typo or data not loaded\nCheck spelling, use head(data)\n\n\nnon-numeric argument\nUsing categorical where numeric expected\nCheck variable type with str(data)\n\n\nmissing values\nNA values in data\nUse na.omit() or check with sum(is.na(data))\n\n\nPackage not found\nLibrary not installed\nRun install.packages(\"packagename\")"
+  },
+  {
+    "objectID": "content/material/session10/cheat_sheet.html#getting-help-in-r",
+    "href": "content/material/session10/cheat_sheet.html#getting-help-in-r",
+    "title": "R Cheat Sheet: Regression & Experimental Analysis",
+    "section": "Getting Help in R",
+    "text": "Getting Help in R\n?function_name        # Help for specific function\n??search_term         # Search help files\nexample(lm)          # See examples\nstr(data)            # Structure of data\nhead(data)           # First 6 rows\nsummary(data)        # Summary statistics"
   }
 ]

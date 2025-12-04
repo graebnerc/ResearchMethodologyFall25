@@ -3,9 +3,12 @@ title: "Implementation Lab: Linear Regression & Experimental Analysis"
 subtitle: "Student Worksheet"
 format:
   html:
-    toc: true
     code-fold: show
-    theme: cosmo
+    theme:
+      light: 
+        - journal
+        - css/custom.scss # Change the default colour
+    toc: true
 execute:
   error: true
 ---

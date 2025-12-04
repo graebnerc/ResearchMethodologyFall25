@@ -32,8 +32,9 @@ on the following topics:
 
 ## In-class exercises
 
-- [Work sheet](/content/material/session10/student_template.qmd)^[If it does not open to download, please use right-click and then "Save as"]
+- [Work sheet](/content/material/session10/student_template.qmd){download="student_template.qmd"}
 - [Data sets](/content/material/session10/session10_data.zip)
+- [Cheat Sheet](/content/material/session10/cheat_sheet.html)
 
 ## ✍️ Coursework
 
