@@ -30,8 +30,14 @@ on the following topics:
 
 - [Chapter 5](https://moderndive.com/v2/regression.html) and [Chapter 6](https://moderndive.com/v2/multiple-regression.html) in @moderndive
 
+## In-class exercises
+
+- [Work sheet](content/material/session10/student_template)^[If it does not open to download, please use right-click and then "Save as"]
+- [Data sets](content/material/session10/session10_data.zip)
+
 ## ✍️ Coursework
 
+- Complete the in-class exercises at home 
 - Do the exercises `LinearRegression1` and `LinearRegression2` from the `DataScienceExercises` package
 
 ::: {.callout-tip collapse="true"}

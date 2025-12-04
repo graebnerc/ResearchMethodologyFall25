@@ -1,0 +1,742 @@
+---
+title: "Implementation Lab: Linear Regression & Experimental Analysis"
+subtitle: "Complete Solutions"
+format:
+  html:
+    toc: true
+    code-fold: show
+    theme: cosmo
+---
+
+# Setup
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+# Load required packages
+library(ggplot2)
+library(dplyr)
+library(broom)
+library(effectsize)
+library(car)
+library(gridExtra)
+```
+
+```{r}
+#| label: load-data
+
+# Load the datasets
+marketing_data <- read.csv("marketing_data.csv")
+firm_growth_data <- read.csv("firm_growth_data.csv")
+leadership_study_between <- read.csv("leadership_study_between.csv")
+communication_study <- read.csv("communication_study.csv")
+exercise_data <- read.csv("exercise_data.csv")
+```
+
+---
+
+# Part 1: Linear Regression
+
+## 1.1 Simple vs. Multiple Regression
+
+**Research Question:** How does ad spending affect sales revenue?
+
+### Simple Regression
+
+```{r}
+#| label: simple-regression
+
+# Fit simple regression: sales_revenue ~ ad_spend
+model_simple <- lm(sales_revenue ~ ad_spend, data = marketing_data)
+summary(model_simple)
+```
+
+**Coefficient interpretation:**
+
+For every €1 increase in ad spending, sales revenue increases by approximately €`r round(coef(model_simple)["ad_spend"], 2)`.
+
+This is the **total association** between ad spending and sales - it captures both the direct effect of advertising and any indirect effects through other variables.
+
+### Multiple Regression
+
+```{r}
+#| label: multiple-regression
+
+# Add website_traffic to the model
+model_multiple <- lm(sales_revenue ~ ad_spend + website_traffic, data = marketing_data)
+summary(model_multiple)
+```
+
+**Coefficient interpretation:**
+
+Now the coefficients represent **ceteris paribus effects** (direct effects, controlling for other variables):
+
+- For every €1 increase in ad spending, holding website traffic constant, sales revenue increases by approximately €`r round(coef(model_multiple)["ad_spend"], 2)`.
+- For every additional visitor, holding ad spending constant, sales revenue increases by approximately €`r round(coef(model_multiple)["website_traffic"], 2)`.
+
+### Compare Coefficients
+
+```{r}
+#| label: compare-coefficients
+
+# Extract coefficient for ad_spend from both models
+coef_simple <- coef(model_simple)["ad_spend"]
+coef_multiple <- coef(model_multiple)["ad_spend"]
+
+cat("Simple model coefficient:", round(coef_simple, 3), "\n")
+cat("Multiple model coefficient:", round(coef_multiple, 3), "\n")
+cat("Difference (bias):", round(coef_simple - coef_multiple, 3), "\n")
+```
+
+**Understanding Omitted Variable Bias:**
+
+The coefficient changed from `r round(coef_simple, 2)` to `r round(coef_multiple, 2)` because:
+
+1. **Website traffic is correlated with ad spending** (ads drive traffic)
+2. **Website traffic affects sales** (more visitors → more sales)
+3. **The simple model attributed both effects to ad spending** (overestimated the direct effect)
+
+This is called **omitted variable bias** - when we leave out a relevant variable that correlates with both our predictor and outcome, we get biased estimates.
+
+**Business implication:** The direct ROI of advertising (€`r round(coef_multiple, 2)` per €1 spent) is lower than the total association (€`r round(coef_simple, 2)` per €1 spent) because some of advertising's impact works through increased website traffic.
+
+---
+
+## 1.2 Model Diagnostics
+
+```{r}
+#| label: diagnostic-plots
+#| fig-width: 10
+#| fig-height: 5
+
+# Extract fitted values and residuals using base R
+fitted_values <- fitted(model_multiple)
+residuals_values <- residuals(model_multiple)
+
+# Create diagnostic plots
+p1 <- ggplot(data.frame(fitted = fitted_values, resid = residuals_values),
+             aes(x = fitted, y = resid)) +
+  geom_point(alpha = 0.6) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  geom_smooth(se = FALSE, color = "blue") +
+  labs(title = "Residuals vs Fitted",
+       subtitle = "Should show random scatter (no pattern)",
+       x = "Fitted Values", 
+       y = "Residuals") +
+  theme_minimal()
+
+p2 <- ggplot(data.frame(resid = residuals_values), aes(sample = resid)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Normal Q-Q Plot",
+       subtitle = "Points should follow red line",
+       x = "Theoretical Quantiles",
+       y = "Sample Quantiles") +
+  theme_minimal()
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+**What to look for:**
+
+1. **Residuals vs Fitted:** 
+   - Should show random scatter around the horizontal line at 0
+   - No clear patterns (U-shapes, fan shapes, etc.)
+   - If you see a pattern, it suggests: missing variables, non-linearity, or heteroscedasticity
+
+2. **Q-Q Plot:**
+   - Points should follow the red diagonal line closely
+   - Deviations suggest non-normal residuals
+   - Small deviations at the extremes are often okay
+
+**Interpretation for our model:** Both plots look good - residuals are randomly scattered and approximately normally distributed.
+
+---
+
+## 1.3 Log Transformation
+
+**Research Question:** How has company revenue grown over time?
+
+### Visualize Raw Data
+
+```{r}
+#| label: visualize-exponential
+#| fig-width: 8
+#| fig-height: 5
+
+# Create scatter plot with linear fit
+ggplot(firm_growth_data, aes(x = year, y = revenue)) +
+  geom_point(size = 3, alpha = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, color = "red", linewidth = 1) +
+  geom_smooth(method = "loess", se = FALSE, color = "blue", linewidth = 1) +
+  labs(title = "Revenue Growth Over Time (Raw Data)",
+       subtitle = "Red = Linear fit (inadequate), Blue = Flexible fit",
+       x = "Year",
+       y = "Revenue (EUR)") +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal()
+```
+
+**Observation:**
+
+The linear fit (red) completely fails to capture the exponential growth pattern. The data curves upward, showing that revenue growth is accelerating over time - a characteristic of exponential growth.
+
+### Apply Log Transformation
+
+```{r}
+#| label: log-transform
+
+# Create log-transformed variable
+firm_growth_data <- firm_growth_data %>%
+  mutate(log_revenue = log(revenue))
+
+# Fit both models
+model_linear <- lm(revenue ~ year, data = firm_growth_data)
+model_log <- lm(log_revenue ~ year, data = firm_growth_data)
+
+# Compare R²
+cat("Linear model R²:", round(summary(model_linear)$r.squared, 4), "\n")
+cat("Log model R²:", round(summary(model_log)$r.squared, 4), "\n")
+```
+
+The log model has much better fit!
+
+### Visualize Log-Transformed Data
+
+```{r}
+#| label: visualize-log
+#| fig-width: 8
+#| fig-height: 5
+
+# Plot log(revenue) vs year
+ggplot(firm_growth_data, aes(x = year, y = log_revenue)) +
+  geom_point(size = 3, alpha = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, color = "blue", linewidth = 1) +
+  labs(title = "Log(Revenue) vs Year",
+       subtitle = "Perfect linear relationship after transformation!",
+       x = "Year",
+       y = "Log(Revenue)") +
+  theme_minimal()
+```
+
+After log transformation, the relationship is linear! This confirms that the original data follows an exponential growth pattern.
+
+### Interpret Coefficients
+
+```{r}
+#| label: interpret-log
+
+# Get coefficient for year in log model
+coef_log <- coef(model_log)["year"]
+percentage_change <- (exp(coef_log) - 1) * 100
+
+cat("Coefficient in log model:", round(coef_log, 4), "\n")
+cat("This means:", round(percentage_change, 2), "% growth per year\n")
+```
+
+**Key interpretation rule:**
+
+When the **dependent variable** is log-transformed, coefficients represent **percentage changes**.
+
+Specifically: Each year is associated with approximately `r round(percentage_change, 1)`% growth in revenue.
+
+**Why this works:** Exponential relationships have the form $Y = A \cdot e^{Bx}$. Taking the natural log gives: $\ln(Y) = \ln(A) + Bx$, which is linear!
+
+### Visual Proof: Back to Original Scale
+
+```{r}
+#| label: back-transform
+#| fig-width: 8
+#| fig-height: 5
+
+# Create predictions on original scale
+predictions <- firm_growth_data %>%
+  mutate(
+    linear_pred = predict(model_linear),
+    log_pred = exp(predict(model_log))  # Back-transform predictions
+  )
+
+ggplot(predictions, aes(x = year)) +
+  geom_point(aes(y = revenue), size = 3, alpha = 0.8) +
+  geom_line(aes(y = linear_pred), color = "red", linewidth = 1.2) +
+  geom_line(aes(y = log_pred), color = "blue", linewidth = 1.2) +
+  labs(title = "Model Predictions Comparison",
+       subtitle = "Red = Linear model (poor fit), Blue = Log model (excellent fit)",
+       x = "Year",
+       y = "Revenue (EUR)") +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal()
+```
+
+The log model (blue) perfectly captures the exponential growth pattern, while the linear model (red) systematically misses the curvature.
+
+---
+
+# Part 2: Experimental Analysis
+
+## 2.1 t-Test
+
+**Research Question:** Does leadership training improve team performance?
+
+### Visualize the Data
+
+```{r}
+#| label: visualize-ttest
+#| fig-width: 8
+#| fig-height: 5
+
+ggplot(leadership_study_between, aes(x = group, y = team_performance, fill = group)) +
+  geom_boxplot(alpha = 0.7) +
+  geom_jitter(width = 0.2, alpha = 0.5) +
+  stat_summary(fun = mean, geom = "point", shape = 23, size = 3, fill = "red") +
+  labs(title = "Team Performance by Group",
+       subtitle = "Red diamonds show group means",
+       x = "Group",
+       y = "Team Performance Score") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+Visually, the training group appears to have higher performance scores on average.
+
+### Check Assumptions
+
+```{r}
+#| label: check-assumptions-ttest
+
+# Normality test for each group
+shapiro_control <- shapiro.test(
+  filter(leadership_study_between, group == "control")$team_performance
+)
+shapiro_training <- shapiro.test(
+  filter(leadership_study_between, group == "training")$team_performance
+)
+
+cat("Shapiro-Wilk test - Control group: p =", round(shapiro_control$p.value, 4), "\n")
+cat("Shapiro-Wilk test - Training group: p =", round(shapiro_training$p.value, 4), "\n")
+
+# Equal variances test
+levene_result <- leveneTest(team_performance ~ group, data = leadership_study_between)
+cat("\nLevene's test for equal variances: p =", round(levene_result$`Pr(>F)`[1], 4), "\n")
+```
+
+**Interpretation:**
+
+Both p-values are > 0.05, so:
+- ✓ Data is approximately normally distributed in each group
+- ✓ Variances are approximately equal
+
+We can proceed with the standard t-test.
+
+### Run t-test
+
+```{r}
+#| label: run-ttest
+
+t_result <- t.test(
+  team_performance ~ group,
+  data = leadership_study_between,
+  var.equal = TRUE
+)
+
+print(t_result)
+```
+
+**Results:**
+
+- **Mean difference:** `r round(abs(diff(t_result$estimate)), 2)` points (training group scored higher)
+- **95% CI:** [`r round(t_result$conf.int[1], 2)`, `r round(t_result$conf.int[2], 2)`]
+- **p-value:** `r format.pval(t_result$p.value, digits = 3)`
+- **Conclusion:** The training group performed significantly better than the control group (p < 0.001)
+
+### Calculate Effect Size
+
+```{r}
+#| label: cohens-d-ttest
+
+cohens_d_result <- cohens_d(team_performance ~ group, 
+                            data = leadership_study_between)
+print(cohens_d_result)
+```
+
+**Effect size interpretation:**
+
+- **Cohen's d = `r round(abs(cohens_d_result$Cohens_d), 2)`**
+- This is a **large effect** (d > 0.8)
+
+**What this means:**
+- The groups differ by more than 1 standard deviation
+- Not only is the difference statistically significant, it's also practically meaningful
+- This suggests the training has a substantial real-world impact
+
+**Business decision:** Given the large effect size and statistical significance, the leadership training appears highly effective and worth implementing if costs are reasonable.
+
+---
+
+## 2.2 One-Way ANOVA
+
+**Research Question:** Which communication method leads to highest satisfaction?
+
+### Visualize the Data
+
+```{r}
+#| label: visualize-anova
+#| fig-width: 8
+#| fig-height: 5
+
+ggplot(communication_study, aes(x = communication_method, 
+                                 y = satisfaction_score, 
+                                 fill = communication_method)) +
+  geom_boxplot(alpha = 0.7) +
+  geom_jitter(width = 0.2, alpha = 0.3) +
+  stat_summary(fun = mean, geom = "point", shape = 23, size = 4, fill = "red") +
+  labs(title = "Satisfaction Score by Communication Method",
+       subtitle = "Red diamonds show group means",
+       x = "Communication Method",
+       y = "Satisfaction Score") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+The groups appear to have different mean satisfaction scores, with email showing the lowest satisfaction.
+
+### Fit ANOVA
+
+```{r}
+#| label: fit-anova
+
+# Using aov()
+anova_model <- aov(satisfaction_score ~ communication_method, 
+                   data = communication_study)
+summary(anova_model)
+```
+
+**Results:**
+
+- **F-statistic:** `r round(summary(anova_model)[[1]]$"F value"[1], 2)`
+- **p-value:** `r format.pval(summary(anova_model)[[1]]$"Pr(>F)"[1], digits = 3)`
+
+**Conclusion:** There is a statistically significant difference in satisfaction scores among the three communication methods (p `r ifelse(summary(anova_model)[[1]]$"Pr(>F)"[1] < 0.001, "< 0.001", paste("=", round(summary(anova_model)[[1]]$"Pr(>F)"[1], 3)))`).
+
+**Important:** ANOVA only tells us that *at least one* group differs from the others. It doesn't tell us *which* groups differ - we need post-hoc tests for that.
+
+### ANOVA as Regression
+
+```{r}
+#| label: anova-regression
+
+# Show that lm() gives same results
+lm_model <- lm(satisfaction_score ~ communication_method, 
+               data = communication_study)
+anova(lm_model)
+```
+
+The F-statistic and p-value are identical! This demonstrates that ANOVA is just a special case of regression with categorical predictors.
+
+```{r}
+#| label: coefficients
+
+# Look at coefficients
+summary(lm_model)$coefficients
+```
+
+**Understanding the coefficients:**
+
+R automatically creates dummy variables for categorical predictors. Since "email" comes first alphabetically, it becomes the **reference group**:
+
+- **Intercept (5.78):** Mean satisfaction for email group
+- **face_to_face coefficient (1.70):** Face-to-face scores 1.70 points higher than email on average
+- **video_call coefficient (1.23):** Video call scores 1.23 points higher than email on average
+
+### Effect Size
+
+```{r}
+#| label: eta-squared
+
+eta_sq <- eta_squared(anova_model)
+print(eta_sq)
+```
+
+**Interpretation:**
+
+η² = `r round(eta_sq$Eta2[1], 3)` means communication method explains `r round(eta_sq$Eta2[1] * 100, 1)`% of the variance in satisfaction scores.
+
+**Effect size guidelines:**
+- Small: η² ≈ 0.01
+- Medium: η² ≈ 0.06
+- Large: η² ≈ 0.14
+
+Our effect (`r round(eta_sq$Eta2[1], 2)`) is large, indicating communication method has a substantial impact on satisfaction.
+
+### Post-Hoc Tests
+
+```{r}
+#| label: tukey
+
+# Tukey HSD controls for multiple comparisons
+tukey_result <- TukeyHSD(anova_model)
+print(tukey_result)
+```
+
+**Interpretation:**
+
+Looking at the p-values (p adj column):
+
+1. **face_to_face - email:** p < 0.001 → **Significant difference**
+   - Face-to-face has ~1.70 points higher satisfaction than email
+
+2. **video_call - email:** p < 0.001 → **Significant difference**
+   - Video call has ~1.23 points higher satisfaction than email
+
+3. **video_call - face_to_face:** p = `r round(tukey_result$communication_method["video_call-face_to_face", "p adj"], 3)` → **No significant difference**
+   - Face-to-face and video call don't differ significantly from each other
+
+**Business conclusion:** Both face-to-face and video call communication produce significantly higher satisfaction than email, but there's no meaningful difference between face-to-face and video call. Consider phasing out email-only communication for important interactions.
+
+---
+
+# Part 3: Guided Exercise - Solutions
+
+## Dataset: Website A/B Test
+
+```{r}
+#| label: load-exercise-data
+
+exercise_data <- read.csv("exercise_data.csv")
+head(exercise_data)
+summary(exercise_data)
+```
+
+---
+
+## Task 1: Regression Analysis
+
+### a. Scatter plot
+
+```{r}
+#| label: task1a
+#| fig-width: 8
+#| fig-height: 5
+
+ggplot(exercise_data, aes(x = time_on_site, y = converted)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = TRUE, color = "blue") +
+  labs(title = "Conversion vs Time on Site",
+       x = "Time on Site (seconds)",
+       y = "Converted (0 = No, 1 = Yes)") +
+  theme_minimal()
+```
+
+There appears to be a positive relationship - users who spend more time on site are more likely to convert.
+
+### b. Fit simple regression
+
+```{r}
+#| label: task1b
+
+model_ex_simple <- lm(converted ~ time_on_site, data = exercise_data)
+summary(model_ex_simple)
+```
+
+### c. Interpret coefficient
+
+**Interpretation:**
+
+The coefficient for `time_on_site` is `r round(coef(model_ex_simple)["time_on_site"], 5)`.
+
+This means: For every additional second spent on the site, the probability of conversion increases by approximately `r round(coef(model_ex_simple)["time_on_site"], 4)` (or `r round(coef(model_ex_simple)["time_on_site"] * 100, 2)`%).
+
+**Note:** This is a linear probability model. For better modeling of binary outcomes, we'd typically use logistic regression, but linear models provide a reasonable approximation for interpretation.
+
+### d. Report R²
+
+```{r}
+#| label: task1d
+
+r2_simple <- summary(model_ex_simple)$r.squared
+cat("R² =", round(r2_simple, 4), "\n")
+cat("Time on site explains", round(r2_simple * 100, 1), "% of variance in conversion\n")
+```
+
+The R² is moderate, suggesting time on site is a meaningful predictor but there are other factors influencing conversion.
+
+---
+
+## Task 2: Compare Designs
+
+### a. t-test
+
+```{r}
+#| label: task2a
+
+t_test_design <- t.test(time_on_site ~ design, data = exercise_data)
+print(t_test_design)
+```
+
+**Results:**
+
+- **Complex design mean:** `r round(t_test_design$estimate[1], 1)` seconds
+- **Simple design mean:** `r round(t_test_design$estimate[2], 1)` seconds
+- **Difference:** `r round(abs(diff(t_test_design$estimate)), 1)` seconds
+- **p-value:** `r format.pval(t_test_design$p.value, digits = 3)`
+
+The complex design keeps users on the site significantly longer (p < 0.001).
+
+### b. Effect size
+
+```{r}
+#| label: task2b
+
+cohens_d_design <- cohens_d(time_on_site ~ design, data = exercise_data)
+print(cohens_d_design)
+```
+
+**Effect size:** Cohen's d = `r round(abs(cohens_d_design$Cohens_d), 2)` (large effect)
+
+### c. Conclusion
+
+**Which design keeps users longer?**
+
+The **Complex design** keeps users on the site significantly longer - about `r round(abs(diff(t_test_design$estimate)), 1)` seconds more on average. This is both statistically significant (p < 0.001) and a large practical effect (d ≈ `r round(abs(cohens_d_design$Cohens_d), 1)`).
+
+**Business consideration:** While complex design increases time on site, we should also check if this translates to higher conversion rates - longer time doesn't always mean better outcomes!
+
+---
+
+## Task 3: Omitted Variable Bias (Challenge)
+
+### a. Add previous_visits
+
+```{r}
+#| label: task3a
+
+model_ex_multiple <- lm(converted ~ time_on_site + previous_visits, 
+                        data = exercise_data)
+summary(model_ex_multiple)
+```
+
+### b. Compare coefficients
+
+```{r}
+#| label: task3b
+
+coef_simple <- coef(model_ex_simple)["time_on_site"]
+coef_multiple <- coef(model_ex_multiple)["time_on_site"]
+
+cat("Simple model - time_on_site coefficient:", round(coef_simple, 5), "\n")
+cat("Multiple model - time_on_site coefficient:", round(coef_multiple, 5), "\n")
+cat("Difference:", round(coef_simple - coef_multiple, 5), "\n")
+cat("Percentage change:", round((coef_simple - coef_multiple) / coef_simple * 100, 1), "%\n")
+```
+
+### c. Interpret
+
+**Is there omitted variable bias? Why or why not?**
+
+**Yes, there is omitted variable bias!**
+
+The coefficient for `time_on_site` changed from `r round(coef_simple, 5)` to `r round(coef_multiple, 5)` when we added `previous_visits` to the model.
+
+**Why this happened:**
+
+Omitted variable bias occurs when a variable:
+1. Affects the outcome (conversion) ✓
+2. Correlates with the included predictor (time_on_site) ✓
+
+Let's check the correlation:
+
+```{r}
+#| label: check-correlation
+
+cor(exercise_data$time_on_site, exercise_data$previous_visits)
+```
+
+The correlation is `r round(cor(exercise_data$time_on_site, exercise_data$previous_visits), 3)`.
+
+**The story:**
+- Users with more previous visits tend to spend more time on site (they're familiar, engaged customers)
+- Users with more previous visits are also more likely to convert (trust, familiarity)
+- The simple model incorrectly attributed *some* of the "previous visits" effect to "time on site"
+
+**Conclusion:** The multiple regression model gives us a more accurate estimate of the *direct effect* of time on site, controlling for user engagement history. This is crucial for making informed design decisions!
+
+---
+
+# Summary: Key Concepts
+
+## Linear Regression
+
+1. **Simple vs. Multiple Regression:**
+   - Simple: Total association between variables
+   - Multiple: Direct effects (ceteris paribus), controlling for confounders
+
+2. **Omitted Variable Bias:**
+   - Occurs when we leave out variables that correlate with both predictor and outcome
+   - Results in biased coefficient estimates
+   - Solution: Include relevant control variables
+
+3. **Log Transformation:**
+   - Linearizes exponential relationships
+   - Coefficients represent percentage changes
+   - Check diagnostic plots to see if transformation helps
+
+4. **Model Diagnostics:**
+   - Residuals vs Fitted: Check for patterns
+   - Q-Q Plot: Check normality of residuals
+   - Use `fitted()` and `residuals()` to extract values
+
+## Experimental Analysis
+
+1. **t-Tests:**
+   - Compare means between two groups
+   - Check assumptions: normality, equal variances
+   - Always calculate effect sizes (Cohen's d)
+
+2. **ANOVA:**
+   - Compare means across 3+ groups
+   - ANOVA = regression with categorical predictors
+   - Post-hoc tests (Tukey HSD) identify which groups differ
+   - Report effect sizes (η²)
+
+3. **Effect Sizes:**
+   - Statistical significance ≠ practical significance
+   - Cohen's d guidelines: 0.2 (small), 0.5 (medium), 0.8 (large)
+   - η² guidelines: 0.01 (small), 0.06 (medium), 0.14 (large)
+
+4. **Assumptions Matter:**
+   - Always check before running tests
+   - Violations can lead to incorrect conclusions
+   - Alternatives exist when assumptions are violated
+
+---
+
+# Additional Resources
+
+## When to Use Each Method
+
+- **Simple regression:** Exploring basic relationships
+- **Multiple regression:** Controlling for confounders, real-world analysis
+- **t-test:** Comparing two groups (experiments, A/B tests)
+- **ANOVA:** Comparing 3+ groups
+- **Log transformation:** Exponential growth, multiplicative effects
+
+## Common Mistakes to Avoid
+
+1. Interpreting correlation as causation
+2. Ignoring omitted variable bias
+3. Forgetting to check assumptions
+4. Relying only on p-values without effect sizes
+5. Using multiple t-tests instead of ANOVA (inflates Type I error)
+
+## Next Steps
+
+- Review the tutorials for deeper theoretical understanding
+- Practice with your own datasets
+- Learn about logistic regression for binary outcomes
+- Explore interaction effects in factorial designs
+
+---
+
+*If you have questions about any of these concepts, please come to office hours or post in the course forum!*
