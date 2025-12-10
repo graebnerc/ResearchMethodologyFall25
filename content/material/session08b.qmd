@@ -1,0 +1,272 @@
+---
+title: "Recap exercises: import, preparation and visualization"
+date: "2025-11-07"
+---
+
+The following exercises are meant to help you recap what you learned in the areas of 
+*data import*, *data preparation* and *visualization*.
+
+- [Data for exercise 2](/content/material/Recap8b/pricing_experiment.csv)
+- [Template Exercise 1](/content/material/Recap8b/r_recap_exercise1.R)
+- [Template Exercise 2](/content/material/Recap8b/r_recap_exercise2.R)
+
+## Customer Satisfaction Tracking
+
+- [Data for exercise 1](/content/material/Recap8b/customer_satisfaction.csv)
+
+> **Background:**
+You work for a company that recently implemented new customer service protocols.
+Customer satisfaction data was collected at three time points: before the change (Q1),
+and at two follow-up periods (Q2, Q3). Customers rated their satisfaction with
+service quality and product value on a 1-5 scale.
+Each row represents one customer's ratings across all three quarters.
+
+### Import data
+
+Download the file `customer_satisfaction.csv`and place it in your working directory.
+Import the CSV file and store it in a variable called `customers_data`.
+
+### Prepare data
+
+
+The data is currently in a *wide* format - each quarter is a separate column.
+Transform it to a tidy format where:
+- One column indicates the quarter (`q1`, `q2`, `q3`)
+- One column indicates the metric type (`service_quality`, `product_value`)
+- One column contains the rating value
+
+::: {.callout-tip collapse="true"}
+#### Hint: how to separate columns
+:::
+
+### Compute grouped averages
+
+Calculate the mean rating for each combination of quarter and metric type.
+Store this in a new table called `satisfaction_summary`.
+
+## Visualization
+
+Create a line plot showing how average customer satisfaction changes over 
+quarters. It should have the quarters on the x-axis, the mean rating on the 
+y-axis, and it should show different colors for service quality and product
+value.
+
+## Bonus: compute improvements
+
+# Solution
+
+
+For this exercise we need the following packages:
+
+```{r}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(kableExtra) # <- only for the presentation on the webpage
+```
+
+Since the csv file is in good shape we can just read it via `data.table::fread()`
+or, because it is already very clean, with `readr::read_csv()`:
+
+```{r}
+# Note: adjust to you project and best use here::here()
+customers_data <- read_csv(
+  file = "Recap8b/customer_satisfaction.csv")
+```
+
+This is how the current data looks like:
+
+```{r}
+head(customers_data) |>
+  kable()
+```
+
+To transform it into the desired long format we use `tidyr::pivot_longer()`.
+Here we can make our live easier by using the selection helper `dplyr::starts_with()`
+to capture all columns starting with `q`.
+But a simple application only brings us that far:
+
+```{r}
+customers_data |>
+  pivot_longer(
+    cols = all_of(starts_with("q"))
+    ) |>
+  head() |>
+  kable()
+```
+
+The column `name` still contains information about both the quarter and the metric.
+There are a number of ways we can separate this column.
+
+One way would be to use the argument `names_sep` of `pivot_longer()` and then
+give two column names to `names_to`. This works in our case but note that it
+gives a warning that some parts of the column are dropped:
+
+```{r}
+#| warning: true
+customers_long <- customers_data |>
+  pivot_longer(
+    cols = starts_with("q"), 
+    names_sep = "_", 
+    names_to = c("quarter", "metric")
+    ) 
+head(customers_long)
+```
+
+This is because we
+are telling the function to separate the column using the token `_`, but this
+token appears more than once (but we only provide two column names). In our case
+this is save to ignore, but when you want to avoid it, you can use the function
+`dplyr::separate()`, which allows for more sophisticate separation procedures.
+In our case, we can set `extra = "merge"`, which tells the function to only 
+split on the first underscore and keep everything else together:
+
+```{r}
+customers_long <- customers_data |>
+  pivot_longer(
+    cols = starts_with("q"),
+    names_to = "full_name",
+    values_to = "rating"
+  ) |>
+  separate(
+    col = full_name, 
+    into = c("quarter", "metric"), 
+    sep = "_", 
+    extra = "merge")
+
+head(customers_long) |>
+  kable()
+```
+
+Next we need to compute average ratings for each combination of quarter and 
+metric type:
+
+```{r}
+satisfaction_summary <- customers_long |>
+  group_by(quarter, metric) |>
+  summarise(avg_rating = mean(rating), .groups = "drop") 
+
+kable(satisfaction_summary)
+```
+
+
+> Note: there are different ways of doing this. Instead of the more explicit
+`group_by()` you could have used `summarize(..., .by=c())`.
+
+The final step is then to create the visualization using `ggplot2`.
+The only thing to note is that we need to be explicit regarding the grouping
+and set 
+
+```{r}
+ggplot(
+  data = satisfaction_summary, 
+  mapping = aes(
+    x = quarter, 
+    y = avg_rating, 
+    colour = metric, 
+    group = metric)
+  ) +
+  geom_point() +
+  geom_line() +
+  theme_light()
+```
+
+
+::: {.callout-tip collapse="true"}
+#### Why do we need `group = metric`?
+
+When you use `geom_line()`, `ggplot2` needs to know which points to connect. 
+By default, `ggplot2` automatically creates groups based on the combination of 
+all discrete variables in your data.
+In our case these are the two variables `quarter` and `metric`.
+
+So `ggplot2` creates groups based on the combination of both these variables:
+
+1. `q1 + product_value` (1 point)
+2. `q1 + service_quality` (1 point)
+3. `q2 + product_value` (1 point)
+4. `q2 + service_quality` (1 point)
+5. `q3 + product_value` (1 point)
+6. `q3 + service_quality` (1 point)
+
+Each group has only one observation, so there's nothing to connect with a line!
+
+What we *actually* want is to have separate lines for each metric, i.e.
+one line for `product_value` across all quarters and 
+one line for `service_quality` across all quarters. 
+
+So you need to tell `ggplot2`: 
+"Group by metric only, not by the combination of all discrete variables, 
+which would be quarter and metric!"
+
+:::
+
+
+Of course, there are many ways to make the plot pretties, but here we may leave
+it at this!
+
+To also complete the bonus challenge, we need to compute the improvement after
+the intervention, i.e. from `q1` to the other two quarters. We will do this by
+computer the average for `q2` and `q3`, compute the relative change to `q1` and
+then rank the data according to their relative changes.
+
+Here are all steps conducted separately: first, create a new variable to
+group periods before and after the intervention:
+
+```{r}
+step1 <- satisfaction_summary |>
+  mutate(
+    intervention = ifelse(test = quarter=="q1", yes = "No", no = "Yes")
+    )
+kable(step1)
+```
+
+
+Now compute the respective averages:
+
+```{r}
+step2 <- step1 |>
+  summarise(
+    avg_rating = mean(avg_rating), .by = c("intervention", "metric")
+    )
+kable(step2)
+```
+
+Make it wider:
+
+```{r}
+step3 <- step2 |>
+  pivot_wider(names_from = intervention, values_from = avg_rating) 
+kable(step3)
+```
+
+And now compute the relative change:
+
+```{r}
+step4 <- step3 |>
+  mutate(
+    absolute_change = Yes - No,
+    relative_change = (absolute_change / No)*100
+    ) |>
+  select(-No, -Yes)
+kable(step4)
+```
+
+Or, all in one call:
+
+```{r}
+satisfaction_summary |>
+  mutate(
+    intervention = ifelse(test = quarter=="q1", yes = "No", no = "Yes")
+    ) |>
+  summarise(
+    avg_rating = mean(avg_rating), .by = c("intervention", "metric")
+  ) |>
+  pivot_wider(names_from = intervention, values_from = avg_rating) |>
+  mutate(
+    absolute_change = Yes - No,
+    relative_change = (absolute_change / No)*100
+    ) |>
+  select(-No, -Yes)
+```
