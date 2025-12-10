@@ -42,12 +42,13 @@ format:
         \setkomafont{disposition}{\color{eufblue}\bfseries}
 ---
 
-## Packages used
 
 ```{r}
+#| code-summary: "R Packages"
 library(tibble)
 library(ggplot2)
 library(moderndive)
+library(ggpubr)
 library(kableExtra)
 ```
 
@@ -158,9 +159,6 @@ This is why this kind of transformation is particularly helpful in the context o
 #| fig-width: 10
 #| fig-height: 4
 
-library(ggplot2)
-library(patchwork)
-
 # Generate exponential data
 time <- 0:20
 value <- 10 * exp(0.15 * time)
@@ -187,7 +185,7 @@ p2 <- ggplot(df, aes(x = time, y = log_value)) +
   theme_minimal(base_size = 12)
 
 # Combine plots
-p1 + p2
+ggarrange(p1, p2, ncol = 2, labels = c("A)", "B)"))
 ```
 
 ## When and why do we use logarithms?
@@ -227,7 +225,7 @@ p2 <- ggplot(df_income, aes(x = log_income)) +
        y = "Frequency") +
   theme_minimal(base_size = 12)
 
-p1 + p2
+ggarrange(p1, p2, ncol = 2, labels = c("A)", "B)"))
 ```
 
 **Interpreting percentage changes.** When we use logarithms in regression models, our results tell us about proportional or percentage changes rather than absolute changes. For instance, if you're studying how education affects income, using log(income) helps you say "an extra year of education is associated with a 10% increase in income" rather than "an extra year increases income by EUR 5,000" — which is more meaningful since a 5,000 EUR  increase means very different things to someone earning 20,000 EUR versus 200,000 EUR.
@@ -293,72 +291,92 @@ This is now a simple straight line that standard linear regression can easily ha
 **Key insight:** Multiplication in the original data becomes addition after log transformation, making complex exponential patterns manageable with basic statistical tools.
 :::
 
-**Handling exponential relationships.** Consider a company analyzing how advertising spending affects product awareness. In the early stages, each 1,000 EUR spent might dramatically increase awareness, but as awareness grows, it takes progressively more spending to achieve the same absolute increase—a classic exponential pattern. 
+**Handling exponential relationships.** Consider an e-commerce company analyzing how their marketing budget affects monthly revenue. As they scale up spending, each additional euro generates proportionally more revenue due to network effects and brand recognition—a classic exponential pattern.
 
-If awareness follows the relationship: 
+If revenue follows the relationship: 
 
-$$Awareness = 10 \times e^{\left(0.0005 \times Spending\right)}$$ 
+$$Revenue = 50,000 \times e^{\left(0.00008 \times Marketing\right)}$$
 
-trying to fit a linear regression directly would fail badly. But if we take the natural logarithm of both sides: 
+trying to fit a linear regression directly would fail badly. The relationship curves upward, violating the linearity assumption.
 
-$$\ln\left(Awareness\right) = \ln\left(10\right) + 0.0005 \times Spending$$
+But if we take the natural logarithm of both sides: $\ln\left(Revenue\right) = \ln\left(50,000\right) + 0.00008 \times Marketing$, we now have a linear relationship that's perfect for regression analysis. The regression coefficient ($\beta_1$) tells us that each additional euro spent on marketing is associated with approximately a % increase in revenue.
 
-we now have a linear relationship that's perfect for regression analysis. The regression coefficient (0.0005) tells us how spending affects the growth rate of awareness.
-
-You can see this in action with a concrete example in @fig-advertising-regression.
+Let's see this in action with a concrete example in @fig-viral-growth.
 
 ```{r}
-#| label: fig-advertising-regression
-#| fig-cap: "Linear regression on log-transformed data captures the exponential relationship between advertising spending and product awareness"
+#| label: fig-viral-growth
+#| fig-cap: "Linear regression on log-transformed data captures the exponential relationship between time and viral app growth. Left panel shows how a linear model (red dashed line) badly misfits the exponential pattern, while the right panel shows the same data becomes perfectly linear after log transformation."
 #| fig-width: 10
 #| fig-height: 4
 
-# Generate advertising data following exponential relationship
-set.seed(456)
-spending <- seq(0, 10000, by = 500)
-# True relationship: Awareness = 10 * exp(0.0005 * Spending) + noise
-awareness <- 10 * exp(0.0005 * spending) * exp(rnorm(length(spending), 0, 0.1))
+# Generate viral growth data following exponential relationship
+set.seed(789)
+weeks <- 0:20
+# True relationship: Users = 100 * exp(0.15 * Week) 
+# 15% weekly growth rate - realistic for early-stage viral apps
+true_intercept <- 100
+true_growth_rate <- 0.15
+users <- true_intercept * exp(true_growth_rate * weeks) * exp(rnorm(length(weeks), 0, 0.08))
 
-df_ad <- data.frame(
-  spending = spending,
-  awareness = awareness,
-  log_awareness = log(awareness)
+df_viral <- data.frame(
+  weeks = weeks,
+  users = users,
+  log_users = log(users)
 )
 
-# Fit linear model on log-transformed data
-model <- lm(log_awareness ~ spending, data = df_ad)
+# Fit linear model on ORIGINAL scale (this will fit poorly)
+model_linear <- lm(users ~ weeks, data = df_viral)
 
-# Plot 1: Original scale with exponential curve
-p1 <- ggplot(df_ad, aes(x = spending, y = awareness)) +
+# Fit linear model on log-transformed data (this will fit well)
+model_log <- lm(log_users ~ weeks, data = df_viral)
+
+# Extract coefficients
+log_intercept <- coef(model_log)[1]
+log_growth_coef <- coef(model_log)[2]
+initial_users <- round(exp(log_intercept), 0)
+weekly_growth_pct <- round(log_growth_coef * 100, 1)
+
+# Calculate final users
+final_users <- round(df_viral$users[df_viral$weeks == 20], 0)
+
+# Plot 1: Original scale showing LINEAR model misfit
+p1 <- ggplot(df_viral, aes(x = weeks, y = users)) +
   geom_point(size = 2, color = "steelblue") +
-  geom_line(aes(y = exp(predict(model))), 
+  geom_line(aes(y = predict(model_linear)), 
             color = "darkred", linewidth = 1, linetype = "dashed") +
-  labs(title = "Original scale: Exponential relationship",
-       x = "Advertising spending (€)",
-       y = "Product awareness (%)") +
+  labs(title = "Original scale: Linear model misfits badly",
+       x = "Weeks since launch",
+       y = "Daily active users",
+       subtitle = "Red dashed line = linear regression (poor fit)") +
+  scale_y_continuous(labels = scales::comma) +
   theme_minimal(base_size = 12)
 
-# Plot 2: Log scale showing linear relationship
-p2 <- ggplot(df_ad, aes(x = spending, y = log_awareness)) +
+# Plot 2: Log scale showing perfect linear fit
+p2 <- ggplot(df_viral, aes(x = weeks, y = log_users)) +
   geom_point(size = 2, color = "steelblue") +
   geom_smooth(method = "lm", se = TRUE, color = "darkred", fill = "pink") +
-  labs(title = "Log scale: Linear relationship",
-       x = "Advertising spending (€)",
-       y = "ln(Awareness)") +
+  labs(title = "Log scale: Perfect linear relationship",
+       x = "Weeks since launch",
+       y = "ln(Users)",
+       subtitle = "Red line = linear regression (excellent fit)") +
   theme_minimal(base_size = 12)
 
-p1 + p2
+ggarrange(p1, p2, ncol = 2, labels = c("A)", "B)"))
 ```
+
+
+
 
 ```{r}
 #| label: tbl-logmodel-results
+#| echo: false
 #| tbl-cap: "Regression results."
-get_regression_table(model) |> 
+get_regression_table(model_log) |> 
   kable()
 ```
 
+In this example, the coefficient for weeks (`r round(log_growth_coef, 3)`, see @tbl-logmodel-results) tells us users are growing at approximately `r weekly_growth_pct`% per week—going from around `r initial_users` users at launch to over `r format(final_users, big.mark = ",")` users after 20 weeks. This exponential pattern is typical in the early viral growth phase of successful apps like Instagram, TikTok, or WhatsApp before they hit market saturation.
 
-In this example, the coefficient for spending (approximately `r format(round(model$coefficients[["spending"]], 4), scientific = FALSE)`, see @tbl-logmodel-results) tells us that for each additional euro spent on advertising, there is an associated awareness increase by about 0.05%. This multiplicative effect is much more realistic than assuming the same absolute increase in awareness regardless of current spending levels.
 
 ## Summary
 
