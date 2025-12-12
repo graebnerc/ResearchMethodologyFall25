@@ -663,7 +663,9 @@ Figure&nbsp;2: How logarithmic transformation makes skewed data more symmetric
 </div>
 </div>
 <p><strong>Handling exponential relationships.</strong> Consider an e-commerce company analyzing how their marketing budget affects monthly revenue. As they scale up spending, each additional euro generates proportionally more revenue due to network effects and brand recognition—a classic exponential pattern.</p>
-<p>If revenue follows the relationship: $Revenue = 50,000 e^{(0.00008 Marketing)}, trying to fit a linear regression directly would fail badly. The relationship curves upward, violating the linearity assumption.</p>
+<p>If revenue follows the relationship:</p>
+<p><span class="math display">\[Revenue = 50,000 \times e^{\left(0.00008 \times Marketing\right)}\]</span></p>
+<p>trying to fit a linear regression directly would fail badly. The relationship curves upward, violating the linearity assumption.</p>
 <p>But if we take the natural logarithm of both sides: <span class="math inline">\(\ln\left(Revenue\right) = \ln\left(50,000\right) + 0.00008 \times Marketing\)</span>, we now have a linear relationship that’s perfect for regression analysis. The regression coefficient (<span class="math inline">\(\beta_1\)</span>) tells us that each additional euro spent on marketing is associated with approximately a % increase in revenue.</p>
 <p>Let’s see this in action with a concrete example in <a href="#fig-viral-growth" class="quarto-xref">Figure&nbsp;3</a>.</p>
 <div class="cell">
@@ -737,11 +739,6 @@ Figure&nbsp;3: Linear regression on log-transformed data captures the exponentia
 </div>
 </div>
 <div class="cell">
-<details class="code-fold">
-<summary>Show R code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_regression_table</span>(model_log) <span class="sc">|&gt;</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div id="tbl-logmodel-results" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-logmodel-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">

@@ -8,7 +8,7 @@
 
 <meta name="author" content="Claudius Gräbner-Radkowitsch">
 
-<title>Linear Regression Assumptions and Diagnostic Tests – Theoretical and Empirical Research Methodology - Implementation Lab</title>
+<title>Linear regression: residuals and model diagnostics – Theoretical and Empirical Research Methodology - Implementation Lab</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -135,7 +135,7 @@ window.Quarto = {
 };
 </script>
 
-<meta property="og:title" content="Linear Regression Assumptions and Diagnostic Tests – Theoretical and Empirical Research Methodology - Implementation Lab">
+<meta property="og:title" content="Linear regression: residuals and model diagnostics – Theoretical and Empirical Research Methodology - Implementation Lab">
 <meta property="og:description" content="">
 <meta property="og:image" content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==">
 <meta property="og:site_name" content="Theoretical and Empirical Research Methodology - Implementation Lab">
@@ -169,7 +169,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Linear Regression Assumptions and Diagnostic Tests</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Linear regression: residuals and model diagnostics</li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -356,7 +356,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Linear Regression Assumptions and Diagnostic Tests</h1>
+<h1 class="title">Linear regression: residuals and model diagnostics</h1>
 </div>
 
 
@@ -379,6 +379,12 @@ window.Quarto = {
 <div class="quarto-title-meta">
 
       
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">08 12 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -388,6 +394,13 @@ window.Quarto = {
 </header>
 
 
+<div class="cell">
+<details class="code-fold">
+<summary>R Packages Used</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggtext)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <section id="understanding-residuals-the-foundation-of-diagnostics" class="level2">
 <h2 class="anchored" data-anchor-id="understanding-residuals-the-foundation-of-diagnostics">Understanding Residuals: The Foundation of Diagnostics</h2>
 <p>Before diving into assumptions and diagnostic tests, we need to understand residuals—the cornerstone of all regression diagnostics. Many students confuse residuals with error terms, but understanding the distinction is crucial for interpreting diagnostic plots and tests.</p>
@@ -401,7 +414,21 @@ window.Quarto = {
 <li><span class="math inline">\(y_i\)</span> is the actual observed value</li>
 <li><span class="math inline">\(\hat{y}_i\)</span> is the predicted value from your regression model</li>
 </ul>
-<p><strong>In plain language:</strong> A residual tells you how far off your prediction was for each observation. If your model predicts a customer will spend €100 but they actually spent €120, the residual is €20.</p>
+<p><strong>In plain language:</strong> A residual tells you how far off your prediction was for each observation. If your model predicts a customer will spend 100 EUR but they actually spent 120 EUR, the residual is 20 EUR (see also <a href="#fig-residuals" class="quarto-xref">Figure&nbsp;1</a>).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-residuals" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-residuals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="residuals_plot.png" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-residuals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Illustration of a residual.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="residuals-vs.-error-terms-a-critical-distinction" class="level3">
 <h3 class="anchored" data-anchor-id="residuals-vs.-error-terms-a-critical-distinction">Residuals vs.&nbsp;Error Terms: A Critical Distinction</h3>
@@ -436,10 +463,10 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p><strong>The error term (</strong><span class="math inline">\(\epsilon_i\)</span>) is the true, unobservable deviation in the population model:</p>
+<p><strong>The error term</strong> (<span class="math inline">\(\epsilon_i\)</span>) is the true, unobservable deviation in the population model:</p>
 <p><span class="math display">\[y_i = \beta_0 + \beta_1 x_i + \epsilon_i\]</span></p>
 <p>This represents the “true” relationship in the population. We never observe <span class="math inline">\(\epsilon_i\)</span> because we don’t know the true population parameters (<span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>).</p>
-<p><strong>The residual (</strong><span class="math inline">\(e_i\)</span>) is what we actually observe from our fitted sample model:</p>
+<p><strong>The residual</strong> (<span class="math inline">\(e_i\)</span>) is what we actually observe from our fitted sample model:</p>
 <p><span class="math display">\[y_i = \hat{\beta}_0 + \hat{\beta}_1 x_i + e_i\]</span></p>
 <p>This is our estimate based on sample data. We calculate <span class="math inline">\(e_i\)</span> because we have estimates <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span>.</p>
 </section>
@@ -454,10 +481,52 @@ window.Quarto = {
 <section id="types-of-residuals-in-diagnostics" class="level3">
 <h3 class="anchored" data-anchor-id="types-of-residuals-in-diagnostics">Types of Residuals in Diagnostics</h3>
 <p>You’ll encounter several types of residuals in diagnostic output:</p>
-<p><strong>1. Raw residuals (</strong><span class="math inline">\(e_i\)</span>): <span class="math display">\[e_i = y_i - \hat{y}_i\]</span></p>
+<p><strong>1. Raw residuals</strong> (<span class="math inline">\(e_i\)</span>): <span class="math display">\[e_i = y_i - \hat{y}_i\]</span></p>
 <p>These are what we’ve been discussing—the basic difference between observed and predicted values.</p>
-<p><strong>2. Standardized residuals (</strong><span class="math inline">\(e_i^*\)</span>): <span class="math display">\[e_i^* = \frac{e_i}{\hat{\sigma}\sqrt{1-h_i}}\]</span></p>
+<p><strong>2. Standardized residuals</strong> (<span class="math inline">\(e_i^*\)</span>): <span class="math display">\[e_i^* = \frac{e_i}{\hat{\sigma}\sqrt{1-h_i}}\]</span></p>
 <p>where <span class="math inline">\(\hat{\sigma}\)</span> is the residual standard error and <span class="math inline">\(h_i\)</span> is the leverage. Standardized residuals have approximately unit variance, making them comparable across observations. Values beyond ±2 or ±3 suggest potential outliers.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Understanding Leverage
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Leverage</strong> (denoted as <span class="math inline">\(h_i\)</span> or “hat value”) measures how unusual or extreme an observation’s predictor values (X values) are compared to the rest of the data. It quantifies how far an observation is from the center of the predictor space.</p>
+<p><strong>Mathematical definition:</strong></p>
+<p>In simple linear regression, leverage for observation <span class="math inline">\(i\)</span> is:</p>
+<p><span class="math display">\[h_i = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{j=1}^{n}(x_j - \bar{x})^2}\]</span></p>
+<p>In multiple regression, leverage values come from the diagonal of the “hat matrix” <span class="math inline">\(\mathbf{H} = \mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\)</span>, which “puts the hat” on <span class="math inline">\(\mathbf{y}\)</span> to get <span class="math inline">\(\hat{\mathbf{y}}\)</span>.</p>
+<p><strong>Key properties:</strong></p>
+<ul>
+<li>Leverage ranges from <span class="math inline">\(\frac{1}{n}\)</span> to 1</li>
+<li>Average leverage is <span class="math inline">\(\frac{p}{n}\)</span> where <span class="math inline">\(p\)</span> is the number of parameters (including intercept)</li>
+<li>Sum of all leverage values equals <span class="math inline">\(p\)</span>: <span class="math inline">\(\sum_{i=1}^{n} h_i = p\)</span></li>
+</ul>
+<p><strong>Interpretation:</strong></p>
+<ul>
+<li><strong>Low leverage</strong> (<span class="math inline">\(h_i \approx \frac{p}{n}\)</span>): The observation’s X values are typical, close to the center of the data</li>
+<li><strong>High leverage</strong> (<span class="math inline">\(h_i &gt; \frac{2p}{n}\)</span> or <span class="math inline">\(\frac{3p}{n}\)</span>): The observation’s X values are unusual or extreme</li>
+</ul>
+<p><strong>Why leverage matters:</strong></p>
+<p>High leverage observations have greater potential to influence the regression line because they’re far from the center of the data. Think of a lever: observations far from the fulcrum (center) have more power to move the line.</p>
+<p>However, <strong>high leverage alone doesn’t make a point influential</strong>:</p>
+<ul>
+<li>If a high leverage point fits the model well (small residual), it reinforces the pattern and isn’t problematic</li>
+<li>If a high leverage point doesn’t fit the model (large residual), it can dramatically pull the regression line toward itself</li>
+</ul>
+<p><strong>Example:</strong></p>
+<p>Imagine studying the relationship between study hours and exam scores for students who studied 10-20 hours. A student who studied 40 hours would have high leverage—they’re far from the typical range. If they score as predicted by the pattern, they confirm it. If they score much lower or higher than expected, they could dramatically change your estimated relationship.</p>
+<p><strong>Why leverage appears in standardized residuals:</strong></p>
+<p>The formula <span class="math inline">\(e_i^* = \frac{e_i}{\hat{\sigma}\sqrt{1-h_i}}\)</span> adjusts for the fact that observations with high leverage naturally have smaller residuals because the regression line is “pulled” toward them. Without this adjustment, high leverage points would appear to fit better than they actually do, masking potential problems.</p>
+</div>
+</div>
+</div>
 <p><strong>3. Studentized residuals:</strong></p>
 <p>Similar to standardized but use a different estimate of variance that excludes observation <span class="math inline">\(i\)</span>. More robust for identifying outliers.</p>
 <p><strong>Why standardize?</strong> Raw residuals naturally have different variances depending on the leverage of each observation. Standardization accounts for this, putting all residuals on the same scale for fair comparison.</p>
@@ -639,9 +708,9 @@ Table&nbsp;1: Summary of linear regression assumptions and diagnostic approaches
 <p><strong>How it works:</strong> Plots residuals (<span class="math inline">\(e_i = y_i - \hat{y}_i\)</span>) against fitted values (<span class="math inline">\(\hat{y}_i\)</span>). If the linearity and homoscedasticity assumptions hold, residuals should be randomly scattered around zero with no patterns or trends.</p>
 <p><strong>What to look for:</strong></p>
 <ul>
-<li><strong>Good:</strong> Random scatter around the horizontal line at zero, with no discernible pattern (see <a href="#fig-residfit-good" class="quarto-xref">Figure&nbsp;1</a>)</li>
-<li><strong>Problem - Non-linearity:</strong> Curved pattern (U-shape, inverted U, or other systematic curves) indicates the relationship is not linear (see <a href="#fig-residfit-nonlinear" class="quarto-xref">Figure&nbsp;2</a>)</li>
-<li><strong>Problem - Heteroscedasticity:</strong> Funnel shape (expanding or contracting spread) indicates non-constant variance (see <a href="#fig-residfit-hetero" class="quarto-xref">Figure&nbsp;3</a>)</li>
+<li><strong>Good:</strong> Random scatter around the horizontal line at zero, with no discernible pattern (see <a href="#fig-residfit-good" class="quarto-xref">Figure&nbsp;2</a>)</li>
+<li><strong>Problem - Non-linearity:</strong> Curved pattern (U-shape, inverted U, or other systematic curves) indicates the relationship is not linear (see <a href="#fig-residfit-nonlinear" class="quarto-xref">Figure&nbsp;3</a>)</li>
+<li><strong>Problem - Heteroscedasticity:</strong> Funnel shape (expanding or contracting spread) indicates non-constant variance (see <a href="#fig-residfit-hetero" class="quarto-xref">Figure&nbsp;4</a>)</li>
 </ul>
 <div class="cell">
 <div class="cell-output-display">
@@ -651,7 +720,7 @@ Table&nbsp;1: Summary of linear regression assumptions and diagnostic approaches
 <img src="index_files/figure-html/fig-residfit-good-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-residfit-good-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Residuals vs Fitted plot showing a good model fit. Residuals are randomly scattered around zero with no patterns, indicating linearity and homoscedasticity are satisfied.
+Figure&nbsp;2: Residuals vs Fitted plot showing a good model fit. Residuals are randomly scattered around zero with no patterns, indicating linearity and homoscedasticity are satisfied.
 </figcaption>
 </figure>
 </div>
@@ -665,7 +734,7 @@ Figure&nbsp;1: Residuals vs Fitted plot showing a good model fit. Residuals are 
 <img src="index_files/figure-html/fig-residfit-nonlinear-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-residfit-nonlinear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Residuals vs Fitted plot showing a non-linear relationship. The curved pattern in the residuals indicates that a linear model is inadequate and transformations or polynomial terms may be needed.
+Figure&nbsp;3: Residuals vs Fitted plot showing a non-linear relationship. The curved pattern in the residuals indicates that a linear model is inadequate and transformations or polynomial terms may be needed.
 </figcaption>
 </figure>
 </div>
@@ -679,7 +748,7 @@ Figure&nbsp;2: Residuals vs Fitted plot showing a non-linear relationship. The c
 <img src="index_files/figure-html/fig-residfit-hetero-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-residfit-hetero-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Residuals vs Fitted plot showing heteroscedasticity. The funnel shape (increasing spread of residuals) indicates that variance is not constant across the range of fitted values.
+Figure&nbsp;4: Residuals vs Fitted plot showing heteroscedasticity. The funnel shape (increasing spread of residuals) indicates that variance is not constant across the range of fitted values.
 </figcaption>
 </figure>
 </div>
@@ -694,8 +763,8 @@ Figure&nbsp;3: Residuals vs Fitted plot showing heteroscedasticity. The funnel s
 <p><strong>How it works:</strong> Plots the quantiles of standardized residuals against theoretical quantiles from a standard normal distribution. If residuals are normally distributed, points should fall along the diagonal reference line.</p>
 <p><strong>What to look for:</strong></p>
 <ul>
-<li><strong>Good:</strong> Points closely follow the diagonal line from lower-left to upper-right (see <a href="#fig-qq-good" class="quarto-xref">Figure&nbsp;4</a>)</li>
-<li><strong>Problem - Heavy tails:</strong> Points deviate from the line at both extremes, curving away (see <a href="#fig-qq-nonnormal" class="quarto-xref">Figure&nbsp;5</a>)</li>
+<li><strong>Good:</strong> Points closely follow the diagonal line from lower-left to upper-right (see <a href="#fig-qq-good" class="quarto-xref">Figure&nbsp;5</a>)</li>
+<li><strong>Problem - Heavy tails:</strong> Points deviate from the line at both extremes, curving away (see <a href="#fig-qq-nonnormal" class="quarto-xref">Figure&nbsp;6</a>)</li>
 <li><strong>Problem - Skewness:</strong> Points deviate systematically in one direction, showing an S-curve</li>
 <li><strong>Problem - Light tails:</strong> Points deviate toward the line at extremes</li>
 </ul>
@@ -707,7 +776,7 @@ Figure&nbsp;3: Residuals vs Fitted plot showing heteroscedasticity. The funnel s
 <img src="index_files/figure-html/fig-qq-good-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-qq-good-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Normal Q-Q plot showing normally distributed residuals. Points fall closely along the diagonal reference line, indicating the normality assumption is satisfied.
+Figure&nbsp;5: Normal Q-Q plot showing normally distributed residuals. Points fall closely along the diagonal reference line, indicating the normality assumption is satisfied.
 </figcaption>
 </figure>
 </div>
@@ -721,7 +790,7 @@ Figure&nbsp;4: Normal Q-Q plot showing normally distributed residuals. Points fa
 <img src="index_files/figure-html/fig-qq-nonnormal-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-qq-nonnormal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Normal Q-Q plot showing non-normally distributed residuals. The systematic deviation from the diagonal line (particularly in the tails) indicates a violation of the normality assumption.
+Figure&nbsp;6: Normal Q-Q plot showing non-normally distributed residuals. The systematic deviation from the diagonal line (particularly in the tails) indicates a violation of the normality assumption.
 </figcaption>
 </figure>
 </div>
@@ -736,8 +805,8 @@ Figure&nbsp;5: Normal Q-Q plot showing non-normally distributed residuals. The s
 <p><strong>How it works:</strong> Plots the square root of standardized residuals (<span class="math inline">\(\sqrt{|e_i^*|}\)</span>) against fitted values. The square root transformation stabilizes variance and makes patterns of heteroscedasticity easier to detect.</p>
 <p><strong>What to look for:</strong></p>
 <ul>
-<li><strong>Good:</strong> Roughly horizontal smoothed line with points evenly spread around it (see <a href="#fig-scale-good" class="quarto-xref">Figure&nbsp;6</a>)</li>
-<li><strong>Problem:</strong> Smoothed line has a clear trend (upward or downward slope), or the spread of points increases/decreases systematically (see <a href="#fig-scale-hetero" class="quarto-xref">Figure&nbsp;7</a>)</li>
+<li><strong>Good:</strong> Roughly horizontal smoothed line with points evenly spread around it (see <a href="#fig-scale-good" class="quarto-xref">Figure&nbsp;7</a>)</li>
+<li><strong>Problem:</strong> Smoothed line has a clear trend (upward or downward slope), or the spread of points increases/decreases systematically (see <a href="#fig-scale-hetero" class="quarto-xref">Figure&nbsp;8</a>)</li>
 </ul>
 <div class="cell">
 <div class="cell-output-display">
@@ -747,7 +816,7 @@ Figure&nbsp;5: Normal Q-Q plot showing non-normally distributed residuals. The s
 <img src="index_files/figure-html/fig-scale-good-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scale-good-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6: Scale-Location plot showing homoscedasticity. The smoothed line is approximately horizontal and the spread of points is roughly constant, indicating constant variance of residuals.
+Figure&nbsp;7: Scale-Location plot showing homoscedasticity. The smoothed line is approximately horizontal and the spread of points is roughly constant, indicating constant variance of residuals.
 </figcaption>
 </figure>
 </div>
@@ -761,7 +830,7 @@ Figure&nbsp;6: Scale-Location plot showing homoscedasticity. The smoothed line i
 <img src="index_files/figure-html/fig-scale-hetero-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scale-hetero-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7: Scale-Location plot showing heteroscedasticity. The upward trend in the smoothed line indicates increasing variance of residuals as fitted values increase.
+Figure&nbsp;8: Scale-Location plot showing heteroscedasticity. The upward trend in the smoothed line indicates increasing variance of residuals as fitted values increase.
 </figcaption>
 </figure>
 </div>
@@ -775,14 +844,16 @@ Figure&nbsp;7: Scale-Location plot showing heteroscedasticity. The upward trend 
 <p><strong>Purpose:</strong> Identifies influential observations that disproportionately affect the regression model.</p>
 <p><strong>How it works:</strong> Plots standardized residuals against leverage (hat values). Includes Cook’s distance contours to identify problematic points that are both unusual in their predictor values (high leverage) and poorly predicted by the model (large residuals).</p>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
 <span class="screen-reader-only">Note</span>Understanding Cook’s Distance and Contours
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Cook’s Distance</strong> measures the influence of each observation on the fitted values. It quantifies how much all fitted values change when observation <span class="math inline">\(i\)</span> is deleted from the analysis:</p>
 <p><span class="math display">\[D_i = \frac{\sum_{j=1}^{n}(\hat{y}_j - \hat{y}_{j(i)})^2}{p \cdot MSE}\]</span></p>
@@ -814,6 +885,7 @@ Figure&nbsp;7: Scale-Location plot showing heteroscedasticity. The upward trend 
 </ol>
 </div>
 </div>
+</div>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-leverage-good" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -822,7 +894,7 @@ Figure&nbsp;7: Scale-Location plot showing heteroscedasticity. The upward trend 
 <img src="index_files/figure-html/fig-leverage-good-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-leverage-good-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8: Residuals vs Leverage plot for a well-behaved model. No points fall outside Cook’s distance contours (dashed lines), indicating no observations have undue influence on the model estimates.
+Figure&nbsp;9: Residuals vs Leverage plot for a well-behaved model. No points fall outside Cook’s distance contours (dashed lines), indicating no observations have undue influence on the model estimates.
 </figcaption>
 </figure>
 </div>
@@ -836,7 +908,7 @@ Figure&nbsp;8: Residuals vs Leverage plot for a well-behaved model. No points fa
 <img src="index_files/figure-html/fig-leverage-problem-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-leverage-problem-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9: Residuals vs Leverage plot showing influential observations. Several points (shown with larger symbols) have high Cook’s distance values and fall outside the contours, indicating they substantially influence the regression estimates.
+Figure&nbsp;10: Residuals vs Leverage plot showing influential observations. Several points (shown with larger symbols) have high Cook’s distance values and fall outside the contours, indicating they substantially influence the regression estimates.
 </figcaption>
 </figure>
 </div>
@@ -844,8 +916,8 @@ Figure&nbsp;9: Residuals vs Leverage plot showing influential observations. Seve
 </div>
 <p><strong>What to look for:</strong></p>
 <ul>
-<li><strong>Good:</strong> All points well within Cook’s distance contours, especially no points in corners (see <a href="#fig-leverage-good" class="quarto-xref">Figure&nbsp;8</a>)</li>
-<li><strong>Problem:</strong> Points outside Cook’s distance contours (typically shown as dashed lines), particularly in the upper-right or lower-right corners (see <a href="#fig-leverage-problem" class="quarto-xref">Figure&nbsp;9</a>)</li>
+<li><strong>Good:</strong> All points well within Cook’s distance contours, especially no points in corners (see <a href="#fig-leverage-good" class="quarto-xref">Figure&nbsp;9</a>)</li>
+<li><strong>Problem:</strong> Points outside Cook’s distance contours (typically shown as dashed lines), particularly in the upper-right or lower-right corners (see <a href="#fig-leverage-problem" class="quarto-xref">Figure&nbsp;10</a>)</li>
 </ul>
 <p><strong>Key concepts:</strong></p>
 <ul>
@@ -867,7 +939,7 @@ Figure&nbsp;9: Residuals vs Leverage plot showing influential observations. Seve
 <p><strong>Purpose:</strong> Formal test of whether residuals follow a normal distribution.</p>
 <p><strong>How it works:</strong> Tests the null hypothesis <span class="math inline">\(H_0\)</span>: the data come from a normal distribution. The test statistic (W) measures how well the ordered residuals match the expected pattern from a normal distribution, with <span class="math inline">\(W\)</span> ranging from 0 to 1 (higher values indicate better normality).</p>
 <p><strong>R code:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(model))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(model))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Decision rule:</strong></p>
 <ul>
 <li>If p-value &lt; 0.05: Reject normality assumption (residuals are not normally distributed)</li>
@@ -907,8 +979,8 @@ Figure&nbsp;9: Residuals vs Leverage plot showing influential observations. Seve
 <p><strong>How it works:</strong> Regresses the squared residuals on the predictors to test whether variance is related to predictor values. Under <span class="math inline">\(H_0\)</span> (homoscedasticity), squared residuals should not be systematically related to predictors.</p>
 <p>The test statistic follows a <span class="math inline">\(\chi^2\)</span> distribution with degrees of freedom equal to the number of predictors.</p>
 <p><strong>R code:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Decision rule:</strong></p>
 <ul>
 <li>If p-value &lt; 0.05: Reject homoscedasticity (variance is not constant)</li>
@@ -926,11 +998,11 @@ Figure&nbsp;9: Residuals vs Leverage plot showing influential observations. Seve
 <p><strong>Purpose:</strong> More general test for heteroscedasticity than Breusch-Pagan.</p>
 <p><strong>How it works:</strong> Similar to Breusch-Pagan but includes cross-products and squared terms of predictors when regressing squared residuals. Tests for any form of heteroscedasticity, not just linear relationships between variance and predictors.</p>
 <p><strong>R code:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skedastic)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">white_test</span>(model)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Or using lmtest:</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(model, <span class="sc">~</span> <span class="fu">fitted</span>(model) <span class="sc">+</span> <span class="fu">I</span>(<span class="fu">fitted</span>(model)<span class="sc">^</span><span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skedastic)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">white_test</span>(model)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Or using lmtest:</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(model, <span class="sc">~</span> <span class="fu">fitted</span>(model) <span class="sc">+</span> <span class="fu">I</span>(<span class="fu">fitted</span>(model)<span class="sc">^</span><span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>When to use:</strong> When you suspect complex patterns of heteroscedasticity that Breusch-Pagan might miss, such as variance that changes non-linearly with predictors.</p>
 <hr>
 </section>
@@ -950,8 +1022,8 @@ Figure&nbsp;9: Residuals vs Leverage plot showing influential observations. Seve
 <li><strong>DW &gt; 2</strong>: Negative autocorrelation (consecutive residuals tend to alternate signs)</li>
 </ul>
 <p><strong>R code:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dwtest</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dwtest</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Interpretation:</strong></p>
 <ul>
 <li>DW ≈ 2: No autocorrelation (ideal)</li>
@@ -977,8 +1049,8 @@ Figure&nbsp;9: Residuals vs Leverage plot showing influential observations. Seve
 <p><strong>How it works:</strong> Adds powers of fitted values (e.g., <span class="math inline">\(\hat{y}^2\)</span>, <span class="math inline">\(\hat{y}^3\)</span>, <span class="math inline">\(\hat{y}^4\)</span>) to the original model and tests whether they are jointly significant. If they are, the linear form is inadequate because higher-order terms improve the fit.</p>
 <p>The logic: if the relationship is truly linear, powers of fitted values shouldn’t add predictive power.</p>
 <p><strong>R code:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">resettest</span>(model, <span class="at">power =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>)  <span class="co"># Tests squared and cubed terms</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">resettest</span>(model, <span class="at">power =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>)  <span class="co"># Tests squared and cubed terms</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Decision rule:</strong></p>
 <ul>
 <li>If p-value &lt; 0.05: Linear form is inadequate; consider transformations or polynomial terms</li>
@@ -1005,8 +1077,8 @@ Figure&nbsp;9: Residuals vs Leverage plot showing influential observations. Seve
 <p>where <span class="math inline">\(R_j^2\)</span> is the R² from regressing predictor <span class="math inline">\(j\)</span> on all other predictors.</p>
 <p><strong>Interpretation:</strong> VIF quantifies how much more variance the coefficient has compared to if predictors were uncorrelated. <span class="math inline">\(VIF = 1\)</span> means no correlation; <span class="math inline">\(VIF = 5\)</span> means variance is 5 times larger than if uncorrelated.</p>
 <p><strong>R code:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vif</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vif</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Decision rules:</strong></p>
 <ul>
 <li><strong>VIF &lt; 5</strong>: Generally acceptable</li>
@@ -1033,16 +1105,16 @@ Figure&nbsp;9: Residuals vs Leverage plot showing influential observations. Seve
 <p><span class="math display">\[D_i = \frac{(e_i^*)^2}{p} \times \frac{h_i}{1-h_i}\]</span></p>
 <p>where <span class="math inline">\(e_i^*\)</span> is the standardized residual, <span class="math inline">\(h_i\)</span> is leverage, and <span class="math inline">\(p\)</span> is the number of parameters.</p>
 <p><strong>R code:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cook's distance plot (automatically labeled)</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model, <span class="at">which =</span> <span class="dv">4</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract values for custom analysis</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>cooks_d <span class="ot">&lt;-</span> <span class="fu">cooks.distance</span>(model)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>influential <span class="ot">&lt;-</span> <span class="fu">which</span>(cooks_d <span class="sc">&gt;</span> <span class="fl">0.5</span>)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>highly_influential <span class="ot">&lt;-</span> <span class="fu">which</span>(cooks_d <span class="sc">&gt;</span> <span class="fl">1.0</span>)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># View most influential observations</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">sort</span>(cooks_d, <span class="at">decreasing =</span> <span class="cn">TRUE</span>), <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cook's distance plot (automatically labeled)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model, <span class="at">which =</span> <span class="dv">4</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract values for custom analysis</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>cooks_d <span class="ot">&lt;-</span> <span class="fu">cooks.distance</span>(model)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>influential <span class="ot">&lt;-</span> <span class="fu">which</span>(cooks_d <span class="sc">&gt;</span> <span class="fl">0.5</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>highly_influential <span class="ot">&lt;-</span> <span class="fu">which</span>(cooks_d <span class="sc">&gt;</span> <span class="fl">1.0</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># View most influential observations</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">sort</span>(cooks_d, <span class="at">decreasing =</span> <span class="cn">TRUE</span>), <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Decision rules:</strong></p>
 <ul>
 <li><strong>D &lt; 0.5</strong>: Not influential</li>
@@ -1072,10 +1144,10 @@ Figure&nbsp;9: Residuals vs Leverage plot showing influential observations. Seve
 <p>Follow this systematic approach for every regression analysis:</p>
 <section id="always-start-with-visual-diagnostics" class="level3">
 <h3 class="anchored" data-anchor-id="always-start-with-visual-diagnostics">1. Always Start with Visual Diagnostics</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate all four diagnostic plots at once</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate all four diagnostic plots at once</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Examine each plot carefully:</p>
 <ul>
 <li>Plot 1: Check for patterns in residuals (linearity, homoscedasticity)</li>
@@ -1086,42 +1158,42 @@ Figure&nbsp;9: Residuals vs Leverage plot showing influential observations. Seve
 </section>
 <section id="run-key-quantitative-tests-optional" class="level3">
 <h3 class="anchored" data-anchor-id="run-key-quantitative-tests-optional">2. Run Key Quantitative Tests (Optional)</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Normality</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(model))</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Homoscedasticity</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(model)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Multicollinearity (if multiple predictors)</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">vif</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Normality</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(model))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Homoscedasticity</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(model)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Multicollinearity (if multiple predictors)</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">vif</span>(model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="investigate-issues-identified" class="level3">
 <h3 class="anchored" data-anchor-id="investigate-issues-identified">3. Investigate Issues Identified</h3>
 <p><strong>If linearity is violated:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Try RESET test</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">resettest</span>(model)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Consider transformations or polynomial terms</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Try RESET test</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">resettest</span>(model)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Consider transformations or polynomial terms</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>If heteroscedasticity is detected:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use robust standard errors</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sandwich)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftest</span>(model, <span class="at">vcov =</span> <span class="fu">vcovHC</span>(model, <span class="at">type =</span> <span class="st">"HC3"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use robust standard errors</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sandwich)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftest</span>(model, <span class="at">vcov =</span> <span class="fu">vcovHC</span>(model, <span class="at">type =</span> <span class="st">"HC3"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>If influential points are found:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract Cook's distance</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>cooks_d <span class="ot">&lt;-</span> <span class="fu">cooks.distance</span>(model)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify influential observations</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>influential_obs <span class="ot">&lt;-</span> <span class="fu">which</span>(cooks_d <span class="sc">&gt;</span> <span class="fl">0.5</span>)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine these observations</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>data[influential_obs, ]</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Refit model without them and compare</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>model_no_influential <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data[<span class="sc">-</span>influential_obs, ])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract Cook's distance</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>cooks_d <span class="ot">&lt;-</span> <span class="fu">cooks.distance</span>(model)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify influential observations</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>influential_obs <span class="ot">&lt;-</span> <span class="fu">which</span>(cooks_d <span class="sc">&gt;</span> <span class="fl">0.5</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine these observations</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>data[influential_obs, ]</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Refit model without them and compare</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>model_no_influential <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data[<span class="sc">-</span>influential_obs, ])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>If time series data:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add Durbin-Watson test</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dwtest</span>(model)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine residual plot over time</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">residuals</span>(model), <span class="at">type =</span> <span class="st">"l"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add Durbin-Watson test</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dwtest</span>(model)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine residual plot over time</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">residuals</span>(model), <span class="at">type =</span> <span class="st">"l"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="additional-tests-when-needed" class="level3">
 <h3 class="anchored" data-anchor-id="additional-tests-when-needed">4. Additional Tests When Needed</h3>

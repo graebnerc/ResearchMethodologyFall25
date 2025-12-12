@@ -1,7 +1,54 @@
 ---
-title: "Linear Regression Assumptions and Diagnostic Tests"
-format: html
+title: "Linear regression: residuals and model diagnostics" # Also check out line 43
+date: '2025-12-08'
+documentclass: scrartcl
+execute: 
+  freeze: auto
+format: 
+  html: # Settings set in _metadata.yml
+    toc: true
+  pdf:
+    include-in-header: 
+      text: |
+        \usepackage{lmodern} 
+        \usepackage{graphicx}
+        \usepackage{hyperref}
+        \usepackage{url}                
+        \usepackage{xcolor}
+        \usepackage{booktabs}
+        \usepackage{listings}
+        \lstloadlanguages{R}
+        
+        \definecolor{eufblue}{RGB}{0,57,91}
+        \definecolor{eufgrey}{RGB}{111,111,111}
+        \definecolor{euflightblue}{RGB}{105,170,205}
+        
+        \hypersetup{
+        pdfauthor={Claudius Graebner-Radkowitsch}
+        colorlinks=true,
+        linkcolor=euflightblue,
+        urlcolor=euflightblue
+        }
+        \usepackage[includehead,includefoot,top=2cm, bottom=1.5cm]{geometry}
+        \usepackage[headsepline, footsepline]{scrlayer-scrpage}
+        \pagestyle{scrheadings}
+        \clearpairofpagestyles
+        \ihead{Tutorial: Linear regression - residuals and model diagnostics}
+        %\chead{Kopfzeile Mitte}
+        \ohead{\pagemark} %
+        \ifoot{}
+        \cfoot{\href{https://researchmethodology-fall25.netlify.app/}{\normalfont\color{eufblue}{Data Science Using R - Fall Semester 2025}}} % Fußzeile Mitte
+        \ofoot{} 
+        \setkomafont{disposition}{\color{eufblue}\bfseries}
 ---
+
+```{r}
+#| code-summary: "R Packages Used"
+
+library(ggplot2)
+library(ggtext)
+```
+
 
 ## Understanding Residuals: The Foundation of Diagnostics
 
@@ -19,7 +66,18 @@ where:
 -   $y_i$ is the actual observed value
 -   $\hat{y}_i$ is the predicted value from your regression model
 
-**In plain language:** A residual tells you how far off your prediction was for each observation. If your model predicts a customer will spend €100 but they actually spent €120, the residual is €20.
+**In plain language:** A residual tells you how far off your prediction was for each observation. If your model predicts a customer will spend 100 EUR but they actually spent 120 EUR, the residual is 20 EUR (see also @fig-residuals).
+
+```{r}
+#| label: fig-residuals
+#| fig-cap: "Illustration of a residual."
+#| echo: false
+#| out-width: "50%"
+
+knitr::include_graphics("residuals_plot.png")
+```
+
+
 
 ### Residuals vs. Error Terms: A Critical Distinction
 
@@ -30,13 +88,13 @@ Students often use "residual" and "error" interchangeably, but they are fundamen
 | **Error term** | $\epsilon_i$ | True, unknown deviation from the population regression line | **No** - it's a theoretical concept |
 | **Residual** | $e_i$ | Observed deviation from our fitted sample regression line | **Yes** - we calculate it from our data |
 
-**The error term (**$\epsilon_i$) is the true, unobservable deviation in the population model:
+**The error term** ($\epsilon_i$) is the true, unobservable deviation in the population model:
 
 $$y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$
 
 This represents the "true" relationship in the population. We never observe $\epsilon_i$ because we don't know the true population parameters ($\beta_0$ and $\beta_1$).
 
-**The residual (**$e_i$) is what we actually observe from our fitted sample model:
+**The residual** ($e_i$) is what we actually observe from our fitted sample model:
 
 $$y_i = \hat{\beta}_0 + \hat{\beta}_1 x_i + e_i$$
 
@@ -54,13 +112,55 @@ This is our estimate based on sample data. We calculate $e_i$ because we have es
 
 You'll encounter several types of residuals in diagnostic output:
 
-**1. Raw residuals (**$e_i$): $$e_i = y_i - \hat{y}_i$$
+**1. Raw residuals** ($e_i$): $$e_i = y_i - \hat{y}_i$$
 
 These are what we've been discussing—the basic difference between observed and predicted values.
 
-**2. Standardized residuals (**$e_i^*$): $$e_i^* = \frac{e_i}{\hat{\sigma}\sqrt{1-h_i}}$$
+**2. Standardized residuals** ($e_i^*$): $$e_i^* = \frac{e_i}{\hat{\sigma}\sqrt{1-h_i}}$$
 
 where $\hat{\sigma}$ is the residual standard error and $h_i$ is the leverage. Standardized residuals have approximately unit variance, making them comparable across observations. Values beyond ±2 or ±3 suggest potential outliers.
+
+::: {.callout-note icon=false collapse="true"}
+## Understanding Leverage
+
+**Leverage** (denoted as $h_i$ or "hat value") measures how unusual or extreme an observation's predictor values (X values) are compared to the rest of the data. It quantifies how far an observation is from the center of the predictor space.
+
+**Mathematical definition:**
+
+In simple linear regression, leverage for observation $i$ is:
+
+$$h_i = \frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{j=1}^{n}(x_j - \bar{x})^2}$$
+
+In multiple regression, leverage values come from the diagonal of the "hat matrix" $\mathbf{H} = \mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'$, which "puts the hat" on $\mathbf{y}$ to get $\hat{\mathbf{y}}$.
+
+**Key properties:**
+
+- Leverage ranges from $\frac{1}{n}$ to 1
+- Average leverage is $\frac{p}{n}$ where $p$ is the number of parameters (including intercept)
+- Sum of all leverage values equals $p$: $\sum_{i=1}^{n} h_i = p$
+
+**Interpretation:**
+
+- **Low leverage** ($h_i \approx \frac{p}{n}$): The observation's X values are typical, close to the center of the data
+- **High leverage** ($h_i > \frac{2p}{n}$ or $\frac{3p}{n}$): The observation's X values are unusual or extreme
+
+**Why leverage matters:**
+
+High leverage observations have greater potential to influence the regression line because they're far from the center of the data. Think of a lever: observations far from the fulcrum (center) have more power to move the line.
+
+However, **high leverage alone doesn't make a point influential**:
+
+- If a high leverage point fits the model well (small residual), it reinforces the pattern and isn't problematic
+- If a high leverage point doesn't fit the model (large residual), it can dramatically pull the regression line toward itself
+
+**Example:** 
+
+Imagine studying the relationship between study hours and exam scores for students who studied 10-20 hours. A student who studied 40 hours would have high leverage—they're far from the typical range. If they score as predicted by the pattern, they confirm it. If they score much lower or higher than expected, they could dramatically change your estimated relationship.
+
+**Why leverage appears in standardized residuals:**
+
+The formula $e_i^* = \frac{e_i}{\hat{\sigma}\sqrt{1-h_i}}$ adjusts for the fact that observations with high leverage naturally have smaller residuals because the regression line is "pulled" toward them. Without this adjustment, high leverage points would appear to fit better than they actually do, masking potential problems.
+:::
 
 **3. Studentized residuals:**
 
@@ -403,7 +503,7 @@ ggplot(hetero_data, aes(x = fitted, y = sqrt_std_residuals)) +
 
 **How it works:** Plots standardized residuals against leverage (hat values). Includes Cook's distance contours to identify problematic points that are both unusual in their predictor values (high leverage) and poorly predicted by the model (large residuals).
 
-::: {.callout-note icon="false"}
+::: {.callout-note icon="false" collapse="true"}
 ## Understanding Cook's Distance and Contours
 
 **Cook's Distance** measures the influence of each observation on the fitted values. It quantifies how much all fitted values change when observation $i$ is deleted from the analysis:
